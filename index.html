@@ -78,7 +78,7 @@
       }
 
       function fallback() {
-        addCard('HTML', 'fnaf_skibidi_fixed7.html', './fnaf_skibidi_fixed7.html');
+        addCard('HTML', 'fnas beta.html', './fnas%20beta.html');
         statusEl.textContent = 'No se pudo consultar la API; se muestra un enlace base.';
       }
 
@@ -108,8 +108,8 @@
           .filter(item => item.type === 'dir')
           .sort((a, b) => a.name.localeCompare(b.name));
 
-        htmlFiles.forEach(file => addCard('HTML', file.name, `./${file.name}`));
-        folders.forEach(folder => addCard('Carpeta', folder.name, `./${folder.name}/`));
+        htmlFiles.forEach(file => addCard('HTML', file.name, `./${encodeURIComponent(file.name)}`));
+        folders.forEach(folder => addCard('Carpeta', folder.name, `./${encodeURIComponent(folder.name)}/`));
 
         if (!htmlFiles.length && !folders.length) {
           statusEl.textContent = 'No hay HTML/carpetas para mostrar todavía.';
