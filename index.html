@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FNAS - GitHub Pages</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+    }
+    main {
+      width: min(900px, 100%);
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    h1 { margin-top: 0; font-size: 1.6rem; }
+    p { color: #9da7b3; }
+    .grid {
+      display: grid;
+      gap: .75rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin-top: 1rem;
+    }
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: #e6edf3;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: .85rem;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    a.card:hover {
+      border-color: #58a6ff;
+      transform: translateY(-2px);
+    }
+    .type {
+      display: inline-block;
+      font-size: .72rem;
+      color: #7d8590;
+      margin-bottom: .35rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .status { margin-top: 1rem; font-size: .92rem; color: #7d8590; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>FNAS · GitHub Pages</h1>
+    <p>Esta portada carga automáticamente los HTML y carpetas del repositorio para que también se enlacen cuando subas contenido nuevo.</p>
+    <section id="links" class="grid" aria-live="polite"></section>
+    <div id="status" class="status">Cargando enlaces…</div>
+  </main>
+
+  <script>
+    (async function () {
+      const linksEl = document.getElementById('links');
+      const statusEl = document.getElementById('status');
+
+      function addCard(type, name, href) {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = href;
+        a.innerHTML = `<span class="type">${type}</span><div>${name}</div>`;
+        linksEl.appendChild(a);
+      }
+
+      function fallback() {
+        addCard('HTML', 'fnaf_skibidi_fixed7.html', './fnaf_skibidi_fixed7.html');
+        statusEl.textContent = 'No se pudo consultar la API; se muestra un enlace base.';
+      }
+
+      const parts = location.pathname.split('/').filter(Boolean);
+      const repo = parts[0] || '';
+      const owner = (location.hostname.split('.')[0] || '').trim();
+
+      if (!owner || !repo) {
+        fallback();
+        return;
+      }
+
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents`;
+
+      try {
+        const res = await fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github+json' } });
+        if (!res.ok) throw new Error('API error');
+
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : [];
+
+        const htmlFiles = items
+          .filter(item => item.type === 'file' && item.name.toLowerCase().endsWith('.html') && item.name.toLowerCase() !== 'index.html')
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        const folders = items
+          .filter(item => item.type === 'dir')
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        htmlFiles.forEach(file => addCard('HTML', file.name, `./${file.name}`));
+        folders.forEach(folder => addCard('Carpeta', folder.name, `./${folder.name}/`));
+
+        if (!htmlFiles.length && !folders.length) {
+          statusEl.textContent = 'No hay HTML/carpetas para mostrar todavía.';
+          return;
+        }
+
+        statusEl.textContent = `Enlaces cargados: ${htmlFiles.length} HTML y ${folders.length} carpeta(s).`;
+      } catch (_) {
+        fallback();
+      }
+    })();
+  </script>
+</body>
+</html>
