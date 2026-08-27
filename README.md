@@ -39,6 +39,7 @@ assets/
   fonts/   Creepster y VT323 (.woff2) + su licencia OFL
   img/     logo del splash y periódico de la intro
   audio/   música del menú, clic y llamadas de cada noche
+    fnaf1/  46 efectos del FNAF 1 (puertas, cámaras, jumpscares, ambiente…)
 ```
 
 Consecuencia: los HTML ya no son archivos autónomos. Por eso el juego solo funciona servido
@@ -48,7 +49,7 @@ desde la web oficial —ver [Cómo jugar](#cómo-jugar).
 
 | Recurso | Titular |
 |---|---|
-| Audio e imágenes procedentes de *Five Nights at Freddy's* | **Scott Cawthon**, creador del juego original |
+| Audio e imágenes procedentes de *Five Nights at Freddy's* (46 efectos en `assets/audio/fnaf1/`) | **Scott Cawthon**, creador del juego original |
 | Universo, personajes y marca *Skibidi Toilet* | **DaFuqBoom** |
 | Tipografía *Creepster* | © 2011 Font Diner, Inc — SIL Open Font License 1.1 |
 | Tipografía *VT323* | © 2011 The VT323 Project Authors — SIL Open Font License 1.1 |
