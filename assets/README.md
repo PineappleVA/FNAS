@@ -8,28 +8,39 @@
 Contenido servido junto a las páginas: los tres builds lo cargan con rutas
 relativas (`assets/...`), ya no va incrustado en base64 dentro del HTML.
 
-## Procedencia
+## Inventario completo
 
-| Archivo | Contenido | Procedencia / licencia |
-|---|---|---|
-| `fonts/creepster-400.woff2` | tipografía Creepster | © 2011 Font Diner, Inc · **SIL OFL 1.1** → [`fonts/OFL.txt`](fonts/OFL.txt) |
-| `fonts/vt323-400-latin.woff2`<br>`fonts/vt323-400-latin-ext.woff2` | tipografía VT323 (subconjuntos latin y latin-ext) | © 2011 The VT323 Project Authors · **SIL OFL 1.1** → [`fonts/OFL.txt`](fonts/OFL.txt) |
-| `img/splash-logo.png` | logo del splash («Pineapple presenta») | Equipo Pineapple · obra propia |
-| `img/newspaper-intro.png` | periódico «Skibiry Herald» de la intro | Scott Cawthon · obra mixeada |
-| `audio/title-theme.m4a` | música de la pantalla de título | Scott Cawthon · obra propia |
-| `audio/click.mp3` | clic de interfaz | Equipo Pineapple · obra propia |
-| `audio/phone/night1-4.mp3` | llamadas de teléfono de cada noche (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
-| `audio/phone-unreleased/night1-4.mp3` | llamadas de teléfono de la compilación Unreleased | Equipo Pineapple · obra propia |
-| `audio/fnaf1/*.mp3` (46) | efectos y música del **FNAF 1** integrados en el motor | recursos de audio de **Five Nights at Freddy's** → **Scott Cawthon** · ⛔ no redistribuir |
+Los **63 ficheros** de `assets/`, uno por uno, con su función y su procedencia. Los 46 mp3 de
+FNAF 1 se detallan en la sección siguiente, con el evento que los dispara y su nivel de
+verificación.
 
-**Regla general:** mientras una fila no esté confirmada como obra propia, el
-archivo se trata como recurso de terceros y queda **excluido** de la licencia
-del código. Las filas marcadas con ⚠️ son las que el equipo debe revisar y
-completar; si un recurso resulta ser propio, basta con cambiar su fila.
+| # | Archivo | Función | Procedencia / licencia |
+|---|---|---|---|
+| 1 | `README.md` | este documento: procedencia, atribución y excepción de licencia | Equipo Pineapple · obra propia |
+| 2 | `fonts/OFL.txt` | texto de la licencia SIL OFL 1.1 que cubre las dos tipografías | SIL Open Font License 1.1 |
+| 3 | `fonts/creepster-400.woff2` | tipografía de los títulos y del logotipo en pantalla | © 2011 Font Diner, Inc · **SIL OFL 1.1** |
+| 4 | `fonts/vt323-400-latin.woff2` | tipografía de terminal: HUD, reloj y etiquetas de cámara (subconjunto latin) | © 2011 The VT323 Project Authors · **SIL OFL 1.1** |
+| 5 | `fonts/vt323-400-latin-ext.woff2` | la misma tipografía, subconjunto latin-ext para acentos y eñes | © 2011 The VT323 Project Authors · **SIL OFL 1.1** |
+| 6 | `img/splash-logo.png` | logo del splash «Pineapple presenta» al arrancar | Equipo Pineapple · obra propia |
+| 7 | `img/newspaper-intro.png` | periódico «Skibiry Herald» de la intro de cada noche | Scott Cawthon · obra mixeada |
+| 8 | `audio/title-theme.m4a` | música de la pantalla de título y del menú | Scott Cawthon · obra propia |
+| 9 | `audio/click.mp3` | clic de interfaz en botones y menús | Equipo Pineapple · obra propia |
+| 10 | `audio/phone/night1.mp3` | llamada del encargado de la noche 1 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 11 | `audio/phone/night2.mp3` | llamada del encargado de la noche 2 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 12 | `audio/phone/night3.mp3` | llamada del encargado de la noche 3 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 13 | `audio/phone/night4.mp3` | llamada del encargado de la noche 4 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 14 | `audio/phone-unreleased/night1.mp3` | llamada del encargado de la noche 1 (compilación Unreleased) | Equipo Pineapple · obra propia |
+| 15 | `audio/phone-unreleased/night2.mp3` | llamada del encargado de la noche 2 (compilación Unreleased) | Equipo Pineapple · obra propia |
+| 16 | `audio/phone-unreleased/night3.mp3` | llamada del encargado de la noche 3 (compilación Unreleased) | Equipo Pineapple · obra propia |
+| 17 | `audio/phone-unreleased/night4.mp3` | llamada del encargado de la noche 4 (compilación Unreleased) | Equipo Pineapple · obra propia |
+| 18–63 | `audio/fnaf1/*.mp3` (46) | efectos y música del **FNAF 1**, uno por uno en la sección siguiente | recursos de audio de **Five Nights at Freddy's** → **Scott Cawthon** · ⛔ no redistribuir |
 
-Los binarios idénticos entre builds se guardan una sola vez y se comparten:
-el logo, el periódico, la música del título y el clic son los mismos ficheros
-para las tres versiones.
+**Regla general:** mientras un fichero no esté confirmado como obra propia, se trata como recurso
+de terceros y queda **excluido** de la licencia del código. Si uno resulta ser propio, basta con
+cambiar su fila.
+
+Los binarios idénticos entre builds se guardan una sola vez y se comparten: el logo, el periódico,
+la música del título y el clic son los mismos ficheros para las tres versiones.
 
 ## Audio de FNAF 1 — `audio/fnaf1/`
 
@@ -118,61 +129,76 @@ distinción *lento*/*normal* de la wiki) y que `CAMERA_VIDEO_LOA_60105303` sea e
 al subirlo. La wiki confirma que existe un sonido real de puertas (`Puertas de la
 Office.ogg`), pero **no está en el pack subido**, así que la puerta sigue sintetizada.
 
+### Nivel de verificación
+
+Cada fila de las dos tablas anteriores lleva marcado de dónde sale su identidad:
+
+| Marca | Significado |
+|---|---|
+| ✅ | La wiki describe **este** sonido y su uso; el archivo encaja por nombre y función |
+| 🔶 | La wiki describe el uso, pero **qué archivo concreto** es, es deducción mía |
+| ⚠ | **Hay que verificarlo**: o la descripción de la wiki no encaja con el uso que le damos, o no hay entrada en la wiki |
+| — | Uso propio de este fangame; la wiki no lista ese sonido |
+
+Los ⚠ son siete archivos y conviene escucharlos contra el juego original antes de dar la identidad por buena.
+
 ### En el juego (42)
 
 | Archivo | Suena cuando | Duración | Se reproduce | Nombre original |
-|---|---|---|---|---|
-| `accion-denegada.mp3` | acción denegada | 0.21 s | completo | `error.mp3` |
-| `ambiente-apagon.mp3` | ambiente del apagón, desde que se va la luz hasta el susto o las 6 AM | 30.04 s | en bucle | `ambience2.mp3` |
-| `ambiente-oficina.mp3` | ambiente principal de la oficina, toda la noche | 115.51 s | en bucle | `ColdPresc-B.mp3` |
-| `amenaza-cerca.mp3` | amenaza cerca: **30 %** con un animatrónico en el pasillo, **50 %** con dos, **75 %** con tres, **100 %** si Freddy está en la oficina | 57.47 s | en bucle, volumen según la amenaza | `EerieAmbienceLargeSca_MV005.mp3` |
-| `bajar-monitor.mp3` | bajar el monitor | 0.44 s | completo | `put-down.mp3` |
-| `cambiar-camara.mp3` | cambiar de cámara | 0.16 s | completo | `blip3.mp3` |
-| `campanas-6am.mp3` | campanas de las 6 AM | 8.65 s | completo | `chimes-2.mp3` |
-| `carrera-pasillo-1.mp3` | carrera de IShowSpeed | 1.33 s | completo | `run.mp3` |
-| `carrera-pasillo-2.mp3` | carrera de IShowSpeed | 1.18 s | completo | `running-fast3.mp3` |
-| `estatica-del-monitor-larga.mp3` | estática del monitor (bucle, alternativa) | 16.88 s | en bucle | `static2.mp3` |
-| `estatica-del-monitor.mp3` | estática del monitor (bucle) | 5.46 s | en bucle | `static.mp3` |
-| `fin-de-la-llamada.mp3` | la cinta sale al terminar la llamada | 8.36 s | solo los primeros **1.5 s** | `MiniDV_Tape_Eject_1.mp3` |
-| `golpes-en-la-puerta.mp3` | golpes contra la puerta cerrada | 3.37 s | solo los primeros **1.4 s** | `DOOR_POUNDING_ME_D0291401.mp3` |
-| `grito-golden-freddy.mp3` | jumpscare de Golden Freddy (el grito **lento**, no el normal) | 7.97 s | completo | `XSCREAM2.mp3` |
-| `interferencia-camara-1.mp3` | interferencia al cambiar de sala | 2.09 s | solo los primeros **.55 s** | `garble1.mp3` |
-| `interferencia-camara-2.mp3` | interferencia al cambiar de sala | 3.00 s | solo los primeros **.55 s** | `garble2.mp3` |
-| `interferencia-camara-3.mp3` | interferencia al cambiar de sala | 2.14 s | solo los primeros **.55 s** | `garble3.mp3` |
-| `jumpscare.mp3` | jumpscare | 2.66 s | completo | `XSCREAM.mp3` |
-| `llaman-a-la-puerta.mp3` | un animatrónico llega a la puerta | 1.72 s | completo | `knock2.mp3` |
-| `marcha-toreador-apagon.mp3` | Freddy toca la Marcha del Toreador al irse la luz | 233.42 s | completo | `music_box.mp3` |
-| `musica-pirate-cove.mp3` | Pirate Cove la primera vez que abres la CAM 5 | 4.88 s | completo | `pirate-song2.mp3` |
-| `organo-de-circo.mp3` | órgano de circo, ocasionalmente durante la noche | 6.20 s | completo | `circus.mp3` |
-| `pasos-pasillo.mp3` | pasos por el pasillo | 7.89 s | solo los primeros **.9 s** | `deep-steps.mp3` |
-| `publico-de-la-intro.mp3` | público en la intro del periódico | 1.75 s | completo | `CROWD_SMALL_CHIL_EC049202.mp3` |
-| `respiracion-en-la-puerta-1.mp3` | respiración en la puerta | 1.65 s | completo | `Vocals_Breaths_S_35972006.mp3` |
-| `respiracion-en-la-puerta-2.mp3` | respiración en la puerta | 3.03 s | completo | `Vocals_Breaths_S_35972008.mp3` |
-| `respiracion-en-la-puerta-3.mp3` | respiración en la puerta | 1.36 s | completo | `Vocals_Breaths_S_35972012.mp3` |
-| `respiracion-en-la-puerta-4.mp3` | respiración en la puerta | 1.88 s | completo | `Vocals_Breaths_S_35972014.mp3` |
-| `risa-alucinacion-1.mp3` | risa (alucinación) | 1.12 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1.mp3` |
-| `risa-alucinacion-2.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.82 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1d.mp3` |
-| `risa-alucinacion-3.mp3` | risa lenta de Freddy al moverse, y alucinación | 4.05 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_2d.mp3` |
-| `risa-alucinacion-4.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.85 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_8d.mp3` |
-| `ruidos-cocina-1.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 3.89 s | completo | `OVEN-DRA_1_GEN-HDF18119.mp3` |
-| `ruidos-cocina-2.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.56 s | completo | `OVEN-DRA_2_GEN-HDF18120.mp3` |
-| `ruidos-cocina-3.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 5.17 s | completo | `OVEN-DRA_7_GEN-HDF18121.mp3` |
-| `ruidos-cocina-4.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.69 s | completo | `OVEN-DRAWE_GEN-HDF18122.mp3` |
-| `se-va-la-luz.mp3` | se va la luz | 9.34 s | completo | `powerdown.mp3` |
-| `subir-monitor.mp3` | subir el monitor | 2.59 s | solo los primeros **.7 s** | `CAMERA_VIDEO_LOA_60105303.mp3` |
-| `susurro-alucinacion.mp3` | susurro (alucinación) | 7.58 s | solo los primeros **2.2 s** | `whispering2.mp3` |
-| `voz-robotica-pasillo.mp3` | Bonnie o Chica en las esquinas de los pasillos, **solo desde la 4.ª noche** | 7.55 s | completo | `robotvoice.mp3` |
-| `zumbido-luces-pasillo.mp3` | luces de los pasillos encendidas | 4.36 s | en bucle | `BallastHumMedium2.mp3` |
-| `zumbido-ventilador.mp3` | zumbido del ventilador (bucle) | 4.86 s | en bucle | `Buzz_Fan_Florescent2.mp3` |
+| Archivo | Suena cuando | Duración | Se reproduce | Nombre original | Verificación |
+|---|---|---|---|---|---|
+| `accion-denegada.mp3` | acción denegada | 0.21 s | completo | `error.mp3` | — · uso propio del fangame (puerta atascada); la wiki no lista ese sonido |
+| `ambiente-apagon.mp3` | ambiente del apagón, desde que se va la luz hasta el susto o las 6 AM | 30.04 s | en bucle | `ambience2.mp3` | ✅ · *Ambience2* = ambiente del apagón |
+| `ambiente-oficina.mp3` | ambiente principal de la oficina, toda la noche | 115.51 s | en bucle | `ColdPresc-B.mp3` | ✅ · *Cold Presence B* = ambiente principal de la noche |
+| `amenaza-cerca.mp3` | amenaza cerca: **30 %** con un animatrónico en el pasillo, **50 %** con dos, **75 %** con tres, **100 %** si Freddy está en la oficina | 57.47 s | en bucle, volumen según la amenaza | `EerieAmbienceLargeSca_MV005.mp3` | ✅ · *Giant Hollow Tube Sector*, con la escalera 30/50/75/100 % |
+| `bajar-monitor.mp3` | bajar el monitor | 0.44 s | completo | `put-down.mp3` | 🔶 · la wiki lista «bajando el monitor»; el archivo es deducción |
+| `cambiar-camara.mp3` | cambiar de cámara | 0.16 s | completo | `blip3.mp3` | 🔶 · la wiki lista «cambiar de cámara»; el archivo es deducción |
+| `campanas-6am.mp3` | campanas de las 6 AM | 8.65 s | completo | `chimes-2.mp3` | ✅ · «campanas al finalizar una noche» |
+| `carrera-pasillo-1.mp3` | carrera de IShowSpeed | 1.33 s | completo | `run.mp3` | 🔶 · la wiki: Foxy corriendo por el West Hall; el archivo es deducción |
+| `carrera-pasillo-2.mp3` | carrera de IShowSpeed | 1.18 s | completo | `running-fast3.mp3` | 🔶 · idem |
+| `estatica-del-monitor-larga.mp3` | estática del monitor (bucle, alternativa) | 16.88 s | en bucle | `static2.mp3` | 🔶 · variante larga del mismo bucle |
+| `estatica-del-monitor.mp3` | estática del monitor (bucle) | 5.46 s | en bucle | `static.mp3` | 🔶 · la wiki: «sonido mientras se usa el monitor» |
+| `fin-de-la-llamada.mp3` | la cinta sale al terminar la llamada | 8.36 s | solo los primeros **1.5 s** | `MiniDV_Tape_Eject_1.mp3` | — · uso propio: la cinta al terminar la llamada. La wiki no la lista en FNAF 1 |
+| `golpes-en-la-puerta.mp3` | golpes contra la puerta cerrada | 3.37 s | solo los primeros **1.4 s** | `DOOR_POUNDING_ME_D0291401.mp3` | ✅ · «Foxy golpeando la puerta izquierda de la oficina» |
+| `grito-golden-freddy.mp3` | jumpscare de Golden Freddy (el grito **lento**, no el normal) | 7.97 s | completo | `XSCREAM2.mp3` | 🔶 · la wiki distingue grito *normal* y *lento*; el emparejamiento es deducción |
+| `interferencia-camara-1.mp3` | interferencia al cambiar de sala | 2.09 s | solo los primeros **.55 s** | `garble1.mp3` | ✅ · «señal de las cámaras interrumpida», 3 variantes |
+| `interferencia-camara-2.mp3` | interferencia al cambiar de sala | 3.00 s | solo los primeros **.55 s** | `garble2.mp3` | ✅ · idem |
+| `interferencia-camara-3.mp3` | interferencia al cambiar de sala | 2.14 s | solo los primeros **.55 s** | `garble3.mp3` | ✅ · idem |
+| `jumpscare.mp3` | jumpscare | 2.66 s | completo | `XSCREAM.mp3` | ✅ · «sonido del jumpscare de los animatrónicos» |
+| `llaman-a-la-puerta.mp3` | un animatrónico llega a la puerta | 1.72 s | completo | `knock2.mp3` | 🔶 · llamada a la puerta; el archivo es deducción |
+| `marcha-toreador-apagon.mp3` | Freddy toca la Marcha del Toreador al irse la luz | 233.42 s | completo | `music_box.mp3` | ✅ · *Toreador March* (Bizet, muestra 1905 Regina Music Box) |
+| `musica-pirate-cove.mp3` | Pirate Cove la primera vez que abres la CAM 5 | 4.88 s | completo | `pirate-song2.mp3` | ✅ · «Foxy cantando» en Pirate Cove |
+| `organo-de-circo.mp3` | órgano de circo, ocasionalmente durante la noche | 6.20 s | completo | `circus.mp3` | ✅ · «música de circo al azar cuando un animatrónico está activo» |
+| `pasos-pasillo.mp3` | pasos por el pasillo | 7.89 s | solo los primeros **.9 s** | `deep-steps.mp3` | 🔶 · la wiki: «pasos de Bonnie y Chica»; el archivo es deducción |
+| `publico-de-la-intro.mp3` | público en la intro del periódico | 1.75 s | completo | `CROWD_SMALL_CHIL_EC049202.mp3` | ⚠ · **verificar**: la wiki describe «niños gritando al finalizar una noche», no público en una intro |
+| `respiracion-en-la-puerta-1.mp3` | respiración en la puerta | 1.65 s | completo | `Vocals_Breaths_S_35972006.mp3` | ⚠ · **verificar**: la wiki describe *gemidos* al entrar en la oficina con el monitor subido |
+| `respiracion-en-la-puerta-2.mp3` | respiración en la puerta | 3.03 s | completo | `Vocals_Breaths_S_35972008.mp3` | ⚠ · idem |
+| `respiracion-en-la-puerta-3.mp3` | respiración en la puerta | 1.36 s | completo | `Vocals_Breaths_S_35972012.mp3` | ⚠ · idem |
+| `respiracion-en-la-puerta-4.mp3` | respiración en la puerta | 1.88 s | completo | `Vocals_Breaths_S_35972014.mp3` | ⚠ · idem |
+| `risa-alucinacion-1.mp3` | risa (alucinación) | 1.12 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1.mp3` | 🔶 · la wiki las atribuye a Freddy al moverse; aquí también son alucinación |
+| `risa-alucinacion-2.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.82 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1d.mp3` | 🔶 · idem |
+| `risa-alucinacion-3.mp3` | risa lenta de Freddy al moverse, y alucinación | 4.05 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_2d.mp3` | 🔶 · idem |
+| `risa-alucinacion-4.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.85 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_8d.mp3` | 🔶 · idem |
+| `ruidos-cocina-1.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 3.89 s | completo | `OVEN-DRA_1_GEN-HDF18119.mp3` | ✅ · «ruidos de Chica en la Kitchen», 4 variantes |
+| `ruidos-cocina-2.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.56 s | completo | `OVEN-DRA_2_GEN-HDF18120.mp3` | ✅ · idem |
+| `ruidos-cocina-3.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 5.17 s | completo | `OVEN-DRA_7_GEN-HDF18121.mp3` | ✅ · idem |
+| `ruidos-cocina-4.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.69 s | completo | `OVEN-DRAWE_GEN-HDF18122.mp3` | ✅ · idem |
+| `se-va-la-luz.mp3` | se va la luz | 9.34 s | completo | `powerdown.mp3` | ✅ · «cuando se corta la energía del establecimiento» |
+| `subir-monitor.mp3` | subir el monitor | 2.59 s | solo los primeros **.7 s** | `CAMERA_VIDEO_LOA_60105303.mp3` | 🔶 · la wiki lista «levantando el monitor»; el archivo es deducción |
+| `susurro-alucinacion.mp3` | susurro (alucinación) | 7.58 s | solo los primeros **2.2 s** | `whispering2.mp3` | — · uso propio (alucinación); la wiki no lista susurros en FNAF 1 |
+| `voz-robotica-pasillo.mp3` | Bonnie o Chica en las esquinas de los pasillos, **solo desde la 4.ª noche** | 7.55 s | completo | `robotvoice.mp3` | ✅ · «voz robótica» de las esquinas desde la 4.ª noche |
+| `zumbido-luces-pasillo.mp3` | luces de los pasillos encendidas | 4.36 s | en bucle | `BallastHumMedium2.mp3` | 🔶 · la wiki: «sonido de las luces de los pasillos»; zumbido de balasto |
+| `zumbido-ventilador.mp3` | zumbido del ventilador (bucle) | 4.86 s | en bucle | `Buzz_Fan_Florescent2.mp3` | ✅ · «sonidos provocados por el ventilador y la luz» |
 
 ### Sin asignar (4)
 
 | Archivo | Nombre original | Por qué no está asignado |
-|---|---|---|
-| `sin-usar-golpe-corto.mp3` | `SFXBible_12478.mp3` | la wiki describe unos «golpes que pueden ser escuchados cada cierto tiempo», pero no da el archivo: identificarlo por el nombre sería una conjetura |
-| `sin-usar-secuencia-digital.mp3` | `COMPUTER_DIGITAL_L2076505.mp3` | uso sin identificar |
-| `sin-usar-susto-ventana.mp3` | `windowscare.mp3` | su página de la wiki redirige a *Grimm Foxy* (Help Wanted): no es un sonido del FNAF 1 |
-| `tema-menu-fnaf1.mp3` | `darkness-music.mp3` | es el **tema del menú** original (*Urban Darkness Part 08*, Bjørn Lynne) según [la wiki](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)); el juego usa su propio tema de título |
+| Archivo | Nombre original | Por qué no está asignado | Verificación |
+|---|---|---|---|
+| `sin-usar-golpe-corto.mp3` | `SFXBible_12478.mp3` | la wiki describe unos «golpes que pueden ser escuchados cada cierto tiempo», pero no da el archivo: identificarlo por el nombre sería una conjetura | ⚠ · la wiki describe unos «golpes cada cierto tiempo» sin dar el archivo |
+| `sin-usar-secuencia-digital.mp3` | `COMPUTER_DIGITAL_L2076505.mp3` | uso sin identificar | ⚠ · sin entrada en la wiki; uso sin identificar |
+| `sin-usar-susto-ventana.mp3` | `windowscare.mp3` | su página de la wiki redirige a *Grimm Foxy* (Help Wanted): no es un sonido del FNAF 1 | ✅ · su página redirige a *Grimm Foxy* (Help Wanted): no es del FNAF 1 |
+| `tema-menu-fnaf1.mp3` | `darkness-music.mp3` | es el **tema del menú** original (*Urban Darkness Part 08*, Bjørn Lynne) según [la wiki](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)); el juego usa su propio tema de título | ✅ · *Urban Darkness Part 08* = tema del menú de Steam |
 
 Si un mp3 falta o no se puede decodificar, cada efecto cae en su versión
 sintetizada (`synthXxx`) y el juego sigue funcionando igual que antes.

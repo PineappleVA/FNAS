@@ -3414,7 +3414,7 @@ function nextHourTick(){if(!state.active||state.gameOver||state.won)return;state
 /* La noche se pone cada vez peor: la IA sube con las horas (tope 20) */
 for(const k in state.enemies){const e=state.enemies[k];if(!e.active||e.ai<=0)continue;
 const step=(state.night>=5?2:1);
-if(state.hour>=2||state.night>=4)e.ai=Math.min(20,e.ai+step)}if(state.hourTimer){clearTimeout(state.hourTimer);}state.hourTimer=setTimeout(nextHourTick,getHourDuration());}
+if(state.hour>=2||state.night>=5)e.ai=Math.min(20,e.ai+step)}if(state.hourTimer){clearTimeout(state.hourTimer);}state.hourTimer=setTimeout(nextHourTick,getHourDuration());}
 
 function uiTick(){if(!state.active)return;if(state.camsUp)updateCamTopBar();const _flick=getSetting('flicker');const nearDoor=Object.values(state.enemies).some(e=>e.side);if(_flick&&nearDoor){document.getElementById('officeFlicker').classList.add('active');setTimeout(()=>document.getElementById('officeFlicker').classList.remove('active'),120)}
 const noise=document.getElementById('staticNoise');const camEnemy=document.getElementById('camEnemy');const glitch=document.getElementById('camGlitchBurst');const lowPower=document.getElementById('lowPowerPulse');
