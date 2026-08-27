@@ -1,6 +1,11 @@
 # FNAS
 Five Nights at Skibidi's
 
+> ### ⚠️ Fangame sin ánimo de lucro
+> Proyecto de fans, **gratuito y no comercial**. No es un producto oficial ni está
+> afiliado, patrocinado o respaldado por **Scott Cawthon** (*Five Nights at Freddy's*)
+> ni por **DaFuqBoom** (*Skibidi Toilet*).
+
 ## Builds
 
 | Archivo | Qué es |
@@ -18,10 +23,42 @@ Fuentes, imágenes, música y llamadas de teléfono **no** van incrustadas en el
 
 ```
 assets/
-  fonts/   Creepster y VT323 (.woff2)
+  fonts/   Creepster y VT323 (.woff2) + su licencia OFL
   img/     logo del splash y periódico de la intro
   audio/   música del menú, clic y llamadas de cada noche
 ```
 
 Consecuencia: los HTML ya no son archivos autónomos. Hay que jugarlos servidos por HTTP
 (GitHub Pages lo hace solo); abiertos con `file://` no cargan la multimedia.
+
+## Créditos y recursos de terceros
+
+| Recurso | Titular |
+|---|---|
+| Audio e imágenes procedentes de *Five Nights at Freddy's* | **Scott Cawthon**, creador del juego original |
+| Universo, personajes y marca *Skibidi Toilet* | **DaFuqBoom** |
+| Tipografía *Creepster* | © 2011 Font Diner, Inc — SIL Open Font License 1.1 |
+| Tipografía *VT323* | © 2011 The VT323 Project Authors — SIL Open Font License 1.1 |
+| Código del juego | Jaime Gaming · Equipo Pineapple |
+
+El detalle archivo por archivo está en [`assets/README.md`](assets/README.md).
+
+## Licencia
+
+Este repositorio tiene **dos regímenes distintos**, y es importante no confundirlos:
+
+- ✅ **El código** —HTML, CSS y JavaScript de los builds— es software libre bajo la
+  **MIT License**: ver [`LICENSE`](LICENSE). Puedes usarlo, modificarlo y redistribuirlo.
+- ❌ **La multimedia no.** Todo lo que hay en [`assets/`](assets/) —audio, imágenes y
+  cualquier otro recurso de terceros— queda **excluido** de esa licencia. No somos sus
+  titulares y no tenemos derecho a sublicenciarlo ni a redistribuirlo, así que no podemos
+  concederlo. Ver [`NOTICE`](NOTICE).
+
+**Si reutilizas el código:** hazlo bajo la MIT, pero **no redistribuyas la carpeta
+`assets/`** junto a él. Retírala y usa recursos propios o con licencia compatible.
+
+## Sin monetización
+
+Este proyecto es y seguirá siendo **100 % gratuito**: sin micropagos, sin publicidad, sin
+enlaces de donación y sin venta en ninguna plataforma. Es la condición bajo la que la
+comunidad de FNAF puede trabajar con los recursos del juego original.

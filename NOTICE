@@ -1,0 +1,94 @@
+FNAS — Five Nights at Skibidi's
+Aviso sobre recursos de terceros · Third-party assets notice
+
+=======================================================================
+ESPAÑOL
+=======================================================================
+
+QUÉ CUBRE LA LICENCIA DEL REPOSITORIO
+
+El archivo LICENSE (MIT License) se aplica únicamente al CÓDIGO de este
+repositorio: el HTML, el CSS y el JavaScript de `fnaf release.html`,
+`fnas beta.html`, `fnas unreleased.html` e `index.html`, junto con su
+documentación.
+
+EXCEPCIÓN — LOS RECURSOS MULTIMEDIA NO ESTÁN LICENCIADOS AQUÍ
+
+La carpeta `assets/` y cualquier otro recurso multimedia de terceros
+(audio, imágenes y, salvo indicación en contrario, cualquier material que no
+hayamos creado nosotros) NO queda cubierto por la MIT License ni por ningún
+otro permiso que este repositorio conceda.
+
+No somos titulares de esos recursos y nadie nos ha cedido el derecho a
+sublicenciarlos ni a redistribuirlos, así que no podemos otorgarlo. Se usan
+exclusivamente dentro de este fangame, de forma gratuita y sin ánimo de lucro.
+
+Titulares:
+
+  * Los recursos de audio e imagen procedentes de Five Nights at Freddy's
+    pertenecen a SCOTT CAWTHON, creador del juego original.
+  * El universo, los personajes y la marca Skibidi Toilet pertenecen a
+    DAFUQBOOM.
+  * Las tipografías Creepster y VT323 se distribuyen bajo la SIL Open Font
+    License 1.1: © 2011 Font Diner, Inc y © 2011 The VT323 Project Authors.
+    Texto completo en `assets/fonts/OFL.txt`.
+
+El detalle archivo por archivo está en `assets/README.md`.
+
+QUÉ SIGNIFICA PARA TI SI REUTILIZAS ESTE CÓDIGO
+
+Puedes usar, modificar y redistribuir el código bajo la MIT License.
+NO estás autorizado a redistribuir la carpeta `assets/` junto a él: retírala
+y sustitúyela por recursos propios o con licencia compatible.
+
+SOBRE EL PROYECTO
+
+FNAS es un fangame de la comunidad, 100 % gratuito y sin monetización de
+ningún tipo (sin micropagos, sin publicidad, sin donaciones y sin venta en
+ninguna plataforma). No es un producto oficial y no está afiliado,
+patrocinado ni respaldado por Scott Cawthon ni por DaFuqBoom.
+
+=======================================================================
+ENGLISH
+=======================================================================
+
+WHAT THE REPOSITORY LICENSE COVERS
+
+The LICENSE file (MIT License) applies only to the CODE in this repository:
+the HTML, CSS and JavaScript of `fnaf release.html`, `fnas beta.html`,
+`fnas unreleased.html` and `index.html`, together with their documentation.
+
+EXCEPTION — MEDIA ASSETS ARE NOT LICENSED HERE
+
+The `assets/` folder and any other third-party media (audio, images and,
+unless stated otherwise, any material we did not create ourselves) is NOT
+covered by the MIT License or by any other permission granted by this
+repository.
+
+We do not own those assets and have not been granted the right to sublicense
+or redistribute them, so we cannot grant it. They are used solely within this
+fangame, free of charge and not for profit.
+
+Owners:
+
+  * Audio and image assets derived from Five Nights at Freddy's belong to
+    SCOTT CAWTHON, creator of the original game.
+  * The Skibidi Toilet universe, characters and brand belong to DAFUQBOOM.
+  * The Creepster and VT323 typefaces are distributed under the SIL Open Font
+    License 1.1: (c) 2011 Font Diner, Inc and (c) 2011 The VT323 Project
+    Authors. Full text in `assets/fonts/OFL.txt`.
+
+Per-file details are in `assets/README.md`.
+
+WHAT THIS MEANS IF YOU REUSE THE CODE
+
+You may use, modify and redistribute the code under the MIT License. You are
+NOT authorised to redistribute the `assets/` folder along with it: remove it
+and replace it with your own assets or compatibly licensed ones.
+
+ABOUT THE PROJECT
+
+FNAS is a community fangame, 100 % free and with no monetization of any kind
+(no microtransactions, no advertising, no donations and no sale on any
+platform). It is not an official product and is not affiliated with,
+sponsored by or endorsed by Scott Cawthon or DaFuqBoom.
