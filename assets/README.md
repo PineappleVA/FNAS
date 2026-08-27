@@ -15,11 +15,11 @@ relativas (`assets/...`), ya no va incrustado en base64 dentro del HTML.
 | `fonts/creepster-400.woff2` | tipografía Creepster | © 2011 Font Diner, Inc · **SIL OFL 1.1** → [`fonts/OFL.txt`](fonts/OFL.txt) |
 | `fonts/vt323-400-latin.woff2`<br>`fonts/vt323-400-latin-ext.woff2` | tipografía VT323 (subconjuntos latin y latin-ext) | © 2011 The VT323 Project Authors · **SIL OFL 1.1** → [`fonts/OFL.txt`](fonts/OFL.txt) |
 | `img/splash-logo.png` | logo del splash («Pineapple presenta») | Equipo Pineapple · obra propia |
-| `img/newspaper-intro.png` | periódico «Skibiry Herald» de la intro | ⚠️ **por confirmar**: si deriva del periódico de FNAF, pertenece a Scott Cawthon |
-| `audio/title-theme.m4a` | música de la pantalla de título | ⚠️ **por confirmar** |
-| `audio/click.mp3` | clic de interfaz | ⚠️ **por confirmar** |
-| `audio/phone/night1-4.mp3` | llamadas de teléfono de cada noche (builds v3.0: `fnaf release.html` y `fnas beta.html`) | recursos de audio de **Five Nights at Freddy's** → Scott Cawthon · ⚠️ por confirmar pista a pista |
-| `audio/phone-unreleased/night1-4.mp3` | llamadas de teléfono de la compilación Unreleased | recursos de audio de **Five Nights at Freddy's** → Scott Cawthon · ⚠️ por confirmar pista a pista |
+| `img/newspaper-intro.png` | periódico «Skibiry Herald» de la intro | Scott Cawthon · obra mixeada |
+| `audio/title-theme.m4a` | música de la pantalla de título | Scott Cawthon · obra propia |
+| `audio/click.mp3` | clic de interfaz | Equipo Pineapple · obra propia |
+| `audio/phone/night1-4.mp3` | llamadas de teléfono de cada noche (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| `audio/phone-unreleased/night1-4.mp3` | llamadas de teléfono de la compilación Unreleased | Equipo Pineapple · obra propia |
 
 **Regla general:** mientras una fila no esté confirmada como obra propia, el
 archivo se trata como recurso de terceros y queda **excluido** de la licencia
