@@ -6,6 +6,19 @@ Five Nights at Skibidi's
 > afiliado, patrocinado o respaldado por **Scott Cawthon** (*Five Nights at Freddy's*)
 > ni por **DaFuqBoom** (*Skibidi Toilet*).
 
+## Cómo jugar
+
+**🌐 Solo se puede jugar en la web oficial:** <https://pineappleva.github.io/FNAS/>
+
+Descargar el HTML **no funciona**. El juego necesita servir la carpeta `assets/`
+por HTTP desde el mismo sitio que la página: si abres el fichero descargado con
+doble clic (`file://`), no carga ni las fuentes, ni las imágenes, ni la música, ni
+las llamadas de teléfono. Es así a propósito: la copia de referencia es la que
+está publicada, no la que alguien se baje.
+
+Si quieres el código para estudiarlo o modificarlo, clona el repositorio y sírvelo
+con cualquier servidor local (`python3 -m http.server`, por ejemplo).
+
 ## Builds
 
 | Archivo | Qué es |
@@ -28,8 +41,8 @@ assets/
   audio/   música del menú, clic y llamadas de cada noche
 ```
 
-Consecuencia: los HTML ya no son archivos autónomos. Hay que jugarlos servidos por HTTP
-(GitHub Pages lo hace solo); abiertos con `file://` no cargan la multimedia.
+Consecuencia: los HTML ya no son archivos autónomos. Por eso el juego solo funciona servido
+desde la web oficial —ver [Cómo jugar](#cómo-jugar).
 
 ## Créditos y recursos de terceros
 
