@@ -84,25 +84,41 @@ Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](
 
 ### De dónde salen
 
-La identidad y el uso de las pistas musicales están tomados de la página
-[**Soundtrack (FNaF1)**](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)) de la Five Nights at Freddy's Wiki, que relaciona cada
-`.ogg` del juego con su título real, su autor y el momento exacto en que suena.
-De ahí salen cinco correcciones que antes estaban mal:
+Dos páginas de la Five Nights at Freddy's Wiki son la fuente de las identidades:
+
+- [**Archivos de sonido (FNaF)**](https://freddy-fazbears-pizza.fandom.com/es/wiki/Archivos_de_sonido_(FNaF)) — la lista completa de efectos del FNAF 1,
+  agrupados por uso: animatrónicos, movimiento, música de ambiente, monitor, puertas y
+  luces, cocina, gemidos y llamadas.
+- [**Soundtrack (FNaF1)**](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)) — las pistas musicales, con título real, autor y el
+  momento exacto en que suenan.
+
+Lo que se corrigió con ellas:
 
 - `music_box.ogg` **es** la Marcha del Toreador (Bizet, muestra *1905 Regina Music Box*
-  de Sound Ideas) y suena cuando se va la luz o Freddy está en la Cocina.
-- `Darkness music.ogg` no es el Toreador: es el **tema del menú** de la versión Steam
-  (*Urban Darkness Part 08*, Bjørn Lynne).
-- `ColdPresc B.ogg` es el **ambiente principal** de la noche y `Ambience2.ogg` el del
+  de Sound Ideas) y suena al irse la luz o con Freddy en la Cocina.
+- `Darkness music.ogg` no es el Toreador: es el **tema del menú** de Steam (*Urban
+  Darkness Part 08*, Bjørn Lynne).
+- `ColdPresc B.ogg` es el ambiente principal de la noche y `Ambience2.ogg` el del
   **apagón**; estaban intercambiados.
-- `EerieAmbienceLargeSca MV005.ogg` no es un ambiente de poca energía: sube de volumen
-  según cuántos animatrónicos hay en los pasillos.
-- `Circus.ogg` se oye ocasionalmente durante la noche, no en la intro del periódico.
+- `EerieAmbienceLargeSca MV005.ogg` es la «música de ambiente 2», la que suena **cuando
+  un animatrónico está cerca**, con la escalera de volumen 30/50/75/100 %.
+- `Circus.ogg` suena al azar **cuando uno de los animatrónicos está activo**, no en la
+  intro del periódico.
+- `OVEN-DRA*` no eran candidatas a puerta: son los cuatro **ruidos de Chica en la
+  cocina** (`OVEN-DRAWE` = *oven drawer*).
+- `robotvoice` es la **voz robótica** de las esquinas de los pasillos desde la 4.ª noche.
+- `XSCREAM2` es el grito **lento** del jumpscare de Golden Freddy, distinto del normal.
+- `BallastHumMedium2` es el zumbido de las **luces de los pasillos**.
+- Las interferencias de cámara (`garble1-3`) ya estaban bien: la wiki las atribuye a los
+  animatrónicos moviéndose, y el juego las dispara desde `camMoveGlitch()`.
 
-Los efectos no tienen una página equivalente en la wiki, así que su identidad se toma
-del nombre de la librería en el pack de The Sounds Resource.
+Dos identidades son **inferencia**, no dato de la wiki, y están marcadas como tales: que
+`Laugh_Giggle_Girl_1d/2d/8d` sean las risas lentas de Freddy al moverse (coincide con la
+distinción *lento*/*normal* de la wiki) y que `CAMERA_VIDEO_LOA_60105303` sea el monitor
+al subirlo. La wiki confirma que existe un sonido real de puertas (`Puertas de la
+Office.ogg`), pero **no está en el pack subido**, así que la puerta sigue sintetizada.
 
-### En el juego (35)
+### En el juego (42)
 
 | Archivo | Suena cuando | Duración | Se reproduce | Nombre original |
 |---|---|---|---|---|
@@ -119,6 +135,7 @@ del nombre de la librería en el pack de The Sounds Resource.
 | `estatica-del-monitor.mp3` | estática del monitor (bucle) | 5.46 s | en bucle | `static.mp3` |
 | `fin-de-la-llamada.mp3` | la cinta sale al terminar la llamada | 8.36 s | solo los primeros **1.5 s** | `MiniDV_Tape_Eject_1.mp3` |
 | `golpes-en-la-puerta.mp3` | golpes contra la puerta cerrada | 3.37 s | solo los primeros **1.4 s** | `DOOR_POUNDING_ME_D0291401.mp3` |
+| `grito-golden-freddy.mp3` | jumpscare de Golden Freddy (el grito **lento**, no el normal) | 7.97 s | completo | `XSCREAM2.mp3` |
 | `interferencia-camara-1.mp3` | interferencia al cambiar de sala | 2.09 s | solo los primeros **.55 s** | `garble1.mp3` |
 | `interferencia-camara-2.mp3` | interferencia al cambiar de sala | 3.00 s | solo los primeros **.55 s** | `garble2.mp3` |
 | `interferencia-camara-3.mp3` | interferencia al cambiar de sala | 2.14 s | solo los primeros **.55 s** | `garble3.mp3` |
@@ -134,28 +151,27 @@ del nombre de la librería en el pack de The Sounds Resource.
 | `respiracion-en-la-puerta-3.mp3` | respiración en la puerta | 1.36 s | completo | `Vocals_Breaths_S_35972012.mp3` |
 | `respiracion-en-la-puerta-4.mp3` | respiración en la puerta | 1.88 s | completo | `Vocals_Breaths_S_35972014.mp3` |
 | `risa-alucinacion-1.mp3` | risa (alucinación) | 1.12 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1.mp3` |
-| `risa-alucinacion-2.mp3` | risa (alucinación) | 2.82 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1d.mp3` |
-| `risa-alucinacion-3.mp3` | risa (alucinación) | 4.05 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_2d.mp3` |
-| `risa-alucinacion-4.mp3` | risa (alucinación) | 2.85 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_8d.mp3` |
+| `risa-alucinacion-2.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.82 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1d.mp3` |
+| `risa-alucinacion-3.mp3` | risa lenta de Freddy al moverse, y alucinación | 4.05 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_2d.mp3` |
+| `risa-alucinacion-4.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.85 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_8d.mp3` |
+| `ruidos-cocina-1.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 3.89 s | completo | `OVEN-DRA_1_GEN-HDF18119.mp3` |
+| `ruidos-cocina-2.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.56 s | completo | `OVEN-DRA_2_GEN-HDF18120.mp3` |
+| `ruidos-cocina-3.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 5.17 s | completo | `OVEN-DRA_7_GEN-HDF18121.mp3` |
+| `ruidos-cocina-4.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.69 s | completo | `OVEN-DRAWE_GEN-HDF18122.mp3` |
 | `se-va-la-luz.mp3` | se va la luz | 9.34 s | completo | `powerdown.mp3` |
 | `subir-monitor.mp3` | subir el monitor | 2.59 s | solo los primeros **.7 s** | `CAMERA_VIDEO_LOA_60105303.mp3` |
 | `susurro-alucinacion.mp3` | susurro (alucinación) | 7.58 s | solo los primeros **2.2 s** | `whispering2.mp3` |
+| `voz-robotica-pasillo.mp3` | Bonnie o Chica en las esquinas de los pasillos, **solo desde la 4.ª noche** | 7.55 s | completo | `robotvoice.mp3` |
+| `zumbido-luces-pasillo.mp3` | luces de los pasillos encendidas | 4.36 s | en bucle | `BallastHumMedium2.mp3` |
 | `zumbido-ventilador.mp3` | zumbido del ventilador (bucle) | 4.86 s | en bucle | `Buzz_Fan_Florescent2.mp3` |
 
-### Sin asignar (11)
+### Sin asignar (4)
 
 | Archivo | Nombre original | Por qué no está asignado |
 |---|---|---|
-| `sin-usar-candidata-puerta-1.mp3` | `OVEN-DRA_1_GEN-HDF18119.mp3` | candidatas a puerta, pero duran 2,6-5,2 s para una pulsación de ~200 ms y no está confirmado que sean la puerta del FNAF 1 |
-| `sin-usar-candidata-puerta-2.mp3` | `OVEN-DRA_2_GEN-HDF18120.mp3` | idem |
-| `sin-usar-candidata-puerta-3.mp3` | `OVEN-DRA_7_GEN-HDF18121.mp3` | idem |
-| `sin-usar-candidata-puerta-4.mp3` | `OVEN-DRAWE_GEN-HDF18122.mp3` | idem |
-| `sin-usar-golpe-corto.mp3` | `SFXBible_12478.mp3` | uso sin identificar |
-| `sin-usar-grito-2.mp3` | `XSCREAM2.mp3` | segundo grito; de reserva |
+| `sin-usar-golpe-corto.mp3` | `SFXBible_12478.mp3` | la wiki describe unos «golpes que pueden ser escuchados cada cierto tiempo», pero no da el archivo: identificarlo por el nombre sería una conjetura |
 | `sin-usar-secuencia-digital.mp3` | `COMPUTER_DIGITAL_L2076505.mp3` | uso sin identificar |
 | `sin-usar-susto-ventana.mp3` | `windowscare.mp3` | su página de la wiki redirige a *Grimm Foxy* (Help Wanted): no es un sonido del FNAF 1 |
-| `sin-usar-voz-robot.mp3` | `robotvoice.mp3` | no aparece en [Category:Sound Files](https://freddy-fazbears-pizza.fandom.com/wiki/Category:Sound_Files); de reserva |
-| `sin-usar-zumbido-fluorescente.mp3` | `BallastHumMedium2.mp3` | zumbido de 4,36 s; la luz se pulsa constantemente y lo saturaba |
 | `tema-menu-fnaf1.mp3` | `darkness-music.mp3` | es el **tema del menú** original (*Urban Darkness Part 08*, Bjørn Lynne) según [la wiki](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)); el juego usa su propio tema de título |
 
 Si un mp3 falta o no se puede decodificar, cada efecto cae en su versión

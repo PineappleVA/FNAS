@@ -2427,7 +2427,23 @@ const SFX={
  giggle1:{f:'risa-alucinacion-1.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
  giggle2:{f:'risa-alucinacion-2.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
  giggle3:{f:'risa-alucinacion-3.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
- giggle4:{f:'risa-alucinacion-4.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'}
+ giggle4:{f:'risa-alucinacion-4.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
+ /* --- los siguientes los identifica la pagina "Archivos de sonido (FNaF)" de la wiki --- */
+ /* Chica: los cuatro ruidos que hace mientras se mueve por la Kitchen */
+ kitchen1:{f:'ruidos-cocina-1.mp3',v:.5,cd:2600,g:'cocina'},
+ kitchen2:{f:'ruidos-cocina-2.mp3',v:.5,cd:2600,g:'cocina'},
+ kitchen3:{f:'ruidos-cocina-3.mp3',v:.5,cd:2600,g:'cocina'},
+ kitchen4:{f:'ruidos-cocina-4.mp3',v:.5,cd:2600,g:'cocina'},
+ /* Bonnie y Chica en las esquinas de los pasillos, desde la 4a noche */
+ robotVoice:{f:'voz-robotica-pasillo.mp3',v:.55,cd:4000,g:'robot'},
+ /* el grito de Golden Freddy es el lento, no el normal de los animatronicos */
+ goldenScream:{f:'grito-golden-freddy.mp3',v:.95},
+ /* zumbido de las luces de los pasillos, en bucle mientras estan encendidas */
+ lightBed:{f:'zumbido-luces-pasillo.mp3',v:.14,loop:1,cd:300,g:'luces'},
+ /* risa lenta de Freddy al moverse (misma familia que las alucinaciones, otra via) */
+ freddyLaugh1:{f:'risa-alucinacion-2.mp3',v:.34,dur:2,cd:9000,g:'freddyRisa'},
+ freddyLaugh2:{f:'risa-alucinacion-3.mp3',v:.34,dur:2,cd:9000,g:'freddyRisa'},
+ freddyLaugh3:{f:'risa-alucinacion-4.mp3',v:.34,dur:2,cd:9000,g:'freddyRisa'}
 };
 const SFX_DIR='assets/audio/fnaf1/';
 /* ================== AUDIO POSICIONAL (3D) ==================
@@ -2665,8 +2681,50 @@ function startBlackoutBed(){if(!AudioCtx)return;
 /* El organo de circo se oye ocasionalmente durante la noche, no en la intro. */
 function maybeCircus(){
  if(!AudioCtx||!state||(state&&state.blackout))return;
+ /* la wiki: al azar cuando uno de los animatronicos esta activo */
+ if(!anyAnimatronicActive())return;
  if(Math.random()>.10)return;
  playSfx('circus')}
+/* Cocina: la wiki atribuye estos cuatro sonidos a Chica mientras se mueve por
+   la Kitchen (la CAM 6 del original, que no tiene imagen). */
+function maybeKitchenSfx(){
+ if(!AudioCtx||!state||state.blackout)return;
+ const c=state.enemies&&state.enemies.chica;
+ if(!c||!c.active||c.cam!==9)return;
+ if(Math.random()>.40)return;
+ playSfx(sfxPick(['kitchen1','kitchen2','kitchen3','kitchen4']),{pos:'kitchen'})}
+/* Voz robotica: la wiki la situa en las esquinas de los pasillos a partir de la
+   4a noche, con Bonnie o Chica. */
+function sndRobotVoice(side){
+ if(!AudioCtx)return;
+ playSfx('robotVoice',{pos:doorPos(side)||'hallLeftNear'})}
+function maybeArrivalSfx(key,e){
+ if(!AudioCtx||!e||!state)return;
+ if(key!=='bonnie'&&key!=='chica')return;
+ if(state.night<4)return;
+ if(e.side){sndRobotVoice(e.side);return}
+ if(e.cam===11)sndRobotVoice('left');
+ else if(e.cam===12)sndRobotVoice('right')}
+/* Risa lenta de Freddy al moverse, colocada donde este. */
+function sndFreddyLaugh(e){
+ if(!AudioCtx||!e)return;
+ playSfx(sfxPick(['freddyLaugh1','freddyLaugh2','freddyLaugh3']),
+  {pos:e.side?doorPos(e.side):camPos(e.cam)})}
+/* Grito lento de Golden Freddy, distinto del grito normal. */
+function sndGoldenScream(){
+ if(!playSfx('goldenScream',{pos:'face',fallback:synthJumpscare}))synthJumpscare()}
+/* Zumbido de las luces de los pasillos: un solo bucle mientras haya una
+   encendida. Va en bucle y no por pulsacion para que no sature al vigilar. */
+function startLightHum(side){
+ if(!AudioCtx||sfxGroupBusy('luces'))return;
+ if(typeof getSetting==='function'&&!getSetting('ambience'))return;
+ playSfx('lightBed',{loop:true,pos:doorPos(side)})}
+function stopLightHum(){stopSfx('lightBed',.3)}
+function anyAnimatronicActive(){
+ if(typeof state==='undefined'||!state||!state.enemies)return false;
+ for(const k in state.enemies){const e=state.enemies[k];if(e&&e.active)return true}
+ return false}
+
 let _covePlayed=false;
 function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate')}
 function resetCoveMusic(){_covePlayed=false}
@@ -2679,7 +2737,8 @@ function sndCamUp(up){const k=(up===false)?'camDown':'camUp';
 function sndCamSwitch(cam){const p=camPos(cam);
  if(!playSfx('blip',{pos:p,fallback:synthCamSwitch}))synthCamSwitch()}
 function sndAmbience(){if(sfxLoopActive('ambienceBed'))return;synthAmbience()}
-function sndJumpscare(){if(!playSfx('scream',{pos:'face',fallback:synthJumpscare}))synthJumpscare()}
+function sndJumpscare(golden){if(golden){sndGoldenScream();return}
+ if(!playSfx('scream',{pos:'face',fallback:synthJumpscare}))synthJumpscare()}
 function sndPowerDown(){if(!playSfx('powerdown',{fallback:synthPowerDown}))synthPowerDown()}
 function sndFoxyRun(pos){const p=pos||'hallLeft';if(!playSfx(sfxPick(['runFast','run']),{pos:p,fallback:synthFoxyRun}))synthFoxyRun()}
 function sndFreddyTune(){if(!playSfx('toreador',{fallback:synthFreddyTune}))synthFreddyTune()}
@@ -3153,7 +3212,7 @@ state.intervals.push(setInterval(breathTick,1400));
 
 function clearAllIntervals(){try{clearGolden()}catch(e){}if(state.blackoutTimers){state.blackoutTimers.forEach(id=>clearTimeout(id));state.blackoutTimers=[]}state.intervals.forEach(id=>clearInterval(id));state.intervals=[];Object.values(state.timers).forEach(clearTimeout);state.timers={};if(state.hourTimer){clearTimeout(state.hourTimer);state.hourTimer=null}if(state.ambienceTimer){clearTimeout(state.ambienceTimer);state.ambienceTimer=null}}
 
-function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();updateThreatAmbience();maybeCircus();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
+function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();updateThreatAmbience();maybeCircus();maybeKitchenSfx();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
 function randomStepSound(){if(state.active&&!state.gameOver&&!state.won){if(Math.random()<.12)triggerHallucination();}}
 
 /* ===== CONTROLS ===== */
@@ -3197,7 +3256,8 @@ function scareOffAtDoor(side){
 function synthDoorBang(){try{playOsc(70,'square',.22,.34);playOsc(110,'sawtooth',.16,.18);playNoise(.22,.14)}catch(e){}}
 
 function toggleLight(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setLight(side,!state.lights[side]);sndLight(side)}
-function setLight(side,on){state.lights[side]=on;const hallLight=document.getElementById('hallLight'+(side==='left'?'Left':'Right'));hallLight.classList.toggle('active',on);if(!on)hallLight.classList.add('off-flash');setTimeout(()=>hallLight&&hallLight.classList.remove('off-flash'),500);const btn=document.getElementById('btnLight'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnLight'+(side==='left'?'Left':'Right')+'2');btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);btn.classList.toggle('light-on',on);btn2&&btn2.classList.toggle('light-on',on);const office=document.getElementById('office');if(office){const anyOn=state.lights.left||state.lights.right;office.classList.toggle('lights-off',!anyOn);office.classList.toggle('lights-on',anyOn);if(on){/* keep lights-on while active */}else{office.classList.remove('lights-on')}}if(on){/* La luz solo REVELA: para espantarlos hay que cerrar la puerta. */triggerFlickerBrightness();const hallEnemy=document.getElementById(side==='left'?'hallEnemyLeft':'hallEnemyRight');if(hallEnemy){hallEnemy.style.filter='brightness(2.5)';setTimeout(()=>{hallEnemy.style.filter=''},200)}}updateHallEnemies();updateUsage()}
+function setLight(side,on){state.lights[side]=on;
+ if(on)startLightHum(side);else if(!state.lights.left&&!state.lights.right)stopLightHum();const hallLight=document.getElementById('hallLight'+(side==='left'?'Left':'Right'));hallLight.classList.toggle('active',on);if(!on)hallLight.classList.add('off-flash');setTimeout(()=>hallLight&&hallLight.classList.remove('off-flash'),500);const btn=document.getElementById('btnLight'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnLight'+(side==='left'?'Left':'Right')+'2');btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);btn.classList.toggle('light-on',on);btn2&&btn2.classList.toggle('light-on',on);const office=document.getElementById('office');if(office){const anyOn=state.lights.left||state.lights.right;office.classList.toggle('lights-off',!anyOn);office.classList.toggle('lights-on',anyOn);if(on){/* keep lights-on while active */}else{office.classList.remove('lights-on')}}if(on){/* La luz solo REVELA: para espantarlos hay que cerrar la puerta. */triggerFlickerBrightness();const hallEnemy=document.getElementById(side==='left'?'hallEnemyLeft':'hallEnemyRight');if(hallEnemy){hallEnemy.style.filter='brightness(2.5)';setTimeout(()=>{hallEnemy.style.filter=''},200)}}updateHallEnemies();updateUsage()}
 
 function toggleCameras(){if(!state.active||state.gameOver||state.won)return;initAudio();if(state.goldenActive)clearGolden();state.camsUp=!state.camsUp;const sys=document.getElementById('cameraSystem');const btn=document.getElementById('camButton');if(state.camsUp){document.body.classList.add('cams-up');sys.classList.add('active');btn.classList.add('cam-on');sndCamUp(true);startCamStatic();updateCamView();updateCamIndicators();updateCoveDecor();updateCamTopBar();stopFanHum()}else{document.body.classList.remove('cams-up');sys.classList.remove('active');btn.classList.remove('cam-on');sndCamUp(false);stopCamStatic();
  const md=document.getElementById('monDown');
@@ -3290,9 +3350,9 @@ if(label){label.classList.add('glitching');setTimeout(()=>label.classList.remove
 try{sndCamGlitch(intense,state.currentCam)}catch(e){}}
 function synthCamGlitch(intense){try{playNoise(intense?.22:.12,intense?.10:.05);playOsc(intense?150:220,'square',.05,.02)}catch(e){}}
 
-function aiTick(){if(!state.active||state.gameOver||state.won)return;let _moved=0,_movedHere=false;for(const key in state.enemies){if(key==='foxy')continue; // Foxy handled separately
+function aiTick(){if(!state.active||state.gameOver||state.won)return;let _moved=0,_movedHere=false;const _mk=[];for(const key in state.enemies){if(key==='foxy')continue; // Foxy handled separately
 const e=state.enemies[key];if(!e.active)continue;const ai=e.ai;if(ai<=0)continue;const calmFactor=state.difficulty==='hard'?22:state.difficulty==='medium'?25:29;const roll=Math.floor(Math.random()*calmFactor)+1;if(roll>ai)continue;
-if(e.side){if(state.doors[e.side]){if(Math.random()<0.70){const _dst=e.side==='left'?11:12;e.cam=_dst;e.side=null;sndFootsteps(_dst);_moved++;if(state.camsUp&&_dst===state.currentCam)_movedHere=true;updateCamIndicators();}continue}else{continue}}
+if(e.side){if(state.doors[e.side]){if(Math.random()<0.70){const _dst=e.side==='left'?11:12;e.cam=_dst;e.side=null;sndFootsteps(_dst);_moved++;_mk.push(key);maybeArrivalSfx(key,e);if(state.camsUp&&_dst===state.currentCam)_movedHere=true;updateCamIndicators();}continue}else{continue}}
 // Mirar una camara frena al animatronico... pero no en los pasillos de la oficina
 // (11/12), donde solo hay un 40% de que se quede quieto. Evita el exploit de
 // vigilar CAM 2C/4C indefinidamente.
@@ -3304,11 +3364,12 @@ if(state.camsUp&&e.cam===state.currentCam){
 const paths=PATHS[key][e.cam];if(!paths)continue;const dest=paths[Math.floor(Math.random()*paths.length)];
 const _from=e.cam;
 if(dest==='officeLeft'){e.cam=null;e.side='left';sndKnock('left')}else if(dest==='officeRight'){e.cam=null;e.side='right';sndKnock('right')}else{e.cam=dest;sndFootsteps(dest)}
-_moved++;
+_moved++;_mk.push(key);maybeArrivalSfx(key,e);
 /* glitch mas fuerte si el movimiento ocurre en la camara que estas viendo */
 if(state.camsUp&&(_from===state.currentCam||e.cam===state.currentCam))_movedHere=true}
 updateCamIndicators();updateCamView();updateHallEnemies();
-if(_moved>0&&state.camsUp)camMoveGlitch(_movedHere)}
+if(_moved>0&&state.camsUp)camMoveGlitch(_movedHere);
+if(_mk.indexOf('freddy')>=0)sndFreddyLaugh(state.enemies.freddy)}
 
 /* Foxy / Speed special mechanic: aggression now scales with AI and difficulty */
 function resetFoxy(hitDoor=false){const foxy=state.enemies.foxy;if(!foxy)return;foxy.cam=5;foxy.side=null;foxy.runStage=0;state.foxyRun=false;if(hitDoor){const hitDrain=Math.min(18,3+Math.ceil((foxy.ai||0)/2)+(state.difficulty==='hard'?2:0));state.power=Math.max(0,state.power-hitDrain);updateHUD();updateUsage()}updateCamIndicators();updateCamView();updateHallEnemies();updateCoveDecor()}
@@ -3430,7 +3491,7 @@ function maybeGoldenSkibidi(){
   /* si sigue en pantalla al acabar la animacion -> muerte */
   const deadline=setTimeout(()=>{
     if(state.goldenActive&&!state.camsUp&&!state.gameOver&&!state.won){
-      clearGolden();doJumpscare('freddy')
+      clearGolden();doJumpscare('freddy',true)
     }else{clearGolden()}
   },6200);
   state.timers.golden=deadline;
@@ -3489,7 +3550,7 @@ function registerDoorUse(side){
   if(st){st.classList.add('jammed');setTimeout(()=>st&&st.classList.remove('jammed'),2600)}}}
 function synthDoorJam(){try{playOsc(180,'square',.1,.2);playOsc(120,'square',.1,.18,.12);
  playNoise(.24,.10)}catch(e){}}
-function doJumpscare(enemyKey){if(state.gameOver||state.won)return;stopPhoneCall();state.gameOver=true;state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndJumpscare();document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on');const lv=getSetting('jumpscareLevel')|0;
+function doJumpscare(enemyKey,golden){if(state.gameOver||state.won)return;stopPhoneCall();state.gameOver=true;state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndJumpscare(golden);document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on');const lv=getSetting('jumpscareLevel')|0;
 const jsEnemy=document.getElementById('jsEnemy');jsEnemy.innerHTML=lv===2?'':getEnemySvg(enemyKey||'freddy');
 const jsFlash=document.getElementById('jsFlash');if(jsFlash)jsFlash.style.display=lv>=1?'none':'';
 document.getElementById('jumpscare').classList.add('active');state.lastKiller=enemyKey||'freddy';const _dur=lv===2?900:lv===1?1600:2200;setTimeout(()=>{document.getElementById('jumpscare').classList.remove('active');showEnd(false,state.lastKiller)},_dur)}
