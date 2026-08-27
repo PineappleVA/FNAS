@@ -68,6 +68,18 @@ música y el ambiente del local **no** se panean, porque no vienen de un sitio.
 `SFX_3D=false` lo degrada a paneo estéreo, y si el navegador no tiene
 `PannerNode` la caída es automática.
 
+### Mezcla
+
+Los deslizadores mandan sobre lo que corresponde: **Música** controla la música
+del menú *y* la del juego (Toreador, Pirate Cove, fiesta y campanas de las 6 AM,
+marcadas con `music:1` en la tabla `SFX`); **Efectos** controla el resto;
+**Maestro** los dos. Antes el deslizador de Música solo afectaba al menú y la
+música del menú llevaba un 0,42 fijo que se saltaba el ajuste.
+
+La llamada del encargado suena por un `<audio>` aparte, fuera del bus maestro,
+así que mientras habla el ambiente y la estática se atenúan a un tercio y
+vuelven a su nivel al cortar.
+
 Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](../audio-test.html)**.
 
 ### En el juego (34)

@@ -96,7 +96,9 @@ el uso normal nunca lo dispara.
 Multiplicador por dificultad: **Normal 1,08 · Medio 1,38 · Difícil 1,70**
 Multiplicador por noche: `×1,00 → ×1,06 → ×1,13 → ×1,21 → ×1,31 → ×1,42`
 
-**Coste total de una noche** (estrategia media: 22 % del tiempo una puerta, 12 % luz, 30 % monitor):
+**Coste total de una noche** (estrategia media: 22 % del tiempo una puerta, 12 % luz, 30 % monitor).
+Tabla reproducida a partir del código con desviación 0 en las 18 celdas:
+`6 h × base × curvaDeHora[noche] × multDificultad × curvaDeConsumo[noche] × 0,0974 %/s`.
 
 | Dificultad | N1 | N2 | N3 | N4 | N5 | N6 |
 |---|---|---|---|---|---|---|

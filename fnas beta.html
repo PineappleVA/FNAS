@@ -2294,7 +2294,7 @@ function renderTitleCharacters(){if(titleFigureTimer)clearInterval(titleFigureTi
 function getTitleMusic(){return document.getElementById('titleMusic')}
 let titleMusicBuffer=null,titleMusicSource=null,titleMusicGain=null,titleMusicLoading=false;
 function stopTitleMusicFallback(reset=false){if(titleMusicSource){try{titleMusicSource.stop(0)}catch(e){}titleMusicSource.disconnect();titleMusicSource=null}if(titleMusicGain){titleMusicGain.disconnect();titleMusicGain=null}}
-let _titleAudioEv=false,_titleAudioWd=null;function _armTitleAudioEvents(){if(_titleAudioEv)return;const m=getTitleMusic();if(!m)return;_titleAudioEv=true;const onPlay=()=>{stopTitleFallbackTheme();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}};m.addEventListener('playing',onPlay);m.addEventListener('timeupdate',onPlay)}async function playTitleMusic(){const music=getTitleMusic();if(music){_armTitleAudioEvents();music.volume=.42;music.muted=false;try{await music.play()}catch(e){}}if(_titleAudioWd)clearTimeout(_titleAudioWd);_titleAudioWd=setTimeout(()=>{try{if(!AudioCtx)initAudio();if(AudioCtx&&AudioCtx.state==='suspended')AudioCtx.resume()}catch(e){}const ts=document.getElementById('titleScreen');const vis=ts&&ts.style.display!=='none';const m=getTitleMusic();if(vis&&(!AudioCtx||!m||m.paused||m.ended||m.muted)){stopTitleFallbackTheme();startTitleFallbackTheme()}},1300)}
+let _titleAudioEv=false,_titleAudioWd=null;function _armTitleAudioEvents(){if(_titleAudioEv)return;const m=getTitleMusic();if(!m)return;_titleAudioEv=true;const onPlay=()=>{stopTitleFallbackTheme();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}};m.addEventListener('playing',onPlay);m.addEventListener('timeupdate',onPlay)}async function playTitleMusic(){const music=getTitleMusic();if(music){_armTitleAudioEvents();music.volume=musicVolMul();music.muted=false;try{await music.play()}catch(e){}}if(_titleAudioWd)clearTimeout(_titleAudioWd);_titleAudioWd=setTimeout(()=>{try{if(!AudioCtx)initAudio();if(AudioCtx&&AudioCtx.state==='suspended')AudioCtx.resume()}catch(e){}const ts=document.getElementById('titleScreen');const vis=ts&&ts.style.display!=='none';const m=getTitleMusic();if(vis&&(!AudioCtx||!m||m.paused||m.ended||m.muted)){stopTitleFallbackTheme();startTitleFallbackTheme()}},1300)}
 function pauseTitleMusic(reset=false){if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}const music=getTitleMusic();if(music){music.muted=true;music.pause();if(reset)music.currentTime=0}stopTitleMusicFallback(reset);stopTitleFallbackTheme()}
 let splashFinished=true;let titleMusicStarted=false;let audioUnlocked=true;let audioReady=false;
 function updateAudioPrompt(){/* prompt de audio retirado: el audio se arma con el primer gesto del usuario */}
@@ -2414,13 +2414,13 @@ const SFX={
  eerie:{f:'ambiente-tension.mp3',v:.14,cd:70000},
  /* --- momentos --- */
  powerdown:{f:'se-va-la-luz.mp3',v:.7},
- chimes:{f:'campanas-6am.mp3',v:.55},
- toreador:{f:'marcha-toreador-apagon.mp3',v:.45},
- pirate:{f:'musica-pirate-cove.mp3',v:.35},
+ chimes:{f:'campanas-6am.mp3',v:.55,music:1},
+ toreador:{f:'marcha-toreador-apagon.mp3',v:.45,music:1},
+ pirate:{f:'musica-pirate-cove.mp3',v:.35,music:1},
  tapeEject:{f:'fin-de-la-llamada.mp3',v:.4,dur:1.5},
  /* --- intro del periodico (dura 6,2 s + 1,2 s de fundido) --- */
  crowd:{f:'publico-de-la-intro.mp3',v:.35},
- circus:{f:'musica-de-fiesta-intro.mp3',v:.3,dur:6.2},
+ circus:{f:'musica-de-fiesta-intro.mp3',v:.3,dur:6.2,music:1},
  /* --- alucinaciones sonoras: puntuales y poco frecuentes --- */
  whisper:{f:'susurro-alucinacion.mp3',v:.32,dur:2.2,cd:15000,g:'alucinacion'},
  giggle1:{f:'risa-alucinacion-1.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
@@ -2497,7 +2497,32 @@ function withPan(pos,fn){const prev=_sfxPan;_sfxPan=pos||null;
  try{return fn()}finally{_sfxPan=prev}}
 
 let _sfxBuf={},_sfxReq={},_sfxLoop={},_sfxLast={},_sfxPend={},_sfxGen={},_fanToken=0;
-function sfxVolMul(){return (typeof sfxVol==='function')?Math.max(0,sfxVol()):1}
+/* Lectura de ajustes que no depende de que exista getSetting() en este build. */
+function settingVal(k,def){
+ try{
+  if(typeof saveData!=='undefined'&&saveData&&saveData.settings&&saveData.settings[k]!==undefined)return saveData.settings[k];
+  if(typeof DEFAULT_SETTINGS!=='undefined'&&DEFAULT_SETTINGS[k]!==undefined)return DEFAULT_SETTINGS[k];
+ }catch(e){}
+ return def}
+/* El deslizador de Musica debe mandar sobre la musica del juego, no solo sobre
+   la del menu: el Toreador, el Pirate Cove y la fiesta son musica. */
+function musicVolMul(){return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volMusic',42)/100))}
+/* La llamada del encargado suena por un <audio> aparte, fuera del bus maestro:
+   si no se baja el ambiente mientras habla, se lo come. */
+function bedTarget(k){const d=SFX[k];if(!d)return 0;return (d.v===undefined?.5:d.v)*sfxVolMul()}
+function duckBeds(on){
+ if(!AudioCtx)return;
+ ['ambienceBed','staticBed','staticBed2'].forEach((k)=>{
+  const l=_sfxLoop[k];if(!l)return;
+  try{
+   const t=AudioCtx.currentTime;
+   const v=Math.max(.0001,bedTarget(k)*(on?.32:1));
+   l.gain.gain.cancelScheduledValues(t);
+   l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
+   l.gain.gain.linearRampToValueAtTime(v,t+.4);
+  }catch(e){}})}
+function sfxVolMul(){if(typeof sfxVol==='function')return Math.max(0,sfxVol());
+ return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volSfx',100)/100))}
 function sfxBus(){if(!AudioCtx)return null;
  const b=(typeof masterBus==='function')?masterBus():null;
  return b||AudioCtx.destination}
@@ -2527,7 +2552,7 @@ function playSfx(key,opt){
  opt=opt||{};
  const d=SFX[key];
  if(!AudioCtx||!d)return false;
- const v=(d.v===undefined?.5:d.v)*(opt.vol===undefined?1:opt.vol)*sfxVolMul();
+ const v=(d.v===undefined?.5:d.v)*(opt.vol===undefined?1:opt.vol)*(d.music?musicVolMul():sfxVolMul());
  if(v<=.0005)return false;
  const loop=(opt.loop===undefined)?!!d.loop:!!opt.loop;
  /* el cooldown es por familia (todos los garble comparten uno), no por archivo:
@@ -2741,7 +2766,6 @@ function getDrainMult(){const d=state.difficulty==='hard'?1.70:state.difficulty=
 const nightMult=[1,1,1.06,1.13,1.21,1.31,1.42];
 return d*(nightMult[Math.min(state.night,6)]||1.32)}
 function getHourDuration(){
-// Each difficulty: hard=42s, medium=58s, easy=75s per hour
 /* Las 3 dificultades duran casi lo mismo: antes Dificil duraba 42s/hora frente
    a los 75s de Normal, asi que la noche entera gastaba MENOS energia y Dificil
    resultaba mas facil que Medio. La dificultad la marcan el consumo y la IA. */
@@ -3023,7 +3047,7 @@ if(audio.src!==src)audio.src=src;
 currentPhoneAudio=audio;
 overlay.classList.add('active');
 audio.currentTime=0;
-audio.volume=0.9;
+audio.volume=Math.min(1,.9*sfxVolMul());duckBeds(true);
 let endTimer=null;
 function clearPhoneCall(){if(endTimer)clearTimeout(endTimer);audio.onended=null;audio.onerror=null;overlay.classList.remove('active');currentPhoneAudio=null;}
 audio.onended=function(){try{sndTapeEject()}catch(e){}clearPhoneCall()};
@@ -3041,7 +3065,7 @@ overlay.dataset.phoneTimer=endTimer;
 }
 }
 }
-function mutePhoneCall(){
+function mutePhoneCall(){duckBeds(false);
 if(currentPhoneAudio){currentPhoneAudio.pause();currentPhoneAudio.currentTime=0;currentPhoneAudio.onended=null;currentPhoneAudio.onerror=null;currentPhoneAudio=null;}
 const ov=document.getElementById('phoneCall');
 if(ov&&ov.__clearPhoneCall){try{ov.__clearPhoneCall()}catch(e){}ov.__clearPhoneCall=null;}
@@ -3562,7 +3586,7 @@ function hideInstructions(){document.getElementById('instructions').classList.re
 /* ===== INIT ===== */
 renderTitleCharacters();updateMenuLocks();updateDiffButtons();updateTitleStats();initMenuButtons();initCreditsClickToExit();initCamKeyboard();initOptScroll();applySettings();updateOptionControls();
 const splash=document.getElementById('splashIntro');if(splash){setTimeout(()=>{splash.classList.add('hidden');setTimeout(()=>splash.remove(),1400)},4800)}
-const bootMusic=getTitleMusic();if(bootMusic){bootMusic.volume=.42;bootMusic.muted=false;bootMusic.play().catch(()=>{})}
+const bootMusic=getTitleMusic();if(bootMusic){bootMusic.volume=musicVolMul();bootMusic.muted=false;bootMusic.play().catch(()=>{})}
 splashFinished=true;audioUnlocked=true;syncTitleMusic()
 if(!saveData.seenTutorial){document.getElementById('instructions').classList.add('active');saveData.seenTutorial=true;saveGame(saveData)}
 function playClick(){playOsc(660,"square",.06,.018);playOsc(990,"sine",.05,.012,.02)}
@@ -3607,7 +3631,7 @@ sl.addEventListener('change',()=>{persist();if(k!=='volMusic')playClick()});
 sl.addEventListener('click',e=>e.stopPropagation());sl.addEventListener('pointerdown',e=>e.stopPropagation());});
 applySettings();updateOptionControls();
 }
-function armAudioAndTitle(){audioUnlocked=true;if(!audioReady){try{initAudio();audioReady=true}catch(e){}}else if(AudioCtx&&AudioCtx.state==='suspended'){try{AudioCtx.resume()}catch(e){}}const titleVisible=document.getElementById('titleScreen')&&document.getElementById('titleScreen').style.display!=='none';if(titleVisible){const music=getTitleMusic();if(music){music.muted=false;music.volume=.42;music.play().then(()=>{titleMusicStarted=true}).catch(()=>{})}}setTimeout(syncTitleMusic,120)}document.addEventListener('click',armAudioAndTitle);document.addEventListener('keydown',armAudioAndTitle);document.addEventListener('pointerdown',armAudioAndTitle);document.addEventListener('touchstart',armAudioAndTitle,{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseTitleMusic();else syncTitleMusic()});
+function armAudioAndTitle(){audioUnlocked=true;if(!audioReady){try{initAudio();audioReady=true}catch(e){}}else if(AudioCtx&&AudioCtx.state==='suspended'){try{AudioCtx.resume()}catch(e){}}const titleVisible=document.getElementById('titleScreen')&&document.getElementById('titleScreen').style.display!=='none';if(titleVisible){const music=getTitleMusic();if(music){music.muted=false;music.volume=musicVolMul();music.play().then(()=>{titleMusicStarted=true}).catch(()=>{})}}setTimeout(syncTitleMusic,120)}document.addEventListener('click',armAudioAndTitle);document.addEventListener('keydown',armAudioAndTitle);document.addEventListener('pointerdown',armAudioAndTitle);document.addEventListener('touchstart',armAudioAndTitle,{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseTitleMusic();else syncTitleMusic()});
 </script>
 
 <script>
