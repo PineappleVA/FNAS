@@ -2255,9 +2255,10 @@ const SFX={
  steps:{f:'pasos-pasillo.mp3',v:.4,dur:.9,cd:900},
  scream:{f:'jumpscare.mp3',v:.95},
  /* --- ambiente (bucles) --- */
- ambienceBed:{f:'ambiente-oficina.mp3',v:.18,loop:1},
+ ambienceBed:{f:'ambiente-oficina.mp3',v:.2,loop:1},
  fanBed:{f:'zumbido-ventilador.mp3',v:.12,loop:1},
- eerie:{f:'ambiente-tension.mp3',v:.14,cd:70000},
+ threat:{f:'amenaza-cerca.mp3',v:.22,loop:1},
+ blackoutBed:{f:'ambiente-apagon.mp3',v:.32,loop:1},
  /* --- momentos --- */
  powerdown:{f:'se-va-la-luz.mp3',v:.7},
  chimes:{f:'campanas-6am.mp3',v:.55,music:1},
@@ -2266,7 +2267,7 @@ const SFX={
  tapeEject:{f:'fin-de-la-llamada.mp3',v:.4,dur:1.5},
  /* --- intro del periodico (dura 6,2 s + 1,2 s de fundido) --- */
  crowd:{f:'publico-de-la-intro.mp3',v:.35},
- circus:{f:'musica-de-fiesta-intro.mp3',v:.3,dur:6.2,music:1},
+ circus:{f:'organo-de-circo.mp3',v:.24,cd:55000,music:1},
  /* --- alucinaciones sonoras: puntuales y poco frecuentes --- */
  whisper:{f:'susurro-alucinacion.mp3',v:.32,dur:2.2,cd:15000,g:'alucinacion'},
  giggle1:{f:'risa-alucinacion-1.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
@@ -2477,13 +2478,41 @@ function maybeHallucinationSfx(){
  if(Math.random()>.07)return;
  playSfx(sfxPick(['whisper','giggle1','giggle2','giggle3','giggle4']));
 }
-/* Ambiente tenso con poca energia: una sola vez, no en cada tick del ambiente. */
-function maybeEerieAmbience(){
- if(!AudioCtx||sfxLoopActive('eerie'))return;
- if(typeof state==='undefined'||!state||state.power===undefined)return;
- if(state.power>20)return;
- playSfx('eerie',{loop:true});
-}
+/* Amenaza cerca. La wiki documenta para este bucle una escalera de volumen segun
+   cuantos animatronicos hay en la zona de los pasillos: 30 % con una amenaza,
+   50 % con dos, 75 % con tres y 100 % si Freddy esta en la oficina. */
+const THREAT_GAIN=[0,.30,.50,.75,1];
+const THREAT_POS={hallLeft:1,hallLeftNear:1,hallRight:1,hallRightNear:1};
+function threatLevel(){
+ if(typeof state==='undefined'||!state||!state.enemies)return 0;
+ let n=0;
+ for(const k in state.enemies){const e=state.enemies[k];
+  if(!e||!e.active)continue;
+  if(e.side){if(k==='freddy')return 4;n++;continue}
+  if(THREAT_POS[camPos(e.cam)])n++}
+ return Math.min(n,3)}
+function updateThreatAmbience(){
+ if(!AudioCtx)return;
+ if(typeof getSetting==='function'&&!getSetting('ambience'))return;
+ const lv=(state&&state.blackout)?0:threatLevel();
+ if(lv<=0){stopSfx('threat',.8);return}
+ const f=THREAT_GAIN[lv];
+ if(!sfxLoopActive('threat')){playSfx('threat',{loop:true,vol:f});return}
+ const l=_sfxLoop['threat'];if(!l)return;
+ const v=Math.max(.0001,(SFX.threat.v||.2)*f*(SFX.threat.music?musicVolMul():sfxVolMul()));
+ try{const t=AudioCtx.currentTime;
+  l.gain.gain.cancelScheduledValues(t);
+  l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
+  l.gain.gain.linearRampToValueAtTime(v,t+1.2)}catch(e){}}
+/* Ambiente del apagon: suena mientras dura el corte, hasta el jumpscare o las 6 AM. */
+function startBlackoutBed(){if(!AudioCtx)return;
+ if(typeof getSetting==='function'&&!getSetting('ambience'))return;
+ playSfx('blackoutBed',{loop:true})}
+/* El organo de circo se oye ocasionalmente durante la noche, no en la intro. */
+function maybeCircus(){
+ if(!AudioCtx||!state||(state&&state.blackout))return;
+ if(Math.random()>.10)return;
+ playSfx('circus')}
 let _covePlayed=false;
 function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate')}
 function resetCoveMusic(){_covePlayed=false}
@@ -2533,7 +2562,7 @@ function sndKnock(side){const p=doorPos(side);
 function sndFootsteps(where){const p=(typeof where==='number')?camPos(where):doorPos(where);
  if(!playSfx('steps',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
 function sndTapeEject(){playSfx('tapeEject')}
-function sndPartyCrowd(){playSfx('crowd');playSfx('circus',{delay:.3})}
+function sndPartyCrowd(){playSfx('crowd')}
 
 function synthDoor(){/* golpe hidraulico + rail metalico */
  playOsc(90,'square',.18,.42);playOsc(55,'sawtooth',.24,.24);playNoise(.2,.09);
@@ -2966,7 +2995,7 @@ state.intervals.push(setInterval(breathTick,1400));
 
 function clearAllIntervals(){try{clearGolden()}catch(e){}if(state.blackoutTimers){state.blackoutTimers.forEach(id=>clearTimeout(id));state.blackoutTimers=[]}state.intervals.forEach(id=>clearInterval(id));state.intervals=[];Object.values(state.timers).forEach(clearTimeout);state.timers={};if(state.hourTimer){clearTimeout(state.hourTimer);state.hourTimer=null}if(state.ambienceTimer){clearTimeout(state.ambienceTimer);state.ambienceTimer=null}}
 
-function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();maybeEerieAmbience();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
+function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();updateThreatAmbience();maybeCircus();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
 function randomStepSound(){if(state.active&&!state.gameOver&&!state.won){if(Math.random()<.12)triggerHallucination();}}
 
 /* ===== CONTROLS ===== */
@@ -3212,7 +3241,7 @@ const enemy=document.createElement('div');enemy.className='cove-inactive-enemy';
 if(state.camsUp&&state.currentCam===5){const maxStage=getFoxyMaxStage();const openness=maxStage===99?0:(foxy.runStage/maxStage);cove.style.display='flex';cove.className='cove-stage';const curtain=document.createElement('div');curtain.className='cove-curtain';if(openness>=.34)curtain.classList.add('peek');if(openness>=.67)curtain.classList.add('gone');cove.innerHTML='';cove.appendChild(curtain);const star=document.createElement('div');star.className='cove-star';star.textContent='★';cove.appendChild(star);const sign=document.createElement('div');sign.className='cove-sign';sign.textContent='SPEED COVE';cove.appendChild(sign);if(openness>=.67){const enemy=document.createElement('div');enemy.className='cam-enemy';enemy.style.opacity='1';enemy.style.position='relative';enemy.innerHTML=getEnemySvg('foxy');cove.appendChild(enemy)}}else{cove.style.display='none'}}
 
 /* ===== SPECIAL EVENTS ===== */
-function powerOut(){if(!state.active||state.blackout)return;state.blackout=true;stopPhoneCall();state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndPowerDown();
+function powerOut(){if(!state.active||state.blackout)return;state.blackout=true;stopPhoneCall();state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndPowerDown();startBlackoutBed();
 /* el reloj sigue: aun puedes llegar a las 6 AM a oscuras */
 const remaining=6-state.hour;if(remaining>0){let hleft=remaining;const tick=()=>{if(state.gameOver||state.won)return;state.hour++;updateHUD();if(state.hour>=6){state.blackoutTimers&&state.blackoutTimers.forEach(id=>clearTimeout(id));winGame();return}state.blackoutTimers.push(setTimeout(tick,getHourDuration()))};state.blackoutTimers=state.blackoutTimers||[];state.blackoutTimers.push(setTimeout(tick,getHourDuration()))}setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);state.camsUp=false;document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('blackout').classList.add('active');document.getElementById('blackoutEyes').classList.remove('active');const hallLeft=document.getElementById('hallEnemyLeft');const hallRight=document.getElementById('hallEnemyRight');hallLeft.classList.remove('visible');hallRight.classList.remove('visible');hallLeft.innerHTML='';hallRight.innerHTML='';const powerFreddy=document.getElementById('powerFreddy');powerFreddy.innerHTML='';powerFreddy.classList.remove('active');document.getElementById('fan').style.opacity='.35';document.getElementById('fan-blades').style.animationPlayState='paused';state.blackoutTimers=[];state.blackoutTimers.push(setTimeout(()=>{powerFreddy.innerHTML=getEnemySvg('freddy');powerFreddy.classList.add('active');document.getElementById('blackoutEyes').classList.add('active');sndFreddyTune();
 /* Margen aleatorio como en el original: si el reloj llega a las 6 AM antes, sobrevives */

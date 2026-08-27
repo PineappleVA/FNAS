@@ -82,13 +82,34 @@ vuelven a su nivel al cortar.
 
 Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](../audio-test.html)**.
 
-### En el juego (34)
+### De dónde salen
+
+La identidad y el uso de las pistas musicales están tomados de la página
+[**Soundtrack (FNaF1)**](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)) de la Five Nights at Freddy's Wiki, que relaciona cada
+`.ogg` del juego con su título real, su autor y el momento exacto en que suena.
+De ahí salen cinco correcciones que antes estaban mal:
+
+- `music_box.ogg` **es** la Marcha del Toreador (Bizet, muestra *1905 Regina Music Box*
+  de Sound Ideas) y suena cuando se va la luz o Freddy está en la Cocina.
+- `Darkness music.ogg` no es el Toreador: es el **tema del menú** de la versión Steam
+  (*Urban Darkness Part 08*, Bjørn Lynne).
+- `ColdPresc B.ogg` es el **ambiente principal** de la noche y `Ambience2.ogg` el del
+  **apagón**; estaban intercambiados.
+- `EerieAmbienceLargeSca MV005.ogg` no es un ambiente de poca energía: sube de volumen
+  según cuántos animatrónicos hay en los pasillos.
+- `Circus.ogg` se oye ocasionalmente durante la noche, no en la intro del periódico.
+
+Los efectos no tienen una página equivalente en la wiki, así que su identidad se toma
+del nombre de la librería en el pack de The Sounds Resource.
+
+### En el juego (35)
 
 | Archivo | Suena cuando | Duración | Se reproduce | Nombre original |
 |---|---|---|---|---|
 | `accion-denegada.mp3` | acción denegada | 0.21 s | completo | `error.mp3` |
-| `ambiente-oficina.mp3` | ambiente de la oficina (bucle) | 30.04 s | en bucle | `ambience2.mp3` |
-| `ambiente-tension.mp3` | ambiente tenso con poca energía | 57.47 s | completo | `EerieAmbienceLargeSca_MV005.mp3` |
+| `ambiente-apagon.mp3` | ambiente del apagón, desde que se va la luz hasta el susto o las 6 AM | 30.04 s | en bucle | `ambience2.mp3` |
+| `ambiente-oficina.mp3` | ambiente principal de la oficina, toda la noche | 115.51 s | en bucle | `ColdPresc-B.mp3` |
+| `amenaza-cerca.mp3` | amenaza cerca: **30 %** con un animatrónico en el pasillo, **50 %** con dos, **75 %** con tres, **100 %** si Freddy está en la oficina | 57.47 s | en bucle, volumen según la amenaza | `EerieAmbienceLargeSca_MV005.mp3` |
 | `bajar-monitor.mp3` | bajar el monitor | 0.44 s | completo | `put-down.mp3` |
 | `cambiar-camara.mp3` | cambiar de cámara | 0.16 s | completo | `blip3.mp3` |
 | `campanas-6am.mp3` | campanas de las 6 AM | 8.65 s | completo | `chimes-2.mp3` |
@@ -103,9 +124,9 @@ Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](
 | `interferencia-camara-3.mp3` | interferencia al cambiar de sala | 2.14 s | solo los primeros **.55 s** | `garble3.mp3` |
 | `jumpscare.mp3` | jumpscare | 2.66 s | completo | `XSCREAM.mp3` |
 | `llaman-a-la-puerta.mp3` | un animatrónico llega a la puerta | 1.72 s | completo | `knock2.mp3` |
-| `marcha-toreador-apagon.mp3` | marcha del Toreador durante el apagón | 62.41 s | completo | `darkness-music.mp3` |
-| `musica-de-fiesta-intro.mp3` | música de fiesta en la intro del periódico | 11.10 s | solo los primeros **6.2 s** | `circus.mp3` |
+| `marcha-toreador-apagon.mp3` | Freddy toca la Marcha del Toreador al irse la luz | 233.42 s | completo | `music_box.mp3` |
 | `musica-pirate-cove.mp3` | Pirate Cove la primera vez que abres la CAM 5 | 4.88 s | completo | `pirate-song2.mp3` |
+| `organo-de-circo.mp3` | órgano de circo, ocasionalmente durante la noche | 6.20 s | completo | `circus.mp3` |
 | `pasos-pasillo.mp3` | pasos por el pasillo | 7.89 s | solo los primeros **.9 s** | `deep-steps.mp3` |
 | `publico-de-la-intro.mp3` | público en la intro del periódico | 1.75 s | completo | `CROWD_SMALL_CHIL_EC049202.mp3` |
 | `respiracion-en-la-puerta-1.mp3` | respiración en la puerta | 1.65 s | completo | `Vocals_Breaths_S_35972006.mp3` |
@@ -121,12 +142,10 @@ Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](
 | `susurro-alucinacion.mp3` | susurro (alucinación) | 7.58 s | solo los primeros **2.2 s** | `whispering2.mp3` |
 | `zumbido-ventilador.mp3` | zumbido del ventilador (bucle) | 4.86 s | en bucle | `Buzz_Fan_Florescent2.mp3` |
 
-### Sin asignar (12)
+### Sin asignar (11)
 
 | Archivo | Nombre original | Por qué no está asignado |
 |---|---|---|
-| `sin-usar-ambiente-largo.mp3` | `ColdPresc-B.mp3` | 1:55 sin uso identificado |
-| `sin-usar-caja-de-musica.mp3` | `music_box.mp3` | pista de 3:53; cualquier recorte sería arbitrario |
 | `sin-usar-candidata-puerta-1.mp3` | `OVEN-DRA_1_GEN-HDF18119.mp3` | candidatas a puerta, pero duran 2,6-5,2 s para una pulsación de ~200 ms y no está confirmado que sean la puerta del FNAF 1 |
 | `sin-usar-candidata-puerta-2.mp3` | `OVEN-DRA_2_GEN-HDF18120.mp3` | idem |
 | `sin-usar-candidata-puerta-3.mp3` | `OVEN-DRA_7_GEN-HDF18121.mp3` | idem |
@@ -134,9 +153,10 @@ Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](
 | `sin-usar-golpe-corto.mp3` | `SFXBible_12478.mp3` | uso sin identificar |
 | `sin-usar-grito-2.mp3` | `XSCREAM2.mp3` | segundo grito; de reserva |
 | `sin-usar-secuencia-digital.mp3` | `COMPUTER_DIGITAL_L2076505.mp3` | uso sin identificar |
-| `sin-usar-susto-ventana.mp3` | `windowscare.mp3` | uso en el FNAF 1 sin identificar |
-| `sin-usar-voz-robot.mp3` | `robotvoice.mp3` | peleaba con el Toreador durante el apagón |
+| `sin-usar-susto-ventana.mp3` | `windowscare.mp3` | su página de la wiki redirige a *Grimm Foxy* (Help Wanted): no es un sonido del FNAF 1 |
+| `sin-usar-voz-robot.mp3` | `robotvoice.mp3` | no aparece en [Category:Sound Files](https://freddy-fazbears-pizza.fandom.com/wiki/Category:Sound_Files); de reserva |
 | `sin-usar-zumbido-fluorescente.mp3` | `BallastHumMedium2.mp3` | zumbido de 4,36 s; la luz se pulsa constantemente y lo saturaba |
+| `tema-menu-fnaf1.mp3` | `darkness-music.mp3` | es el **tema del menú** original (*Urban Darkness Part 08*, Bjørn Lynne) según [la wiki](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)); el juego usa su propio tema de título |
 
 Si un mp3 falta o no se puede decodificar, cada efecto cae en su versión
 sintetizada (`synthXxx`) y el juego sigue funcionando igual que antes.
