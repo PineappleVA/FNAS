@@ -1102,9 +1102,9 @@ foxy:{5:[3,4,11]} // Foxy special: from cove runs to 3->4->11->office
 
 /* ===== AUDIO ===== */
 let AudioCtx=null;
-function initAudio(){if(!AudioCtx)AudioCtx=new(window.AudioContext||window.webkitAudioContext)();if(AudioCtx.state==='suspended')AudioCtx.resume()}
-function playOsc(freq,type,duration,vol,delay=0){if(!AudioCtx)return;const osc=AudioCtx.createOscillator();const gain=AudioCtx.createGain();osc.type=type;osc.frequency.value=freq;gain.gain.value=vol;osc.connect(gain);gain.connect(AudioCtx.destination);const t=AudioCtx.currentTime+delay;osc.start(t);osc.stop(t+duration);return{osc,gain}}
-function playNoise(duration,vol){if(!AudioCtx)return;const buf=AudioCtx.createBuffer(1,AudioCtx.sampleRate*duration,AudioCtx.sampleRate);const data=buf.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;const src=AudioCtx.createBufferSource();src.buffer=buf;const gain=AudioCtx.createGain();gain.gain.value=vol;src.connect(gain);gain.connect(AudioCtx.destination);src.start();src.stop(AudioCtx.currentTime+duration)}
+function initAudio(){if(!AudioCtx)AudioCtx=new(window.AudioContext||window.webkitAudioContext)();if(AudioCtx.state==='suspended')AudioCtx.resume();sfxListener()}
+function playOsc(freq,type,duration,vol,delay=0){if(!AudioCtx)return;const osc=AudioCtx.createOscillator();const gain=AudioCtx.createGain();osc.type=type;osc.frequency.value=freq;gain.gain.value=vol;osc.connect(gain);gain.connect(sfxOut());const t=AudioCtx.currentTime+delay;osc.start(t);osc.stop(t+duration);return{osc,gain}}
+function playNoise(duration,vol){if(!AudioCtx)return;const buf=AudioCtx.createBuffer(1,AudioCtx.sampleRate*duration,AudioCtx.sampleRate);const data=buf.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;const src=AudioCtx.createBufferSource();src.buffer=buf;const gain=AudioCtx.createGain();gain.gain.value=vol;src.connect(gain);gain.connect(sfxOut());src.start();src.stop(AudioCtx.currentTime+duration)}
 /* ================== BANCO DE MUESTRAS: AUDIO REAL DE FNAF 1 ==================
    Recursos de audio de Five Nights at Freddy's (c) Scott Cawthon, servidos desde
    assets/audio/fnaf1/ (procedencia y exclusion de licencia en assets/README.md).
@@ -1163,6 +1163,73 @@ const SFX={
  giggle4:{f:'risa-alucinacion-4.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'}
 };
 const SFX_DIR='assets/audio/fnaf1/';
+/* ================== AUDIO POSICIONAL (3D) ==================
+   El oyente esta sentado en la oficina mirando al frente (-Z). Las puertas
+   quedan a los lados y muy cerca; los pasillos se alejan hacia el fondo; el
+   resto del local se reparte alrededor. Cada sonido diegetico se coloca en su
+   punto con un PannerNode HRTF, de modo que la puerta izquierda suena a la
+   izquierda, IShowSpeed corre por el pasillo oeste y el escenario queda al
+   fondo. SFX_3D=false lo degrada a paneo estereo; si el navegador no tiene
+   PannerNode, cae en StereoPanner automaticamente. */
+let SFX_3D=true;   /* ponlo a false para paneo estereo simple */
+const SFX_POS={
+ officeLeft:[-1.6,0,.4],officeRight:[1.6,0,.4],
+ hallLeftNear:[-1.9,0,-1.8],hallRightNear:[1.9,0,-1.8],
+ hallLeft:[-2.4,0,-6.5],hallRight:[2.4,0,-6.5],
+ stage:[0,0,-13],dining:[0,0,-9.5],cove:[-4.5,0,-9.5],
+ backstage:[4.5,0,-11],kitchen:[5.5,0,-7.5],restrooms:[-5.5,0,-7.5],
+ face:[0,0,.3]
+};
+/* Numero de camara -> punto del local. Los pasillos oeste (2A/2B/2C) caen a la
+   izquierda y los este (4A/4B/4C) a la derecha, como en el mapa del juego. */
+const CAM_POS={1:'stage',2:'dining',3:'hallLeft',4:'hallLeftNear',5:'cove',
+ 6:'hallRight',7:'hallRightNear',8:'backstage',9:'kitchen',10:'restrooms',
+ 11:'hallLeftNear',12:'hallRightNear'};
+function doorPos(side){return side==='left'?'officeLeft':side==='right'?'officeRight':null}
+function camPos(n){return CAM_POS[n]||null}
+function sfxListener(){if(!AudioCtx||!AudioCtx.listener)return;const L=AudioCtx.listener;
+ try{
+  if(L.positionX){L.positionX.value=0;L.positionY.value=0;L.positionZ.value=0;
+   L.forwardX.value=0;L.forwardY.value=0;L.forwardZ.value=-1;
+   L.upX.value=0;L.upY.value=1;L.upZ.value=0}
+  else if(L.setPosition){L.setPosition(0,0,0);L.setOrientation(0,0,-1,0,1,0)}
+ }catch(e){}}
+function sfxPanner(pos){
+ if(!AudioCtx)return null;
+ const c=SFX_POS[pos];if(!c)return null;
+ if(SFX_3D){
+  try{
+   if(AudioCtx.createPanner){
+    const p=AudioCtx.createPanner();
+    p.panningModel='HRTF';p.distanceModel='inverse';
+    p.refDistance=1.2;p.maxDistance=45;p.rolloffFactor=.85;
+    p.coneInnerAngle=360;p.coneOuterAngle=360;p.coneOuterGain=1;
+    if(p.positionX){p.positionX.value=c[0];p.positionY.value=c[1];p.positionZ.value=c[2]}
+    else if(p.setPosition)p.setPosition(c[0],c[1],c[2]);
+    return p}
+  }catch(e){}
+ }
+ try{
+  if(AudioCtx.createStereoPanner){
+   const p=AudioCtx.createStereoPanner();
+   p.pan.value=Math.max(-1,Math.min(1,c[0]/2.4));
+   return p}
+ }catch(e){}
+ return null}
+/* Salida de un efecto: bus maestro, precedido de un panner si procede. */
+function sfxOut(pos){const bus=sfxBus()||AudioCtx.destination;
+ const p=(pos===undefined?_sfxPan:pos);
+ if(!p)return bus;
+ const pn=sfxPanner(p);if(!pn)return bus;
+ try{pn.connect(bus)}catch(e){return bus}
+ return pn}
+/* Los efectos sintetizados no reciben coordenadas llamada a llamada: se fijan
+   para todo el bloque con withPan(), igual que el paneo que ya tenia la
+   respiracion en su version sintetizada. */
+let _sfxPan=null;
+function withPan(pos,fn){const prev=_sfxPan;_sfxPan=pos||null;
+ try{return fn()}finally{_sfxPan=prev}}
+
 let _sfxBuf={},_sfxReq={},_sfxLoop={},_sfxLast={},_sfxPend={},_sfxGen={},_fanToken=0;
 function sfxVolMul(){return (typeof sfxVol==='function')?Math.max(0,sfxVol()):1}
 function sfxBus(){if(!AudioCtx)return null;
@@ -1217,7 +1284,7 @@ function playSfx(key,opt){
   if(!buf){if(!loop&&opt.fallback){try{opt.fallback()}catch(e){}}return}
   try{
    const src=AudioCtx.createBufferSource();src.buffer=buf;src.loop=loop;
-   const g=AudioCtx.createGain();src.connect(g);g.connect(sfxBus()||AudioCtx.destination);
+   const g=AudioCtx.createGain();src.connect(g);g.connect(sfxOut(opt.pos||null));
    const t=AudioCtx.currentTime+(opt.delay||0);
    const off=(opt.offset||0);
    let dur=(opt.dur!==undefined?opt.dur:d.dur);
@@ -1284,22 +1351,24 @@ let _covePlayed=false;
 function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate')}
 function resetCoveMusic(){_covePlayed=false}
 function sfxPick(a){return a[Math.floor(Math.random()*a.length)]}
-function sndDoor(){synthDoor()}
-function sndLight(){synthLight()}
+function sndDoor(side){const p=doorPos(side);
+ if(!playSfx('door',{pos:p,fallback:function(){withPan(p,synthDoor)}}))withPan(p,synthDoor)}
+function sndLight(side){withPan(doorPos(side),synthLight)}
 function sndCamUp(up){const k=(up===false)?'camDown':'camUp';
  if(!playSfx(k,{fallback:synthCamUp}))synthCamUp()}
-function sndCamSwitch(){if(!playSfx('blip',{fallback:synthCamSwitch}))synthCamSwitch()}
+function sndCamSwitch(cam){const p=camPos(cam);
+ if(!playSfx('blip',{pos:p,fallback:synthCamSwitch}))synthCamSwitch()}
 function sndAmbience(){if(sfxLoopActive('ambienceBed'))return;synthAmbience()}
-function sndJumpscare(){if(!playSfx('scream',{fallback:synthJumpscare}))synthJumpscare()}
+function sndJumpscare(){if(!playSfx('scream',{pos:'face',fallback:synthJumpscare}))synthJumpscare()}
 function sndPowerDown(){if(!playSfx('powerdown',{fallback:synthPowerDown}))synthPowerDown()}
-function sndFoxyRun(){if(!playSfx(sfxPick(['runFast','run']),{fallback:synthFoxyRun}))synthFoxyRun()}
+function sndFoxyRun(pos){const p=pos||'hallLeft';if(!playSfx(sfxPick(['runFast','run']),{pos:p,fallback:synthFoxyRun}))synthFoxyRun()}
 function sndFreddyTune(){if(!playSfx('toreador',{fallback:synthFreddyTune}))synthFreddyTune()}
 function sndDoorBang(){if(!playSfx('doorBang',{fallback:synthDoorBang}))synthDoorBang()}
 function sndCamGlitch(intense){
  if(!playSfx(sfxPick(['glitch1','glitch2','glitch3']),{fallback:function(){synthCamGlitch(intense)}}))synthCamGlitch(intense)}
 function sndBreath(side){
  const k=sfxPick(['breath1','breath2','breath3','breath4']);
- if(!playSfx(k,{fallback:function(){synthBreath(side)}}))synthBreath(side)}
+ if(!playSfx(k,{pos:doorPos(side),fallback:function(){synthBreath(side)}}))synthBreath(side)}
 function sndDoorJam(){if(!playSfx('denied',{fallback:synthDoorJam}))synthDoorJam()}
 function startFanHum(){
  if(!AudioCtx||fanHumNodes)return;
@@ -1321,7 +1390,8 @@ function startFanHum(){
 }
 function sndSixAM(){playSfx('chimes')}
 function sndKnock(){if(!playSfx('knock',{fallback:sndStep}))sndStep()}
-function sndFootsteps(){if(!playSfx('steps',{fallback:sndStep}))sndStep()}
+function sndFootsteps(where){const p=(typeof where==='number')?camPos(where):doorPos(where);
+ if(!playSfx('steps',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
 function sndTapeEject(){playSfx('tapeEject')}
 function sndPartyCrowd(){playSfx('crowd');playSfx('circus',{delay:.3})}
 
@@ -1542,15 +1612,15 @@ function startAmbience(){if(!state.active)return;startAmbienceBed();sndAmbience(
 function randomStepSound(){if(state.active&&!state.gameOver&&!state.won){if(Math.random()<.12)triggerHallucination();}}
 
 /* ===== CONTROLS ===== */
-function toggleDoor(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setDoor(side,!state.doors[side]);sndDoor()}
+function toggleDoor(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setDoor(side,!state.doors[side]);sndDoor(side)}
 function setDoor(side,on){state.doors[side]=on;const door=document.getElementById('door'+(side==='left'?'Left':'Right'));const btn=document.getElementById('btnDoor'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnDoor'+(side==='left'?'Left':'Right')+'2');const status=document.getElementById('doorStatus'+(side==='left'?'Left':'Right'));door.classList.toggle('closed',on);door.classList.toggle('open',!on);btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);if(status){status.classList.toggle('active',on);status.textContent=on?'CERRADA':'ABIERTA';status.style.color=on?'#f00':'#555'}updateUsage()}
 
-function toggleLight(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setLight(side,!state.lights[side]);sndLight()}
+function toggleLight(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setLight(side,!state.lights[side]);sndLight(side)}
 function setLight(side,on){state.lights[side]=on;document.getElementById('hallLight'+(side==='left'?'Left':'Right')).classList.toggle('active',on);const btn=document.getElementById('btnLight'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnLight'+(side==='left'?'Left':'Right')+'2');btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);btn.classList.toggle('light-on',on);btn2&&btn2.classList.toggle('light-on',on);updateHallEnemies();updateUsage()}
 
 function toggleCameras(){if(!state.active||state.gameOver||state.won)return;initAudio();state.camsUp=!state.camsUp;const sys=document.getElementById('cameraSystem');const btn=document.getElementById('camButton');if(state.camsUp){stopFanHum();sys.classList.add('active');btn.classList.add('cam-on');sndCamUp(true);startCamStatic();updateCamView();updateCoveDecor()}else{startFanHum();sys.classList.remove('active');btn.classList.remove('cam-on');sndCamUp(false);stopCamStatic();checkDoorDeath()}updateUsage()}
 
-function switchCam(num,silent){if(!state.active)return;state.currentCam=num;document.querySelectorAll('.cam-node').forEach(n=>{n.classList.toggle('active',parseInt(n.dataset.cam)===num)});if(!silent)sndCamSwitch();updateCamView();updateCamIndicators();updateCoveDecor()}
+function switchCam(num,silent){if(!state.active)return;state.currentCam=num;document.querySelectorAll('.cam-node').forEach(n=>{n.classList.toggle('active',parseInt(n.dataset.cam)===num)});if(!silent)sndCamSwitch(num);updateCamView();updateCamIndicators();updateCoveDecor()}
 
 /* ===== GAME LOGIC ===== */
 function gameTick(){

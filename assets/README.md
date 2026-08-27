@@ -53,6 +53,21 @@ dispara.** El glitch visual de una cámara dura 280–620 ms, así que
 1,40 s. Los recortes y los *cooldowns* están en la tabla `SFX` del HTML, en un
 solo sitio.
 
+### Audio posicional
+
+Los sonidos que ocurren en un sitio del local se colocan ahí con un `PannerNode`
+HRTF: el oyente está sentado en la oficina mirando al frente, las puertas quedan
+a izquierda y derecha a medio metro, los pasillos se alejan hacia el fondo y las
+salas se reparten alrededor. Así la puerta izquierda suena a la izquierda,
+IShowSpeed corre por el pasillo oeste y el escenario queda al fondo, con
+atenuación por distancia.
+
+Cada cámara tiene su punto (`CAM_POS`): los pasillos oeste (2A/2B/2C) caen a la
+izquierda y los este (4A/4B/4C) a la derecha, como en el mapa del juego. La
+música y el ambiente del local **no** se panean, porque no vienen de un sitio.
+`SFX_3D=false` lo degrada a paneo estéreo, y si el navegador no tiene
+`PannerNode` la caída es automática.
+
 Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](../audio-test.html)**.
 
 ### En el juego (34)
