@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FNAS · pruebas de audio</title>
+<style>
+:root{color-scheme:dark}
+body{background:#0b0b0d;color:#e8e6e3;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;margin:0;padding:24px}
+h1{font-size:18px;margin:0 0 4px}
+p.lead{color:#9a978f;margin:0 0 14px;max-width:74ch}
+table{border-collapse:collapse;width:100%;max-width:1100px}
+th,td{border-bottom:1px solid #232327;padding:6px 8px;text-align:left;vertical-align:middle}
+th{color:#8d8a83;font-weight:400;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+td.n{word-break:break-all}td.r{text-align:right;white-space:nowrap;color:#b9b6ae}
+td.p{width:38px}
+button{background:#1c1c20;color:#e8c93a;border:1px solid #3a3a40;border-radius:4px;cursor:pointer;font-size:13px;padding:3px 8px}
+button:hover{background:#26262c}button.on{background:#e8c93a;color:#111}
+.ok{color:#7ec97e}.no{color:#8a8a8a}
+</style></head><body>
+<h1>Pruebas de audio &mdash; FNAF 1</h1>
+<p class="lead">Herramienta de desarrollo. Cada archivo de <code>assets/audio/fnaf1/</code> con el evento del
+juego que lo dispara y el recorte aplicado (por ejemplo <code>7,89 s &#8594; 0,90 s</code> significa que solo
+suena el primer segundo). Sirve para comprobar de o&iacute;do que cada sonido est&aacute; en su sitio; no forma
+parte del juego.</p>
+<p class="lead">Volumen <input type="range" id="vol" min="0" max="100" value="70"></p>
+<table><thead><tr><th></th><th>archivo</th><th>duraci&oacute;n</th><th>suena cuando</th><th></th></tr></thead>
+<tbody>
+<tr><td class="p"><button data-s="BallastHumMedium2.mp3">&#9654;</button></td><td class="n">BallastHumMedium2.mp3</td><td class="r">4.36 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="Buzz_Fan_Florescent2.mp3">&#9654;</button></td><td class="n">Buzz_Fan_Florescent2.mp3</td><td class="r">4.86 s</td><td>zumbido del ventilador (bucle)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="CAMERA_VIDEO_LOA_60105303.mp3">&#9654;</button></td><td class="n">CAMERA_VIDEO_LOA_60105303.mp3</td><td class="r">.7 s &#8594; 2.59 s</td><td>subir el monitor</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="COMPUTER_DIGITAL_L2076505.mp3">&#9654;</button></td><td class="n">COMPUTER_DIGITAL_L2076505.mp3</td><td class="r">4.05 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="CROWD_SMALL_CHIL_EC049202.mp3">&#9654;</button></td><td class="n">CROWD_SMALL_CHIL_EC049202.mp3</td><td class="r">1.75 s</td><td>publico en la intro</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="ColdPresc-B.mp3">&#9654;</button></td><td class="n">ColdPresc-B.mp3</td><td class="r">115.51 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="DOOR_POUNDING_ME_D0291401.mp3">&#9654;</button></td><td class="n">DOOR_POUNDING_ME_D0291401.mp3</td><td class="r">1.4 s &#8594; 3.37 s</td><td>golpes contra la puerta cerrada</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="EerieAmbienceLargeSca_MV005.mp3">&#9654;</button></td><td class="n">EerieAmbienceLargeSca_MV005.mp3</td><td class="r">57.47 s</td><td>ambiente tenso con poca energia</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="Laugh_Giggle_Girl_1.mp3">&#9654;</button></td><td class="n">Laugh_Giggle_Girl_1.mp3</td><td class="r">2 s &#8594; 1.12 s</td><td>risa (alucinacion)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="Laugh_Giggle_Girl_1d.mp3">&#9654;</button></td><td class="n">Laugh_Giggle_Girl_1d.mp3</td><td class="r">2 s &#8594; 2.82 s</td><td>risa (alucinacion)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="Laugh_Giggle_Girl_2d.mp3">&#9654;</button></td><td class="n">Laugh_Giggle_Girl_2d.mp3</td><td class="r">2 s &#8594; 4.05 s</td><td>risa (alucinacion)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="Laugh_Giggle_Girl_8d.mp3">&#9654;</button></td><td class="n">Laugh_Giggle_Girl_8d.mp3</td><td class="r">2 s &#8594; 2.85 s</td><td>risa (alucinacion)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="MiniDV_Tape_Eject_1.mp3">&#9654;</button></td><td class="n">MiniDV_Tape_Eject_1.mp3</td><td class="r">1.5 s &#8594; 8.36 s</td><td>fin de la llamada</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="OVEN-DRAWE_GEN-HDF18122.mp3">&#9654;</button></td><td class="n">OVEN-DRAWE_GEN-HDF18122.mp3</td><td class="r">2.69 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="OVEN-DRA_1_GEN-HDF18119.mp3">&#9654;</button></td><td class="n">OVEN-DRA_1_GEN-HDF18119.mp3</td><td class="r">3.89 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="OVEN-DRA_2_GEN-HDF18120.mp3">&#9654;</button></td><td class="n">OVEN-DRA_2_GEN-HDF18120.mp3</td><td class="r">2.56 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="OVEN-DRA_7_GEN-HDF18121.mp3">&#9654;</button></td><td class="n">OVEN-DRA_7_GEN-HDF18121.mp3</td><td class="r">5.17 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="SFXBible_12478.mp3">&#9654;</button></td><td class="n">SFXBible_12478.mp3</td><td class="r">1.18 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="Vocals_Breaths_S_35972006.mp3">&#9654;</button></td><td class="n">Vocals_Breaths_S_35972006.mp3</td><td class="r">1.65 s</td><td>respiracion en la puerta</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="Vocals_Breaths_S_35972008.mp3">&#9654;</button></td><td class="n">Vocals_Breaths_S_35972008.mp3</td><td class="r">3.03 s</td><td>respiracion en la puerta</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="Vocals_Breaths_S_35972012.mp3">&#9654;</button></td><td class="n">Vocals_Breaths_S_35972012.mp3</td><td class="r">1.36 s</td><td>respiracion en la puerta</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="Vocals_Breaths_S_35972014.mp3">&#9654;</button></td><td class="n">Vocals_Breaths_S_35972014.mp3</td><td class="r">1.88 s</td><td>respiracion en la puerta</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="XSCREAM.mp3">&#9654;</button></td><td class="n">XSCREAM.mp3</td><td class="r">2.66 s</td><td>jumpscare</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="XSCREAM2.mp3">&#9654;</button></td><td class="n">XSCREAM2.mp3</td><td class="r">7.97 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="ambience2.mp3">&#9654;</button></td><td class="n">ambience2.mp3</td><td class="r">30.04 s</td><td>ambiente de la oficina (bucle)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="blip3.mp3">&#9654;</button></td><td class="n">blip3.mp3</td><td class="r">0.16 s</td><td>cambiar de camara</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="chimes-2.mp3">&#9654;</button></td><td class="n">chimes-2.mp3</td><td class="r">8.65 s</td><td>campanas de las 6 AM</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="circus.mp3">&#9654;</button></td><td class="n">circus.mp3</td><td class="r">6.2 s &#8594; 11.10 s</td><td>musica de fiesta en la intro</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="darkness-music.mp3">&#9654;</button></td><td class="n">darkness-music.mp3</td><td class="r">62.41 s</td><td>marcha del Toreador (apagon)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="deep-steps.mp3">&#9654;</button></td><td class="n">deep-steps.mp3</td><td class="r">.9 s &#8594; 7.89 s</td><td>pasos por el pasillo</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="error.mp3">&#9654;</button></td><td class="n">error.mp3</td><td class="r">0.21 s</td><td>accion denegada</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="garble1.mp3">&#9654;</button></td><td class="n">garble1.mp3</td><td class="r">.55 s &#8594; 2.09 s</td><td>interferencia al cambiar de sala</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="garble2.mp3">&#9654;</button></td><td class="n">garble2.mp3</td><td class="r">.55 s &#8594; 3.00 s</td><td>interferencia al cambiar de sala</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="garble3.mp3">&#9654;</button></td><td class="n">garble3.mp3</td><td class="r">.55 s &#8594; 2.14 s</td><td>interferencia al cambiar de sala</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="knock2.mp3">&#9654;</button></td><td class="n">knock2.mp3</td><td class="r">1.72 s</td><td>un animatronico llega a la puerta</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="music_box.mp3">&#9654;</button></td><td class="n">music_box.mp3</td><td class="r">233.42 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="pirate-song2.mp3">&#9654;</button></td><td class="n">pirate-song2.mp3</td><td class="r">4.88 s</td><td>musica del Pirate Cove</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="powerdown.mp3">&#9654;</button></td><td class="n">powerdown.mp3</td><td class="r">9.34 s</td><td>se va la luz</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="put-down.mp3">&#9654;</button></td><td class="n">put-down.mp3</td><td class="r">0.44 s</td><td>bajar el monitor</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="robotvoice.mp3">&#9654;</button></td><td class="n">robotvoice.mp3</td><td class="r">7.55 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="run.mp3">&#9654;</button></td><td class="n">run.mp3</td><td class="r">1.33 s</td><td>carrera de IShowSpeed</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="running-fast3.mp3">&#9654;</button></td><td class="n">running-fast3.mp3</td><td class="r">1.18 s</td><td>carrera de IShowSpeed</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="static.mp3">&#9654;</button></td><td class="n">static.mp3</td><td class="r">5.46 s</td><td>estatica del monitor (bucle)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="static2.mp3">&#9654;</button></td><td class="n">static2.mp3</td><td class="r">16.88 s</td><td>estatica del monitor (bucle, alternativa)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="whispering2.mp3">&#9654;</button></td><td class="n">whispering2.mp3</td><td class="r">2.2 s &#8594; 7.58 s</td><td>susurro (alucinacion)</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="windowscare.mp3">&#9654;</button></td><td class="n">windowscare.mp3</td><td class="r">4.31 s</td><td>&mdash;</td><td><span class="no">sin asignar</span></td></tr>
+</tbody></table>
+<script>
+var cur=null;
+document.querySelectorAll('button[data-s]').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(cur){try{cur.a.pause()}catch(e){} cur.b.classList.remove('on');
+      if(cur.b===b){cur=null;return}}
+    var a=new Audio('assets/audio/fnaf1/'+encodeURIComponent(b.dataset.s));
+    a.volume=(document.getElementById('vol').value/100);
+    b.classList.add('on');cur={a:a,b:b};
+    a.onended=function(){b.classList.remove('on');if(cur&&cur.b===b)cur=null};
+    a.play().catch(function(){b.classList.remove('on')});
+  });
+});
+</script></body></html>

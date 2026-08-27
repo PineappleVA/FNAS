@@ -40,66 +40,76 @@ Pertenecen al juego original de **Scott Cawthon**: están aquí como recurso de 
 fangame gratuito y sin ánimo de lucro, **excluidos de la licencia** y no
 redistribuibles, igual que el resto de esta carpeta.
 
-Se cargan por `fetch` + `decodeAudioData` y se reproducen sobre el bus maestro
-del motor. **Cada efecto conserva su versión sintetizada como respaldo**: si un
-archivo falta o no se puede decodificar, suena el efecto por Web Audio y el
-juego sigue funcionando igual.
+**Regla que sigue el motor: una muestra nunca dura más que el evento que la
+dispara.** El glitch visual de una cámara dura 280–620 ms, así que los `garble`
+(2–3 s) se recortan a 0,55 s; el golpe en la puerta anima 380 ms + 1100 ms de
+retirada, así que `DOOR_POUNDING` (3,37 s) se recorta a 1,40 s. Los recortes y
+los *cooldowns* están en la tabla `SFX` del HTML, en un solo sitio.
 
-| Archivo | Para qué se usa | Función |
-|---|---|---|
-| `OVEN-DRA_2_GEN-HDF18120.mp3` | Puerta al cerrarse/abrirse (varía entre 4 muestras) | `sndDoor()` |
-| `OVEN-DRA_1_GEN-HDF18119.mp3` | Puerta (variante) | `sndDoor()` |
-| `OVEN-DRAWE_GEN-HDF18122.mp3` | Puerta (variante) | `sndDoor() |
-| `OVEN-DRA_7_GEN-HDF18121.mp3` | Puerta (variante) | `sndDoor() |
-| `DOOR_POUNDING_ME_D0291401.mp3` | Golpes contra la puerta cerrada | `sndDoorBang()` |
-| `knock2.mp3` | Llaman a la puerta: un animatrónico ha llegado | `sndKnock()` |
-| `error.mp3` | Acción denegada / puerta atascada | `sndDoorJam()` |
-| `CAMERA_VIDEO_LOA_60105303.mp3` | Subir el monitor | `sndCamUp(true)` |
-| `put-down.mp3` | Bajar el monitor | `sndCamUp(false)` |
-| `blip3.mp3` | Blip al cambiar de cámara | `sndCamSwitch()` |
-| `garble1.mp3` | Interferencia al cambiar de sala | `sndCamGlitch()` |
-| `garble2.mp3` | Interferencia al cambiar de sala | `sndCamGlitch()` |
-| `garble3.mp3` | Interferencia al cambiar de sala | `sndCamGlitch()` |
-| `static.mp3` | Estática del monitor, en bucle mientras está subido | `startCamStatic()` |
-| `static2.mp3` | Interferencia fuerte (alguien se mueve mientras miras) | `sndCamGlitch(true)` |
-| `Vocals_Breaths_S_35972006.mp3` | Respiración en la puerta | `sndBreath()` |
-| `Vocals_Breaths_S_35972008.mp3` | Respiración en la puerta | `sndBreath()` |
-| `Vocals_Breaths_S_35972012.mp3` | Respiración en la puerta | `sndBreath()` |
-| `Vocals_Breaths_S_35972014.mp3` | Respiración en la puerta | `sndBreath()` |
-| `run.mp3` | Carrera de IShowSpeed por el pasillo | `sndFoxyRun()` |
-| `running-fast3.mp3` | Carrera de IShowSpeed por el pasillo | `sndFoxyRun()` |
-| `deep-steps.mp3` | Pasos por el pasillo | `sndFootsteps()` |
-| `XSCREAM.mp3` | Jumpscare | `sndJumpscare()` |
-| `XSCREAM2.mp3` | Jumpscare (variante) | `sndJumpscare(true)` |
-| `robotvoice.mp3` | «¡LET'S EAT!» durante el apagón | `sndRobotVoice()` |
-| `whispering2.mp3` | Susurro: alucinación sonora | `maybeHallucinationSfx()` |
-| `Laugh_Giggle_Girl_1.mp3` | Risa de niña: alucinación sonora | `maybeHallucinationSfx()` |
-| `Laugh_Giggle_Girl_1d.mp3` | Risa de niña: alucinación sonora | `maybeHallucinationSfx()` |
-| `Laugh_Giggle_Girl_2d.mp3` | Risa de niña: alucinación sonora | `maybeHallucinationSfx()` |
-| `Laugh_Giggle_Girl_8d.mp3` | Risa de niña: alucinación sonora | `maybeHallucinationSfx()` |
-| `windowscare.mp3` | Aparición de Golden Skibidi | `sndScareFlash()` |
-| `ambience2.mp3` | Ambiente de la oficina (30 s), en bucle | `startAmbienceBed()` |
-| `Buzz_Fan_Florescent2.mp3` | Zumbido del ventilador, en bucle | `startFanHum()` |
-| `BallastHumMedium2.mp3` | Zumbido del fluorescente al encender la luz | `sndLight()` |
-| `EerieAmbienceLargeSca_MV005.mp3` | Ambiente tenso cuando queda poca energía | `startAmbience()` |
-| `powerdown.mp3` | Se va la luz | `sndPowerDown()` |
-| `chimes-2.mp3` | Campanadas de las 6 AM | `sndSixAM()` |
-| `darkness-music.mp3` | Marcha del Toreador durante el apagón | `sndFreddyTune()` |
-| `pirate-song2.mp3` | Música del Pirate Cove la primera vez que abres la CAM 5 | `sndPirateCove()` |
-| `circus.mp3` | Música de fiesta en la intro del periódico | `sndPartyCrowd()` |
-| `CROWD_SMALL_CHIL_EC049202.mp3` | Ambiente de público en la intro del periódico | `sndPartyCrowd()` |
-| `COMPUTER_DIGITAL_L2076505.mp3` | Pantalla «12:00 AM» al empezar la noche | `sndNightStart()` |
-| `MiniDV_Tape_Eject_1.mp3` | La cinta sale: fin de la llamada del encargado | `startPhoneCall()` |
-| `music_box.mp3` | Caja de música de Golden Skibidi (se recorta a 6,2 s) | `maybeGoldenSkibidi()` |
+Para comprobar de oído que cada sonido está donde debe: **[`audio-test.html`](../audio-test.html)**
+lista los 46 archivos con el evento que los dispara y su recorte.
 
-Sin asignar (en el pack, pero no he podido identificar su uso en el FNAF 1;
-quedan disponibles por si el equipo les encuentra sitio):
+### En el juego (34)
 
-- `ColdPresc-B.mp3`
-- `SFXBible_12478.mp3`
+| Archivo | Suena cuando | Duración | Se reproduce |
+|---|---|---|---|
+| `Buzz_Fan_Florescent2.mp3` | zumbido del ventilador (bucle) | 4.86 s | en bucle |
+| `CAMERA_VIDEO_LOA_60105303.mp3` | subir el monitor | 2.59 s | solo los primeros **.7 s** |
+| `CROWD_SMALL_CHIL_EC049202.mp3` | publico en la intro | 1.75 s | completo |
+| `DOOR_POUNDING_ME_D0291401.mp3` | golpes contra la puerta cerrada | 3.37 s | solo los primeros **1.4 s** |
+| `EerieAmbienceLargeSca_MV005.mp3` | ambiente tenso con poca energía | 57.47 s | completo |
+| `Laugh_Giggle_Girl_1.mp3` | risa (alucinación) | 1.12 s | solo los primeros **2 s** |
+| `Laugh_Giggle_Girl_1d.mp3` | risa (alucinación) | 2.82 s | solo los primeros **2 s** |
+| `Laugh_Giggle_Girl_2d.mp3` | risa (alucinación) | 4.05 s | solo los primeros **2 s** |
+| `Laugh_Giggle_Girl_8d.mp3` | risa (alucinación) | 2.85 s | solo los primeros **2 s** |
+| `MiniDV_Tape_Eject_1.mp3` | fin de la llamada | 8.36 s | solo los primeros **1.5 s** |
+| `Vocals_Breaths_S_35972006.mp3` | respiracion en la puerta | 1.65 s | completo |
+| `Vocals_Breaths_S_35972008.mp3` | respiracion en la puerta | 3.03 s | completo |
+| `Vocals_Breaths_S_35972012.mp3` | respiracion en la puerta | 1.36 s | completo |
+| `Vocals_Breaths_S_35972014.mp3` | respiracion en la puerta | 1.88 s | completo |
+| `XSCREAM.mp3` | jumpscare | 2.66 s | completo |
+| `ambience2.mp3` | ambiente de la oficina (bucle) | 30.04 s | en bucle |
+| `blip3.mp3` | cambiar de cámara | 0.16 s | completo |
+| `chimes-2.mp3` | campanas de las 6 AM | 8.65 s | completo |
+| `circus.mp3` | música de fiesta en la intro | 11.10 s | solo los primeros **6.2 s** |
+| `darkness-music.mp3` | marcha del Toreador durante el apagón | 62.41 s | completo |
+| `deep-steps.mp3` | pasos por el pasillo | 7.89 s | solo los primeros **.9 s** |
+| `error.mp3` | accion denegada | 0.21 s | completo |
+| `garble1.mp3` | interferencia al cambiar de sala | 2.09 s | solo los primeros **.55 s** |
+| `garble2.mp3` | interferencia al cambiar de sala | 3.00 s | solo los primeros **.55 s** |
+| `garble3.mp3` | interferencia al cambiar de sala | 2.14 s | solo los primeros **.55 s** |
+| `knock2.mp3` | un animatrónico llega a la puerta | 1.72 s | completo |
+| `pirate-song2.mp3` | música del Pirate Cove | 4.88 s | completo |
+| `powerdown.mp3` | se va la luz | 9.34 s | completo |
+| `put-down.mp3` | bajar el monitor | 0.44 s | completo |
+| `run.mp3` | carrera de IShowSpeed | 1.33 s | completo |
+| `running-fast3.mp3` | carrera de IShowSpeed | 1.18 s | completo |
+| `static.mp3` | estática del monitor (bucle) | 5.46 s | en bucle |
+| `static2.mp3` | estática del monitor (bucle, alternativa) | 16.88 s | en bucle |
+| `whispering2.mp3` | susurro (alucinación) | 7.58 s | solo los primeros **2.2 s** |
 
-Las ganancias de cada muestra están en la tabla `SFX_VOL` del HTML, en un solo
-sitio, para poder afinarlas sin tocar el resto del código.
+### Sin asignar (12)
+
+Están en la carpeta y se pueden escuchar en la página de pruebas, pero no se
+disparan en el juego. Asignarlos es una línea en la tabla `SFX`.
+
+| Archivo | Por qué no está asignado |
+|---|---|
+| `BallastHumMedium2.mp3` | zumbido de 4,36 s; la luz se pulsa constantemente y lo saturaba |
+| `COMPUTER_DIGITAL_L2076505.mp3` | uso sin identificar |
+| `ColdPresc-B.mp3` | 1:55 sin uso identificado |
+| `OVEN-DRAWE_GEN-HDF18122.mp3` | idem |
+| `OVEN-DRA_1_GEN-HDF18119.mp3` | candidatas a puerta, pero duran 2,6-5,2 s para una pulsacion de ~200 ms y no esta confirmado que sean la puerta del FNAF 1 |
+| `OVEN-DRA_2_GEN-HDF18120.mp3` | idem |
+| `OVEN-DRA_7_GEN-HDF18121.mp3` | idem |
+| `SFXBible_12478.mp3` | uso sin identificar |
+| `XSCREAM2.mp3` | segundo grito; de reserva |
+| `music_box.mp3` | pista de 3:53; cualquier recorte seria arbitrario |
+| `robotvoice.mp3` | peleaba con el Toreador durante el apagon |
+| `windowscare.mp3` | uso en el FNAF 1 sin identificar |
+
+Si un mp3 falta o no se puede decodificar, cada efecto cae en su versión
+sintetizada (`synthXxx`) y el juego sigue funcionando igual que antes.
 
 ## Atribución obligatoria
 

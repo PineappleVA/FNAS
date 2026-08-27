@@ -2220,75 +2220,70 @@ function masterBus(){if(!AudioCtx)return null;
 /* ================== BANCO DE MUESTRAS: AUDIO REAL DE FNAF 1 ==================
    Recursos de audio de Five Nights at Freddy's (c) Scott Cawthon, servidos desde
    assets/audio/fnaf1/ (procedencia y exclusion de licencia en assets/README.md).
-   Cada efecto conserva su version sintetizada como respaldo (synthXxx): si un
-   mp3 no esta disponible o no se puede decodificar, suena el efecto por Web
-   Audio y el juego sigue funcionando exactamente igual que antes. */
-const SFX_SRC={
- /* puertas */
- door:'assets/audio/fnaf1/OVEN-DRA_2_GEN-HDF18120.mp3',
- doorAlt:'assets/audio/fnaf1/OVEN-DRA_1_GEN-HDF18119.mp3',
- doorSlide:'assets/audio/fnaf1/OVEN-DRAWE_GEN-HDF18122.mp3',
- doorBig:'assets/audio/fnaf1/OVEN-DRA_7_GEN-HDF18121.mp3',
- doorBang:'assets/audio/fnaf1/DOOR_POUNDING_ME_D0291401.mp3',
- knock:'assets/audio/fnaf1/knock2.mp3',
- denied:'assets/audio/fnaf1/error.mp3',
- /* monitor / camaras */
- camUp:'assets/audio/fnaf1/CAMERA_VIDEO_LOA_60105303.mp3',
- camDown:'assets/audio/fnaf1/put-down.mp3',
- blip:'assets/audio/fnaf1/blip3.mp3',
- glitch1:'assets/audio/fnaf1/garble1.mp3',
- glitch2:'assets/audio/fnaf1/garble2.mp3',
- glitch3:'assets/audio/fnaf1/garble3.mp3',
- staticBed:'assets/audio/fnaf1/static.mp3',
- static2:'assets/audio/fnaf1/static2.mp3',
- /* animatronicos */
- breath1:'assets/audio/fnaf1/Vocals_Breaths_S_35972006.mp3',
- breath2:'assets/audio/fnaf1/Vocals_Breaths_S_35972008.mp3',
- breath3:'assets/audio/fnaf1/Vocals_Breaths_S_35972012.mp3',
- breath4:'assets/audio/fnaf1/Vocals_Breaths_S_35972014.mp3',
- run:'assets/audio/fnaf1/run.mp3',
- runFast:'assets/audio/fnaf1/running-fast3.mp3',
- steps:'assets/audio/fnaf1/deep-steps.mp3',
- scream:'assets/audio/fnaf1/XSCREAM.mp3',
- scream2:'assets/audio/fnaf1/XSCREAM2.mp3',
- robot:'assets/audio/fnaf1/robotvoice.mp3',
- whisper:'assets/audio/fnaf1/whispering2.mp3',
- giggle1:'assets/audio/fnaf1/Laugh_Giggle_Girl_1.mp3',
- giggle2:'assets/audio/fnaf1/Laugh_Giggle_Girl_1d.mp3',
- giggle3:'assets/audio/fnaf1/Laugh_Giggle_Girl_2d.mp3',
- giggle4:'assets/audio/fnaf1/Laugh_Giggle_Girl_8d.mp3',
- scareFlash:'assets/audio/fnaf1/windowscare.mp3',
- /* ambiente y musica */
- ambienceBed:'assets/audio/fnaf1/ambience2.mp3',
- fanBed:'assets/audio/fnaf1/Buzz_Fan_Florescent2.mp3',
- ballast:'assets/audio/fnaf1/BallastHumMedium2.mp3',
- eerie:'assets/audio/fnaf1/EerieAmbienceLargeSca_MV005.mp3',
- powerdown:'assets/audio/fnaf1/powerdown.mp3',
- chimes:'assets/audio/fnaf1/chimes-2.mp3',
- toreador:'assets/audio/fnaf1/darkness-music.mp3',
- pirate:'assets/audio/fnaf1/pirate-song2.mp3',
- circus:'assets/audio/fnaf1/circus.mp3',
- crowd:'assets/audio/fnaf1/CROWD_SMALL_CHIL_EC049202.mp3',
- /* interfaz y llamadas */
- nightStart:'assets/audio/fnaf1/COMPUTER_DIGITAL_L2076505.mp3',
- tapeEject:'assets/audio/fnaf1/MiniDV_Tape_Eject_1.mp3',
- musicBox:'assets/audio/fnaf1/music_box.mp3'
+
+   Una entrada por sonido:
+     f    archivo dentro de assets/audio/fnaf1/
+     v    ganancia relativa
+     dur  segundos a reproducir; recorta las muestras mas largas que el evento
+          que las dispara (un glitch de camara dura 280-620 ms, no 3 s)
+     cd   cooldown en ms: evita que un efecto largo se re-dispare y se pise
+     loop suena en bucle (camas de ambiente)
+
+   Cada efecto conserva su version sintetizada como respaldo (synthXxx): si el
+   mp3 no esta o no se puede decodificar, suena el Web Audio de siempre. */
+const SFX={
+ /* --- puertas --- */
+ doorBang:{f:'DOOR_POUNDING_ME_D0291401.mp3',v:.7,dur:1.4,cd:1400},
+ knock:{f:'knock2.mp3',v:.5,cd:1500},
+ denied:{f:'error.mp3',v:.4,cd:250},
+ /* --- monitor y camaras --- */
+ camUp:{f:'CAMERA_VIDEO_LOA_60105303.mp3',v:.45,dur:.7,cd:300},
+ camDown:{f:'put-down.mp3',v:.45,cd:300},
+ blip:{f:'blip3.mp3',v:.5,cd:120},
+ glitch1:{f:'garble1.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
+ glitch2:{f:'garble2.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
+ glitch3:{f:'garble3.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
+ staticBed:{f:'static.mp3',v:.12,loop:1,g:'estatica'},
+ staticBed2:{f:'static2.mp3',v:.10,loop:1,g:'estatica'},
+ /* --- animatronicos --- */
+ breath1:{f:'Vocals_Breaths_S_35972006.mp3',v:.5,cd:2500,g:'breath'},
+ breath2:{f:'Vocals_Breaths_S_35972008.mp3',v:.5,cd:2500,g:'breath'},
+ breath3:{f:'Vocals_Breaths_S_35972012.mp3',v:.5,cd:2500,g:'breath'},
+ breath4:{f:'Vocals_Breaths_S_35972014.mp3',v:.5,cd:2500,g:'breath'},
+ run:{f:'run.mp3',v:.6,cd:900,g:'carrera'},
+ runFast:{f:'running-fast3.mp3',v:.6,cd:900,g:'carrera'},
+ steps:{f:'deep-steps.mp3',v:.4,dur:.9,cd:900},
+ scream:{f:'XSCREAM.mp3',v:.95},
+ /* --- ambiente (bucles) --- */
+ ambienceBed:{f:'ambience2.mp3',v:.18,loop:1},
+ fanBed:{f:'Buzz_Fan_Florescent2.mp3',v:.12,loop:1},
+ eerie:{f:'EerieAmbienceLargeSca_MV005.mp3',v:.14,cd:70000},
+ /* --- momentos --- */
+ powerdown:{f:'powerdown.mp3',v:.7},
+ chimes:{f:'chimes-2.mp3',v:.55},
+ toreador:{f:'darkness-music.mp3',v:.45},
+ pirate:{f:'pirate-song2.mp3',v:.35},
+ tapeEject:{f:'MiniDV_Tape_Eject_1.mp3',v:.4,dur:1.5},
+ /* --- intro del periodico (dura 6,2 s + 1,2 s de fundido) --- */
+ crowd:{f:'CROWD_SMALL_CHIL_EC049202.mp3',v:.35},
+ circus:{f:'circus.mp3',v:.3,dur:6.2},
+ /* --- alucinaciones sonoras: puntuales y poco frecuentes --- */
+ whisper:{f:'whispering2.mp3',v:.32,dur:2.2,cd:15000,g:'alucinacion'},
+ giggle1:{f:'Laugh_Giggle_Girl_1.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
+ giggle2:{f:'Laugh_Giggle_Girl_1d.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
+ giggle3:{f:'Laugh_Giggle_Girl_2d.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
+ giggle4:{f:'Laugh_Giggle_Girl_8d.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'}
 };
-/* Ganancia relativa de cada muestra. Es una primera pasada: se ajusta aqui, en
-   un solo sitio, sin tocar el resto del codigo. */
-const SFX_VOL={door:.55,doorBang:.7,knock:.5,denied:.4,camUp:.45,camDown:.45,blip:.5,
- glitch1:.3,glitch2:.3,glitch3:.3,staticBed:.12,static2:.45,
- breath1:.5,breath2:.5,breath3:.5,breath4:.5,run:.6,runFast:.6,steps:.4,
- scream:.95,scream2:.9,robot:.5,whisper:.35,giggle1:.38,giggle2:.38,giggle3:.38,giggle4:.38,
- scareFlash:.5,ambienceBed:.18,fanBed:.12,ballast:.14,eerie:.14,powerdown:.7,
- chimes:.55,toreador:.45,pirate:.35,circus:.3,crowd:.35,nightStart:.35,tapeEject:.4,musicBox:.5};
-let _sfxBuf={},_sfxReq={},_sfxLoop={},_fanToken=0;
+const SFX_DIR='assets/audio/fnaf1/';
+let _sfxBuf={},_sfxReq={},_sfxLoop={},_sfxLast={},_sfxPend={},_sfxGen={},_fanToken=0;
 function sfxVolMul(){return (typeof sfxVol==='function')?Math.max(0,sfxVol()):1}
 function sfxBus(){if(!AudioCtx)return null;
  const b=(typeof masterBus==='function')?masterBus():null;
  return b||AudioCtx.destination}
+function sfxNow(){return (typeof performance!=='undefined'&&performance.now)?performance.now():Date.now()}
 function loadSfx(key,cb){
- if(!SFX_SRC[key]){cb(null);return}
+ const d=SFX[key];
+ if(!d){cb(null);return}
  if(Object.prototype.hasOwnProperty.call(_sfxBuf,key)){cb(_sfxBuf[key]);return}
  if(_sfxReq[key]){_sfxReq[key].push(cb);return}
  _sfxReq[key]=[cb];
@@ -2297,7 +2292,7 @@ function loadSfx(key,cb){
   const q=_sfxReq[key]||[];delete _sfxReq[key];
   q.forEach((f)=>{try{f(_sfxBuf[key])}catch(e){}})};
  try{
-  fetch(new URL(SFX_SRC[key],location.href).href).then((r)=>{
+  fetch(new URL(SFX_DIR+d.f,location.href).href).then((r)=>{
    if(!r.ok)throw new Error('HTTP '+r.status);return r.arrayBuffer()}).then((ab)=>{
     if(!AudioCtx){done(null);return}
     try{
@@ -2309,32 +2304,53 @@ function loadSfx(key,cb){
 }
 function playSfx(key,opt){
  opt=opt||{};
- if(!AudioCtx||!SFX_SRC[key])return false;
- const base=(SFX_VOL[key]===undefined?.5:SFX_VOL[key]);
- const v=base*(opt.vol===undefined?1:opt.vol)*sfxVolMul();
+ const d=SFX[key];
+ if(!AudioCtx||!d)return false;
+ const v=(d.v===undefined?.5:d.v)*(opt.vol===undefined?1:opt.vol)*sfxVolMul();
  if(v<=.0005)return false;
+ const loop=(opt.loop===undefined)?!!d.loop:!!opt.loop;
+ /* el cooldown es por familia (todos los garble comparten uno), no por archivo:
+    si no, tres glitches seguidos podian colar tres muestras distintas */
+ const ck=(d.g||key);
+ const cd=(d.cd===undefined?0:d.cd);
+ if(cd>0){const now=sfxNow();
+  if(_sfxLast[ck]!==undefined&&now-_sfxLast[ck]<cd)return false;
+  _sfxLast[ck]=now}
+ /* los bucles se reservan de forma sincrona: la decodificacion es asincrona y
+    sin esto tres llamadas seguidas apilaban tres camas a la vez */
+ /* una cama por familia: la estatica tiene dos pistas alternativas y solo
+    puede sonar una, aunque la decodificacion vaya en camino */
+ if(loop&&sfxGroupBusy(d.g||key))return false;
+ const my=(_sfxGen[key]||0)+1;_sfxGen[key]=my;
+ if(loop)_sfxPend[key]=1;
  loadSfx(key,(buf)=>{
-  if(!buf){if(!opt.loop&&opt.fallback){try{opt.fallback()}catch(e){}}return}
+  if(loop)delete _sfxPend[key];
+  if(_sfxGen[key]!==my)return;   /* se paro mientras cargaba: no arrancar */
+  if(!buf){if(!loop&&opt.fallback){try{opt.fallback()}catch(e){}}return}
   try{
-   const src=AudioCtx.createBufferSource();src.buffer=buf;src.loop=!!opt.loop;
+   const src=AudioCtx.createBufferSource();src.buffer=buf;src.loop=loop;
    const g=AudioCtx.createGain();src.connect(g);g.connect(sfxBus()||AudioCtx.destination);
    const t=AudioCtx.currentTime+(opt.delay||0);
-   const dur=Math.max(.05,buf.duration-(opt.offset||0));
-   const fi=opt.loop?.8:Math.min(.02,dur*.1);
-   const fo=opt.loop?.8:Math.min(.3,Math.max(.04,dur*.12));
+   const off=(opt.offset||0);
+   let dur=(opt.dur!==undefined?opt.dur:d.dur);
+   if(dur===undefined||dur<=0)dur=buf.duration-off;
+   dur=Math.max(.05,Math.min(dur,buf.duration-off));
+   const fi=loop?.8:Math.min(.02,dur*.1);
+   const fo=loop?.8:Math.min(.3,Math.max(.03,dur*.15));
    g.gain.setValueAtTime(.0001,t);
    g.gain.linearRampToValueAtTime(v,t+fi);
-   if(!opt.loop){
+   if(!loop){
     g.gain.setValueAtTime(v,t+Math.max(fi,dur-fo));
     g.gain.linearRampToValueAtTime(.0001,t+dur);
    }
-   src.start(t,opt.offset||0,opt.dur);
-   if(opt.loop)_sfxLoop[key]={src:src,gain:g};
+   src.start(t,off,loop?undefined:dur);
+   if(loop)_sfxLoop[key]={src:src,gain:g};
   }catch(e){if(opt.fallback){try{opt.fallback()}catch(e2){}}}
  });
  return true;
 }
 function stopSfx(key,release){
+ _sfxGen[key]=(_sfxGen[key]||0)+1;delete _sfxPend[key];
  const l=_sfxLoop[key];if(!l)return;delete _sfxLoop[key];
  const r=(release===undefined?.4:release);
  try{
@@ -2347,44 +2363,52 @@ function stopSfx(key,release){
  }catch(e){try{l.src.stop()}catch(e2){}}
 }
 function sfxLoopActive(key){return !!_sfxLoop[key]}
-/* Camas en bucle: ambiente de oficina y estatica del monitor. Se arrancan al
-   entrar en la noche y se cortan al acabar (powerOut / 6 AM / jumpscare / menu). */
+function sfxGroupBusy(g){for(const k in SFX){const e=SFX[k];
+ if((e.g||k)!==g)continue;
+ if(_sfxLoop[k]||_sfxPend[k])return true}
+ return false}
 function startAmbienceBed(){if(!AudioCtx)return;
  if(typeof getSetting==='function'&&!getSetting('ambience'))return;
  playSfx('ambienceBed',{loop:true})}
+/* Estatica del monitor: un solo bucle, elegido al subirlo, y se para al bajarlo. */
 function startCamStatic(){if(!AudioCtx)return;
  if(typeof getSetting==='function'&&!getSetting('staticNoise'))return;
- playSfx('staticBed',{loop:true})}
-function stopSfxBeds(){Object.keys(_sfxLoop).forEach((k)=>stopSfx(k,.5))}
-/* Risa / susurro sueltos: alucinaciones sonoras del FNAF 1. */
+ if(sfxLoopActive('staticBed')||sfxLoopActive('staticBed2'))return;
+ playSfx(Math.random()<.5?'staticBed':'staticBed2',{loop:true})}
+function stopCamStatic(){stopSfx('staticBed',.25);stopSfx('staticBed2',.25)}
+function stopSfxBeds(){stopCamStatic();Object.keys(_sfxLoop).forEach((k)=>stopSfx(k,.5))}
+/* Alucinaciones: como mucho una cada 15 s (lo impone el cooldown de cada pista),
+   y solo con la opcion activada. */
 function maybeHallucinationSfx(){
  if(!AudioCtx)return;
  if(typeof getSetting==='function'&&!getSetting('hallucinations'))return;
- if(Math.random()>.16)return;
- const pool=['whisper','giggle1','giggle2','giggle3','giggle4'];
- playSfx(pool[Math.floor(Math.random()*pool.length)]);
+ if(Math.random()>.07)return;
+ playSfx(sfxPick(['whisper','giggle1','giggle2','giggle3','giggle4']));
 }
-/* Musica del Pirate Cove: suena la primera vez que abres la CAM 5 en la noche. */
+/* Ambiente tenso con poca energia: una sola vez, no en cada tick del ambiente. */
+function maybeEerieAmbience(){
+ if(!AudioCtx||sfxLoopActive('eerie'))return;
+ if(typeof state==='undefined'||!state||state.power===undefined)return;
+ if(state.power>20)return;
+ playSfx('eerie',{loop:true});
+}
 let _covePlayed=false;
 function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate')}
 function resetCoveMusic(){_covePlayed=false}
 function sfxPick(a){return a[Math.floor(Math.random()*a.length)]}
-
-function sndDoor(){if(!playSfx(sfxPick(['door','doorAlt','doorSlide','doorBig']),{fallback:synthDoor}))synthDoor()}
-function sndLight(){playSfx('ballast',{vol:.9});synthLight()}
+function sndDoor(){synthDoor()}
+function sndLight(){synthLight()}
 function sndCamUp(up){const k=(up===false)?'camDown':'camUp';
  if(!playSfx(k,{fallback:synthCamUp}))synthCamUp()}
 function sndCamSwitch(){if(!playSfx('blip',{fallback:synthCamSwitch}))synthCamSwitch()}
 function sndAmbience(){if(sfxLoopActive('ambienceBed'))return;synthAmbience()}
-function sndJumpscare(alt){
- if(!playSfx(alt?'scream2':'scream',{fallback:synthJumpscare}))synthJumpscare()}
+function sndJumpscare(){if(!playSfx('scream',{fallback:synthJumpscare}))synthJumpscare()}
 function sndPowerDown(){if(!playSfx('powerdown',{fallback:synthPowerDown}))synthPowerDown()}
 function sndFoxyRun(){if(!playSfx(sfxPick(['runFast','run']),{fallback:synthFoxyRun}))synthFoxyRun()}
 function sndFreddyTune(){if(!playSfx('toreador',{fallback:synthFreddyTune}))synthFreddyTune()}
 function sndDoorBang(){if(!playSfx('doorBang',{fallback:synthDoorBang}))synthDoorBang()}
 function sndCamGlitch(intense){
- const k=intense?'static2':sfxPick(['glitch1','glitch2','glitch3']);
- if(!playSfx(k,{fallback:function(){synthCamGlitch(intense)}}))synthCamGlitch(intense)}
+ if(!playSfx(sfxPick(['glitch1','glitch2','glitch3']),{fallback:function(){synthCamGlitch(intense)}}))synthCamGlitch(intense)}
 function sndBreath(side){
  const k=sfxPick(['breath1','breath2','breath3','breath4']);
  if(!playSfx(k,{fallback:function(){synthBreath(side)}}))synthBreath(side)}
@@ -2393,7 +2417,7 @@ function startFanHum(){
  if(!AudioCtx||fanHumNodes)return;
  if(typeof getSetting==='function'&&!getSetting('ambience'))return;
  const my=++_fanToken;
- const v=(SFX_VOL.fanBed||.12)*sfxVolMul();
+ const v=(SFX.fanBed.v)*sfxVolMul();
  if(v<=.0005){synthFanHum();return}
  loadSfx('fanBed',(buf)=>{
   if(my!==_fanToken||fanHumNodes)return;
@@ -2407,15 +2431,11 @@ function startFanHum(){
   }catch(e){synthFanHum()}
  });
 }
-/* ---- cues nuevos (no tenian funcion propia con audio sintetizado) ---- */
 function sndSixAM(){playSfx('chimes')}
-function sndKnock(){playSfx('knock')}
-function sndFootsteps(){playSfx('steps')}
-function sndScareFlash(){playSfx('scareFlash')}
-function sndRobotVoice(){playSfx('robot')}
-function sndNightStart(){playSfx('nightStart')}
+function sndKnock(){if(!playSfx('knock',{fallback:sndStep}))sndStep()}
+function sndFootsteps(){if(!playSfx('steps',{fallback:sndStep}))sndStep()}
 function sndTapeEject(){playSfx('tapeEject')}
-function sndPartyCrowd(){playSfx('crowd');playSfx('circus',{delay:.4,vol:.7})}
+function sndPartyCrowd(){playSfx('crowd');playSfx('circus',{delay:.3})}
 
 function synthDoor(){/* golpe hidraulico + rail metalico */
  playOsc(90,'square',.18,.42);playOsc(55,'sawtooth',.24,.24);playNoise(.2,.09);
@@ -2736,7 +2756,7 @@ function showNightScreen(){
     if(myToken!==__seqToken)return;
     requestAnimationFrame(()=>{
       if(myToken!==__seqToken)return;
-      ns.classList.add('active');sndNightStart();
+      ns.classList.add('active');
       T(()=>{ns.classList.remove('active');startGame(n)},4500);
     });
   });
@@ -2849,7 +2869,7 @@ state.intervals.push(setInterval(breathTick,1400));
 
 function clearAllIntervals(){try{clearGolden()}catch(e){}if(state.blackoutTimers){state.blackoutTimers.forEach(id=>clearTimeout(id));state.blackoutTimers=[]}state.intervals.forEach(id=>clearInterval(id));state.intervals=[];Object.values(state.timers).forEach(clearTimeout);state.timers={};if(state.hourTimer){clearTimeout(state.hourTimer);state.hourTimer=null}if(state.ambienceTimer){clearTimeout(state.ambienceTimer);state.ambienceTimer=null}}
 
-function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();if(state.power<25&&!sfxLoopActive('eerie'))playSfx('eerie');sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
+function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();maybeEerieAmbience();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
 function randomStepSound(){if(state.active&&!state.gameOver&&!state.won){if(Math.random()<.12)triggerHallucination();}}
 
 /* ===== CONTROLS ===== */
@@ -2895,7 +2915,7 @@ function synthDoorBang(){try{playOsc(70,'square',.22,.34);playOsc(110,'sawtooth'
 function toggleLight(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setLight(side,!state.lights[side]);sndLight()}
 function setLight(side,on){state.lights[side]=on;const hallLight=document.getElementById('hallLight'+(side==='left'?'Left':'Right'));hallLight.classList.toggle('active',on);if(!on)hallLight.classList.add('off-flash');setTimeout(()=>hallLight&&hallLight.classList.remove('off-flash'),500);const btn=document.getElementById('btnLight'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnLight'+(side==='left'?'Left':'Right')+'2');btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);btn.classList.toggle('light-on',on);btn2&&btn2.classList.toggle('light-on',on);const office=document.getElementById('office');if(office){const anyOn=state.lights.left||state.lights.right;office.classList.toggle('lights-off',!anyOn);office.classList.toggle('lights-on',anyOn);if(on){/* keep lights-on while active */}else{office.classList.remove('lights-on')}}if(on){/* La luz solo REVELA: para espantarlos hay que cerrar la puerta. */triggerFlickerBrightness();const hallEnemy=document.getElementById(side==='left'?'hallEnemyLeft':'hallEnemyRight');if(hallEnemy){hallEnemy.style.filter='brightness(2.5)';setTimeout(()=>{hallEnemy.style.filter=''},200)}}updateHallEnemies();updateUsage()}
 
-function toggleCameras(){if(!state.active||state.gameOver||state.won)return;initAudio();if(state.goldenActive)clearGolden();state.camsUp=!state.camsUp;const sys=document.getElementById('cameraSystem');const btn=document.getElementById('camButton');if(state.camsUp){document.body.classList.add('cams-up');sys.classList.add('active');btn.classList.add('cam-on');sndCamUp(true);startCamStatic();updateCamView();updateCamIndicators();updateCoveDecor();updateCamTopBar();stopFanHum()}else{document.body.classList.remove('cams-up');sys.classList.remove('active');btn.classList.remove('cam-on');sndCamUp(false);stopSfx('staticBed',.25);
+function toggleCameras(){if(!state.active||state.gameOver||state.won)return;initAudio();if(state.goldenActive)clearGolden();state.camsUp=!state.camsUp;const sys=document.getElementById('cameraSystem');const btn=document.getElementById('camButton');if(state.camsUp){document.body.classList.add('cams-up');sys.classList.add('active');btn.classList.add('cam-on');sndCamUp(true);startCamStatic();updateCamView();updateCamIndicators();updateCoveDecor();updateCamTopBar();stopFanHum()}else{document.body.classList.remove('cams-up');sys.classList.remove('active');btn.classList.remove('cam-on');sndCamUp(false);stopCamStatic();
  const md=document.getElementById('monDown');
  if(md&&!document.body.classList.contains('no-flicker')){md.classList.remove('on');void md.offsetWidth;md.classList.add('on');
   setTimeout(()=>md&&md.classList.remove('on'),360)}
@@ -3097,7 +3117,7 @@ if(state.camsUp&&state.currentCam===5){const maxStage=getFoxyMaxStage();const op
 /* ===== SPECIAL EVENTS ===== */
 function powerOut(){if(!state.active||state.blackout)return;state.blackout=true;stopPhoneCall();state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndPowerDown();
 /* el reloj sigue: aun puedes llegar a las 6 AM a oscuras */
-const remaining=6-state.hour;if(remaining>0){let hleft=remaining;const tick=()=>{if(state.gameOver||state.won)return;state.hour++;updateHUD();if(state.hour>=6){state.blackoutTimers&&state.blackoutTimers.forEach(id=>clearTimeout(id));winGame();return}state.blackoutTimers.push(setTimeout(tick,getHourDuration()))};state.blackoutTimers=state.blackoutTimers||[];state.blackoutTimers.push(setTimeout(tick,getHourDuration()))}setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);state.camsUp=false;document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('blackout').classList.add('active');document.getElementById('blackoutEyes').classList.remove('active');const hallLeft=document.getElementById('hallEnemyLeft');const hallRight=document.getElementById('hallEnemyRight');hallLeft.classList.remove('visible');hallRight.classList.remove('visible');hallLeft.innerHTML='';hallRight.innerHTML='';const powerFreddy=document.getElementById('powerFreddy');powerFreddy.innerHTML='';powerFreddy.classList.remove('active');document.getElementById('fan').style.opacity='.35';document.getElementById('fan-blades').style.animationPlayState='paused';state.blackoutTimers=[];state.blackoutTimers.push(setTimeout(()=>{powerFreddy.innerHTML=getEnemySvg('freddy');powerFreddy.classList.add('active');document.getElementById('blackoutEyes').classList.add('active');sndFreddyTune();sndRobotVoice();
+const remaining=6-state.hour;if(remaining>0){let hleft=remaining;const tick=()=>{if(state.gameOver||state.won)return;state.hour++;updateHUD();if(state.hour>=6){state.blackoutTimers&&state.blackoutTimers.forEach(id=>clearTimeout(id));winGame();return}state.blackoutTimers.push(setTimeout(tick,getHourDuration()))};state.blackoutTimers=state.blackoutTimers||[];state.blackoutTimers.push(setTimeout(tick,getHourDuration()))}setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);state.camsUp=false;document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('blackout').classList.add('active');document.getElementById('blackoutEyes').classList.remove('active');const hallLeft=document.getElementById('hallEnemyLeft');const hallRight=document.getElementById('hallEnemyRight');hallLeft.classList.remove('visible');hallRight.classList.remove('visible');hallLeft.innerHTML='';hallRight.innerHTML='';const powerFreddy=document.getElementById('powerFreddy');powerFreddy.innerHTML='';powerFreddy.classList.remove('active');document.getElementById('fan').style.opacity='.35';document.getElementById('fan-blades').style.animationPlayState='paused';state.blackoutTimers=[];state.blackoutTimers.push(setTimeout(()=>{powerFreddy.innerHTML=getEnemySvg('freddy');powerFreddy.classList.add('active');document.getElementById('blackoutEyes').classList.add('active');sndFreddyTune();
 /* Margen aleatorio como en el original: si el reloj llega a las 6 AM antes, sobrevives */
 const delay=6000+Math.random()*9000;state.blackoutTimers.push(setTimeout(()=>doJumpscare('freddy'),delay))},2600))}
 
@@ -3121,8 +3141,8 @@ function maybeGoldenSkibidi(){
   state.goldenActive=true;
   g.innerHTML=getEnemySvg('freddy');
   g.classList.add('active');
-  try{playSfx('musicBox',{dur:6.2,fallback:synthFreddyTune})}catch(e){}
-  try{sndScareFlash()}catch(e){}
+  try{synthFreddyTune()}catch(e){}
+  try{playNoise(.6,.05)}catch(e){}
   /* si sigue en pantalla al acabar la animacion -> muerte */
   const deadline=setTimeout(()=>{
     if(state.goldenActive&&!state.camsUp&&!state.gameOver&&!state.won){
