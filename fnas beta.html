@@ -2526,18 +2526,22 @@ function settingVal(k,def){
 function musicVolMul(){return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volMusic',42)/100))}
 /* La llamada del encargado suena por un <audio> aparte, fuera del bus maestro:
    si no se baja el ambiente mientras habla, se lo come. */
+let _bedDuck=1;
 function bedTarget(k){const d=SFX[k];if(!d)return 0;return (d.v===undefined?.5:d.v)*sfxVolMul()}
 function duckBeds(on){
  if(!AudioCtx)return;
- ['ambienceBed','staticBed','staticBed2'].forEach((k)=>{
+ _bedDuck=on?.32:1;
+ ['ambienceBed','staticBed','staticBed2','lightBed','blackoutBed'].forEach((k)=>{
   const l=_sfxLoop[k];if(!l)return;
   try{
    const t=AudioCtx.currentTime;
-   const v=Math.max(.0001,bedTarget(k)*(on?.32:1));
+   const v=Math.max(.0001,bedTarget(k)*_bedDuck);
    l.gain.gain.cancelScheduledValues(t);
    l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
    l.gain.gain.linearRampToValueAtTime(v,t+.4);
-  }catch(e){}})}
+  }catch(e){}});
+ /* el bucle de amenaza recalcula su ganancia solo, asi que hay que avisarle */
+ updateThreatAmbience()}
 function sfxVolMul(){if(typeof sfxVol==='function')return Math.max(0,sfxVol());
  return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volSfx',100)/100))}
 function sfxBus(){if(!AudioCtx)return null;
@@ -2667,9 +2671,9 @@ function updateThreatAmbience(){
  const lv=(state&&state.blackout)?0:threatLevel();
  if(lv<=0){stopSfx('threat',.8);return}
  const f=THREAT_GAIN[lv];
- if(!sfxLoopActive('threat')){playSfx('threat',{loop:true,vol:f});return}
+ if(!sfxLoopActive('threat')){playSfx('threat',{loop:true,vol:f*_bedDuck});return}
  const l=_sfxLoop['threat'];if(!l)return;
- const v=Math.max(.0001,(SFX.threat.v||.2)*f*(SFX.threat.music?musicVolMul():sfxVolMul()));
+ const v=Math.max(.0001,(SFX.threat.v||.2)*f*(SFX.threat.music?musicVolMul():sfxVolMul())*_bedDuck);
  try{const t=AudioCtx.currentTime;
   l.gain.gain.cancelScheduledValues(t);
   l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);

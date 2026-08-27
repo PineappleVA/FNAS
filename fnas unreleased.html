@@ -1260,18 +1260,22 @@ function settingVal(k,def){
 function musicVolMul(){return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volMusic',42)/100))}
 /* La llamada del encargado suena por un <audio> aparte, fuera del bus maestro:
    si no se baja el ambiente mientras habla, se lo come. */
+let _bedDuck=1;
 function bedTarget(k){const d=SFX[k];if(!d)return 0;return (d.v===undefined?.5:d.v)*sfxVolMul()}
 function duckBeds(on){
  if(!AudioCtx)return;
- ['ambienceBed','staticBed','staticBed2'].forEach((k)=>{
+ _bedDuck=on?.32:1;
+ ['ambienceBed','staticBed','staticBed2','lightBed','blackoutBed'].forEach((k)=>{
   const l=_sfxLoop[k];if(!l)return;
   try{
    const t=AudioCtx.currentTime;
-   const v=Math.max(.0001,bedTarget(k)*(on?.32:1));
+   const v=Math.max(.0001,bedTarget(k)*_bedDuck);
    l.gain.gain.cancelScheduledValues(t);
    l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
    l.gain.gain.linearRampToValueAtTime(v,t+.4);
-  }catch(e){}})}
+  }catch(e){}});
+ /* el bucle de amenaza recalcula su ganancia solo, asi que hay que avisarle */
+ updateThreatAmbience()}
 function sfxVolMul(){if(typeof sfxVol==='function')return Math.max(0,sfxVol());
  return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volSfx',100)/100))}
 function sfxBus(){if(!AudioCtx)return null;
@@ -1401,9 +1405,9 @@ function updateThreatAmbience(){
  const lv=(state&&state.blackout)?0:threatLevel();
  if(lv<=0){stopSfx('threat',.8);return}
  const f=THREAT_GAIN[lv];
- if(!sfxLoopActive('threat')){playSfx('threat',{loop:true,vol:f});return}
+ if(!sfxLoopActive('threat')){playSfx('threat',{loop:true,vol:f*_bedDuck});return}
  const l=_sfxLoop['threat'];if(!l)return;
- const v=Math.max(.0001,(SFX.threat.v||.2)*f*(SFX.threat.music?musicVolMul():sfxVolMul()));
+ const v=Math.max(.0001,(SFX.threat.v||.2)*f*(SFX.threat.music?musicVolMul():sfxVolMul())*_bedDuck);
  try{const t=AudioCtx.currentTime;
   l.gain.gain.cancelScheduledValues(t);
   l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
@@ -1509,6 +1513,28 @@ function sndTapeEject(){playSfx('tapeEject')}
 function sndPartyCrowd(){playSfx('crowd')}
 
 function synthDoor(){playOsc(90,'square',.18,.45);playOsc(55,'sawtooth',.22,.25);playNoise(.18,.08)}
+/* Respaldo sintetizado de los efectos que no tienen muestra propia en el pack.
+   Se usan sfxVolMul()/sfxBus() en lugar de sfxVol()/masterBus(), que en esta
+   compilacion solo existen de forma opcional (ver sus guardas typeof). */
+function synthBreath(side){if(!AudioCtx)return;
+ const vol=sfxVolMul();if(vol<=0)return;
+ const dur=.55;
+ const buf=AudioCtx.createBuffer(1,Math.floor(AudioCtx.sampleRate*dur),AudioCtx.sampleRate);
+ const data=buf.getChannelData(0);
+ for(let i=0;i<data.length;i++){const t=i/data.length;
+  data[i]=(Math.random()*2-1)*Math.sin(Math.PI*t)*0.5}
+ const src=AudioCtx.createBufferSource();src.buffer=buf;
+ const flt=AudioCtx.createBiquadFilter();flt.type='lowpass';flt.frequency.value=420;
+ const pan=AudioCtx.createStereoPanner?AudioCtx.createStereoPanner():null;
+ if(pan)pan.pan.value=side==='left'?-0.85:0.85;
+ const g=AudioCtx.createGain();g.gain.value=0.16*vol;
+ src.connect(flt);flt.connect(pan||g);if(pan)pan.connect(g);
+ g.connect(sfxBus());
+ src.start();src.stop(AudioCtx.currentTime+dur)}
+function synthCamGlitch(intense){try{playNoise(intense?.22:.12,intense?.10:.05);playOsc(intense?150:220,'square',.05,.02)}catch(e){}}
+function synthDoorBang(){try{playOsc(70,'square',.22,.34);playOsc(110,'sawtooth',.16,.18);playNoise(.22,.14)}catch(e){}}
+function synthDoorJam(){try{playOsc(180,'square',.1,.2);playOsc(120,'square',.1,.18,.12);
+ playNoise(.24,.10)}catch(e){}}
 function synthLight(){playOsc(900,'sine',.04,.12);playOsc(1350,'sine',.03,.06,.04);playNoise(.05,.04)}
 function synthCamUp(){playNoise(.15,.12);playOsc(200,'sine',.1,.08)}
 function synthCamSwitch(){playNoise(.08,.08);playOsc(400,'sine',.05,.05)}
