@@ -104,8 +104,9 @@
           .filter(item => item.type === 'file' && item.name.toLowerCase().endsWith('.html') && item.name.toLowerCase() !== 'index.html')
           .sort((a, b) => a.name.localeCompare(b.name));
 
+        // 'assets' guarda la multimedia del juego: no es navegable, no se enlaza.
         const folders = items
-          .filter(item => item.type === 'dir')
+          .filter(item => item.type === 'dir' && item.name.toLowerCase() !== 'assets')
           .sort((a, b) => a.name.localeCompare(b.name));
 
         htmlFiles.forEach(file => addCard('HTML', file.name, `./${encodeURIComponent(file.name)}`));

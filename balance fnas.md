@@ -289,15 +289,20 @@ sin batería en la última hora, no por un fallo de reacción.
 - Pantalla de muerte con los 4 asesinos: retrato correcto, sin texto residual
 - 6 partidas encadenadas: **0** timers colgando
 
-### Comprobación de archivo autónomo (sin conexión)
+### Multimedia en `assets/` (ya no va incrustada)
 
-El juego se carga con **toda la red externa bloqueada** y funciona igual:
+El juego **ya no lleva la multimedia en base64 dentro del HTML**. Fuentes, imágenes, música y
+llamadas de teléfono viven en la carpeta `assets/` y se sirven junto a la página:
 
-- Peticiones a servidores externos durante una sesión completa: **ninguna**
-- `Creepster` y `VT323` incrustadas como `@font-face` en base64 (≈ 60 KB) y **verificadas como
-  aplicadas** midiendo el texto contra la fuente genérica del sistema
-- Sin `@import`, sin `fonts.googleapis.com` ni `fonts.gstatic.com` en el archivo
-- Regresión completa repetida con la red caída: **0 errores JS y 0 de consola**
+- `assets/fonts/` — `Creepster` y `VT323` (dos subconjuntos) en `.woff2`
+- `assets/img/` — logo del splash y periódico de la intro
+- `assets/audio/` — música del menú, clic de interfaz y las llamadas de cada noche
+  (`phone/` para la v3.0, `phone-unreleased/` para la compilación Unreleased)
+- Peticiones a servidores externos durante una sesión completa: **ninguna**. Todo sale del propio
+  repositorio; sin `@import`, sin `fonts.googleapis.com` ni `fonts.gstatic.com`.
+- **Consecuencia:** el HTML ya **no** es un archivo autónomo. Para jugar hay que servirlo por HTTP
+  con la carpeta `assets/` a su lado —GitHub Pages lo hace solo—; abierto con `file://` no carga
+  la multimedia.
 
 ### Correcciones de esta pasada
 
@@ -312,7 +317,8 @@ El juego se carga con **toda la red externa bloqueada** y funciona igual:
   sombra de contacto.
 - **El juego dependía de internet sin que se notara.** La hoja de estilos empezaba con un `@import`
   de Google Fonts: sin conexión, el título y la interfaz perdían su tipografía y caían a una fuente
-  del sistema. Las dos fuentes van ahora incrustadas dentro del propio archivo.
+  del sistema. Las dos fuentes se sirven ahora desde `assets/fonts/`, sin `@import` ni
+  dominios de terceros (ver *Multimedia en `assets/`*).
 - **Código muerto retirado:** `updateHallEyes` (vacía desde que se quitaron los ojos rojos),
   `stepNear` (nunca conectada) y el `console.log` de arranque de partida.
 
