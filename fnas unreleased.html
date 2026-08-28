@@ -1124,6 +1124,9 @@ const SFX={
  doorBang:{f:'golpes-en-la-puerta.mp3',v:.7,dur:1.4,cd:1400},
  knock:{f:'llaman-a-la-puerta.mp3',v:.5,cd:1500},
  denied:{f:'accion-denegada.mp3',v:.4,cd:250},
+ door:{f:'accion-puerta.mp3',v:.5,dur:.6,cd:200},
+ doorReveal:{f:'susto-puerta-iluminada.mp3',v:.75,dur:1.2,cd:6000},
+ glitchN6:{f:'glitch-noche-6.mp3',v:.3,dur:.8,cd:45000},
  /* --- monitor y camaras --- */
  camUp:{f:'subir-monitor.mp3',v:.45,dur:.7,cd:300},
  camDown:{f:'bajar-monitor.mp3',v:.45,cd:300},
@@ -1422,7 +1425,7 @@ function maybeCircus(){
  /* la wiki: al azar cuando uno de los animatronicos esta activo */
  if(!anyAnimatronicActive())return;
  if(Math.random()>.10)return;
- playSfx('circus')}
+ playSfx('circus',{pos:'dining'})}
 /* Cocina: la wiki atribuye estos cuatro sonidos a Chica mientras se mueve por
    la Kitchen (la CAM 6 del original, que no tiene imagen). */
 function maybeKitchenSfx(){
@@ -1435,7 +1438,7 @@ function maybeKitchenSfx(){
    4a noche, con Bonnie o Chica. */
 function sndRobotVoice(side){
  if(!AudioCtx)return;
- playSfx('robotVoice',{pos:doorPos(side)||'hallLeftNear'})}
+ playSfx('robotVoice',{pos:side==='left'?'hallLeftNear':'hallRightNear'})}
 function maybeArrivalSfx(key,e){
  if(!AudioCtx||!e||!state)return;
  if(key!=='bonnie'&&key!=='chica')return;
@@ -1464,7 +1467,7 @@ function anyAnimatronicActive(){
  return false}
 
 let _covePlayed=false;
-function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate')}
+function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate',{pos:'cove'})}
 function resetCoveMusic(){_covePlayed=false}
 function sfxPick(a){return a[Math.floor(Math.random()*a.length)]}
 function sndDoor(side){const p=doorPos(side);
@@ -1511,6 +1514,20 @@ function sndFootsteps(where){const p=(typeof where==='number')?camPos(where):doo
  if(!playSfx('steps',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
 function sndTapeEject(){playSfx('tapeEject')}
 function sndPartyCrowd(){playSfx('crowd')}
+/* Susto en la puerta: al encender la luz con alguien delante.
+   El enemigo en la puerta se marca con e.side (y e.cam a null). */
+function maybeDoorReveal(side){
+ if(!AudioCtx||!state||!state.enemies)return;
+ const es=state.enemies;
+ for(const k in es){const e=es[k];
+  if(e&&e.active&&e.side===side){playSfx('doorReveal',{pos:doorPos(side)});return}}
+}
+/* Glitch digital: solo puede ocurrir en la noche 6. */
+function maybeNight6Glitch(){
+ if(!AudioCtx||!state||!state.active||state.blackout)return;
+ if(state.night<6)return;
+ if(Math.random()>.06)return;
+ playSfx('glitchN6')}
 
 function synthDoor(){playOsc(90,'square',.18,.45);playOsc(55,'sawtooth',.22,.25);playNoise(.18,.08)}
 /* Respaldo sintetizado de los efectos que no tienen muestra propia en el pack.
@@ -1748,7 +1765,7 @@ console.log('Game started night',n,state.enemies);
 
 function clearAllIntervals(){state.intervals.forEach(clearInterval);state.intervals=[];Object.values(state.timers).forEach(clearTimeout);state.timers={};if(state.ambienceTimer){clearTimeout(state.ambienceTimer);state.ambienceTimer=null}}
 
-function startAmbience(){if(!state.active)return;startAmbienceBed();updateThreatAmbience();maybeCircus();maybeKitchenSfx();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
+function startAmbience(){if(!state.active)return;startAmbienceBed();updateThreatAmbience();maybeCircus();maybeKitchenSfx();maybeNight6Glitch();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
 function randomStepSound(){if(state.active&&!state.gameOver&&!state.won){if(Math.random()<.12)triggerHallucination();}}
 
 /* ===== CONTROLS ===== */
@@ -1756,7 +1773,7 @@ function toggleDoor(side){if(!state.active||state.camsUp||state.gameOver||state.
 function setDoor(side,on){state.doors[side]=on;const door=document.getElementById('door'+(side==='left'?'Left':'Right'));const btn=document.getElementById('btnDoor'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnDoor'+(side==='left'?'Left':'Right')+'2');const status=document.getElementById('doorStatus'+(side==='left'?'Left':'Right'));door.classList.toggle('closed',on);door.classList.toggle('open',!on);btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);if(status){status.classList.toggle('active',on);status.textContent=on?'CERRADA':'ABIERTA';status.style.color=on?'#f00':'#555'}updateUsage()}
 
 function toggleLight(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setLight(side,!state.lights[side]);sndLight(side)}
-function setLight(side,on){state.lights[side]=on;
+function setLight(side,on){state.lights[side]=on;if(on)maybeDoorReveal(side);
  if(on)startLightHum(side);else if(!state.lights.left&&!state.lights.right)stopLightHum();document.getElementById('hallLight'+(side==='left'?'Left':'Right')).classList.toggle('active',on);const btn=document.getElementById('btnLight'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnLight'+(side==='left'?'Left':'Right')+'2');btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);btn.classList.toggle('light-on',on);btn2&&btn2.classList.toggle('light-on',on);updateHallEnemies();updateUsage()}
 
 function toggleCameras(){if(!state.active||state.gameOver||state.won)return;initAudio();state.camsUp=!state.camsUp;const sys=document.getElementById('cameraSystem');const btn=document.getElementById('camButton');if(state.camsUp){stopFanHum();sys.classList.add('active');btn.classList.add('cam-on');sndCamUp(true);startCamStatic();updateCamView();updateCoveDecor()}else{startFanHum();sys.classList.remove('active');btn.classList.remove('cam-on');sndCamUp(false);stopCamStatic();checkDoorDeath()}updateUsage()}

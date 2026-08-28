@@ -54,8 +54,8 @@ redistribuibles, igual que el resto de esta carpeta.
 **Los archivos están renombrados según el uso que tienen en el juego**
 (`golpes-en-la-puerta.mp3`, `jumpscare.mp3`, `campanas-6am.mp3`…), no con el
 nombre del pack. La última columna de cada tabla conserva el nombre original
-para poder rastrear la procedencia; los que empiezan por `sin-usar-` están en la
-carpeta pero no se disparan en el juego.
+para poder rastrear la procedencia. De los 46, **45 se disparan en el juego**; el
+único que no lo hace es `tema-menu-fnaf1.mp3`, que es el tema del menú original.
 
 **Regla que sigue el motor: una muestra nunca dura más que el evento que la
 dispara.** El glitch visual de una cámara dura 280–620 ms, así que
@@ -78,6 +78,16 @@ izquierda y los este (4A/4B/4C) a la derecha, como en el mapa del juego. La
 música y el ambiente del local **no** se panean, porque no vienen de un sitio.
 `SFX_3D=false` lo degrada a paneo estéreo, y si el navegador no tiene
 `PannerNode` la caída es automática.
+
+Cuatro sonidos que ocurren en una sala concreta se anclan a su cámara, de modo que
+pueden sonar en cualquier momento y se oyen venir de donde toca:
+
+| Sonido | Se coloca en |
+|---|---|
+| `musica-pirate-cove.mp3` | Pirate Cove (CAM 5) |
+| `organo-de-circo.mp3` | CAM 1B |
+| `voz-robotica-pasillo.mp3` | esquina del pasillo: CAM 2B a la izquierda, 4B a la derecha |
+| `ruidos-cocina-*.mp3` | la cocina (CAM 6, que no tiene imagen) |
 
 ### Mezcla
 
@@ -140,64 +150,63 @@ Cada fila de las dos tablas anteriores lleva marcado de dónde sale su identidad
 | ⚠ | **Hay que verificarlo**: o la descripción de la wiki no encaja con el uso que le damos, o no hay entrada en la wiki |
 | — | Uso propio de este fangame; la wiki no lista ese sonido |
 
-Los ⚠ son siete archivos y conviene escucharlos contra el juego original antes de dar la identidad por buena.
+Tras la verificación a oído ya **no queda ninguna fila marcada ⚠ ni 🔶**: las 45 están
+confirmadas. Las marcas se conservan en la leyenda por si se añade material nuevo.
 
-### En el juego (42)
+### En el juego (45)
 
-| Archivo | Suena cuando | Duración | Se reproduce | Nombre original |
 | Archivo | Suena cuando | Duración | Se reproduce | Nombre original | Verificación |
 |---|---|---|---|---|---|
-| `accion-denegada.mp3` | acción denegada | 0.21 s | completo | `error.mp3` | — · uso propio del fangame (puerta atascada); la wiki no lista ese sonido |
-| `ambiente-apagon.mp3` | ambiente del apagón, desde que se va la luz hasta el susto o las 6 AM | 30.04 s | en bucle | `ambience2.mp3` | ✅ · *Ambience2* = ambiente del apagón |
+| `accion-denegada.mp3` | acción denegada | 0.42 s | completo | `error.mp3` | — · uso propio del fangame (puerta atascada); la wiki no lista ese sonido |
+| `accion-puerta.mp3` | abrir o cerrar una puerta de la oficina | 2.35 s | solo los primeros **0.6 s** | `SFXBible_12478.mp3` | ✅ · «accion de cerrar/abrir las puertas» |
+| `ambiente-apagon.mp3` | ambiente del apagón, desde que se va la luz hasta el susto o las 6 AM | 60.08 s | en bucle | `ambience2.mp3` | ✅ · *Ambience2* = ambiente del apagón |
 | `ambiente-oficina.mp3` | ambiente principal de la oficina, toda la noche | 115.51 s | en bucle | `ColdPresc-B.mp3` | ✅ · *Cold Presence B* = ambiente principal de la noche |
-| `amenaza-cerca.mp3` | amenaza cerca: **30 %** con un animatrónico en el pasillo, **50 %** con dos, **75 %** con tres, **100 %** si Freddy está en la oficina | 57.47 s | en bucle, volumen según la amenaza | `EerieAmbienceLargeSca_MV005.mp3` | ✅ · *Giant Hollow Tube Sector*, con la escalera 30/50/75/100 % |
-| `bajar-monitor.mp3` | bajar el monitor | 0.44 s | completo | `put-down.mp3` | ✅ · «subir/bajar el monitor»  |
-| `cambiar-camara.mp3` | cambiar de cámara | 0.16 s | completo | `blip3.mp3` | ✅ · «cambiar de cámara» |
-| `campanas-6am.mp3` | campanas de las 6 AM | 8.65 s | completo | `chimes-2.mp3` | ✅ · «campanas al finalizar una noche» |
-| `carrera-pasillo-1.mp3` | carrera de IShowSpeed | 1.33 s | completo | `run.mp3` | ✅ · «carrera de IShowSpeed» |
-| `carrera-pasillo-2.mp3` | carrera de IShowSpeed | 1.18 s | completo | `running-fast3.mp3` | ✅ · idem |
-| `estatica-del-monitor-larga.mp3` | estática del monitor (bucle, alternativa) | 16.88 s | en bucle | `static2.mp3` | ✅ · «estatica que se reproduce en el menu principal que va disminuyendo» |
-| `estatica-del-monitor.mp3` | estática del monitor (bucle) | 5.46 s | en bucle | `static.mp3` | ✅ · «estatica que suena justo despues del jumpscare» |
-| `fin-de-la-llamada.mp3` | la cinta sale al terminar la llamada | 8.36 s | solo los primeros **1.5 s** | `MiniDV_Tape_Eject_1.mp3` |✅ · «estatica que se reproduce en cada camara» |
-| `golpes-en-la-puerta.mp3` | golpes contra la puerta cerrada | 3.37 s | solo los primeros **1.4 s** | `DOOR_POUNDING_ME_D0291401.mp3` | ✅ · «Foxy golpeando la puerta izquierda de la oficina» |
-| `grito-golden-freddy.mp3` | jumpscare de Golden Freddy (el grito **lento**, no el normal) | 7.97 s | completo | `XSCREAM2.mp3` | ✅ · «Jumpscare de Golden Freddy» |
-| `interferencia-camara-1.mp3` | interferencia cuando se mueve un animatronico | 2.09 s | solo los primeros **.55 s** | `garble1.mp3` | ✅ · «señal de las cámaras interrumpida», 3 variantes |
-| `interferencia-camara-2.mp3` | interferencia cuando se mueve un animatronico | 3.00 s | solo los primeros **.55 s** | `garble2.mp3` | ✅ · idem |
-| `interferencia-camara-3.mp3` | interferencia cuando se mueve un animatronico | 2.14 s | solo los primeros **.55 s** | `garble3.mp3` | ✅ · idem |
-| `jumpscare.mp3` | jumpscare | 2.66 s | completo | `XSCREAM.mp3` | ✅ · «sonido del jumpscare de los animatrónicos» |
-| `llaman-a-la-puerta.mp3` | un animatrónico llega a la puerta | 1.72 s | completo | `knock2.mp3` | ✅ · «Foxy golpeando la puerta izquierda de la oficina» |
+| `amenaza-cerca.mp3` | amenaza cerca: **30 %** con un animatrónico en el pasillo, **50 %** con dos, **75 %** con tres, **100 %** si Freddy está en la oficina | 114.91 s | en bucle, volumen según la amenaza | `EerieAmbienceLargeSca_MV005.mp3` | ✅ · *Giant Hollow Tube Sector*, con la escalera 30/50/75/100 % |
+| `bajar-monitor.mp3` | bajar el monitor | 0.89 s | completo | `put-down.mp3` | ✅ · «subir/bajar el monitor»  |
+| `cambiar-camara.mp3` | cambiar de cámara | 0.29 s | completo | `blip3.mp3` | ✅ · «cambiar de cámara» |
+| `campanas-6am.mp3` | campanas de las 6 AM | 17.29 s | completo | `chimes-2.mp3` | ✅ · «campanas al finalizar una noche» |
+| `carrera-pasillo-1.mp3` | carrera de IShowSpeed | 2.66 s | completo | `run.mp3` | ✅ · «carrera de IShowSpeed» |
+| `carrera-pasillo-2.mp3` | carrera de IShowSpeed | 2.32 s | completo | `running-fast3.mp3` | ✅ · idem |
+| `estatica-del-monitor-larga.mp3` | estática del monitor (bucle, alternativa) | 33.72 s | en bucle | `static2.mp3` | ✅ · «estatica que se reproduce en el menu principal que va disminuyendo» |
+| `estatica-del-monitor.mp3` | estática del monitor (bucle) | 10.92 s | en bucle | `static.mp3` | ✅ · «estatica que suena justo despues del jumpscare» |
+| `fin-de-la-llamada.mp3` | la cinta sale al terminar la llamada | 16.72 s | solo los primeros **1.5 s** | `MiniDV_Tape_Eject_1.mp3` |✅ · «estatica que se reproduce en cada camara» |
+| `glitch-noche-6.mp3` | glitch digital aleatorio, **solo en la noche 6** | 8.10 s | solo los primeros **0.8 s** | `COMPUTER_DIGITAL_L2076505.mp3` | ✅ · glitch aleatorio en la noche 6 |
+| `golpes-en-la-puerta.mp3` | golpes contra la puerta cerrada | 6.74 s | solo los primeros **1.4 s** | `DOOR_POUNDING_ME_D0291401.mp3` | ✅ · «Foxy golpeando la puerta izquierda de la oficina» |
+| `grito-golden-freddy.mp3` | jumpscare de Golden Freddy (el grito **lento**, no el normal) | 15.93 s | completo | `XSCREAM2.mp3` | ✅ · «Jumpscare de Golden Freddy» |
+| `interferencia-camara-1.mp3` | interferencia cuando se mueve un animatronico | 4.15 s | solo los primeros **.55 s** | `garble1.mp3` | ✅ · «señal de las cámaras interrumpida», 3 variantes |
+| `interferencia-camara-2.mp3` | interferencia cuando se mueve un animatronico | 5.98 s | solo los primeros **.55 s** | `garble2.mp3` | ✅ · idem |
+| `interferencia-camara-3.mp3` | interferencia cuando se mueve un animatronico | 4.26 s | solo los primeros **.55 s** | `garble3.mp3` | ✅ · idem |
+| `jumpscare.mp3` | jumpscare | 5.33 s | completo | `XSCREAM.mp3` | ✅ · «sonido del jumpscare de los animatrónicos» |
+| `llaman-a-la-puerta.mp3` | un animatrónico llega a la puerta | 3.42 s | completo | `knock2.mp3` | ✅ · «Foxy golpeando la puerta izquierda de la oficina» |
 | `marcha-toreador-apagon.mp3` | Freddy toca la Marcha del Toreador al irse la luz | 233.42 s | completo | `music_box.mp3` | ✅ · *Toreador March* (Bizet, muestra 1905 Regina Music Box) |
-| `musica-pirate-cove.mp3` | Pirate Cove la primera vez que abres la CAM 5 | 4.88 s | completo | `pirate-song2.mp3` | ✅ · «Foxy cantando» en Pirate Cove (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D) |
-| `organo-de-circo.mp3` | órgano de circo, ocasionalmente durante la noche | 6.20 s | completo | `circus.mp3` | ✅ · «música de circo al azar cuando un animatrónico está activo» (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D, se posiciona en la camara 1B) |
+| `musica-pirate-cove.mp3` | Pirate Cove la primera vez que abres la CAM 5 | 9.74 s | completo | `pirate-song2.mp3` | ✅ · «Foxy cantando» en Pirate Cove (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D) |
+| `organo-de-circo.mp3` | órgano de circo, ocasionalmente durante la noche | 22.20 s | completo | `circus.mp3` | ✅ · «música de circo al azar cuando un animatrónico está activo» (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D, se posiciona en la camara 1B) |
 | `pasos-pasillo.mp3` | pasos por el pasillo | 7.89 s | solo los primeros **.9 s** | `deep-steps.mp3` | ✅ · «pasos de Bonnie y Chica» |
-| `publico-de-la-intro.mp3` | público en la intro del periódico | 1.75 s | completo | `CROWD_SMALL_CHIL_EC049202.mp3` | ✅ · «niños gritando al finalizar una noche» |
-| `respiracion-en-la-puerta-1.mp3` | respiración en la puerta | 1.65 s | completo | `Vocals_Breaths_S_35972006.mp3` | ✅ · *gemidos* al entrar en la oficina con el monitor subido |
-| `respiracion-en-la-puerta-2.mp3` | respiración en la puerta | 3.03 s | completo | `Vocals_Breaths_S_35972008.mp3` | ✅ · idem |
-| `respiracion-en-la-puerta-3.mp3` | respiración en la puerta | 1.36 s | completo | `Vocals_Breaths_S_35972012.mp3` | ✅ · idem |
-| `respiracion-en-la-puerta-4.mp3` | respiración en la puerta | 1.88 s | completo | `Vocals_Breaths_S_35972014.mp3` | ✅ · idem |
-| `risa-alucinacion-1.mp3` | risa (alucinación) | 1.12 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1.mp3` | ✅ · sonido aleatorio de ambiente |
-| `risa-alucinacion-2.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.82 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1d.mp3` | ✅ · risa de Freddy al moverse |
-| `risa-alucinacion-3.mp3` | risa lenta de Freddy al moverse, y alucinación | 4.05 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_2d.mp3` | ✅ · idem |
-| `risa-alucinacion-4.mp3` | risa lenta de Freddy al moverse, y alucinación | 2.85 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_8d.mp3` | ✅ · idem |
-| `ruidos-cocina-1.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 3.89 s | completo | `OVEN-DRA_1_GEN-HDF18119.mp3` | ✅ · «ruidos de Chica en la Kitchen», 4 variantes (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D) |
-| `ruidos-cocina-2.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.56 s | completo | `OVEN-DRA_2_GEN-HDF18120.mp3` | ✅ · idem |
-| `ruidos-cocina-3.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 5.17 s | completo | `OVEN-DRA_7_GEN-HDF18121.mp3` | ✅ · idem |
-| `ruidos-cocina-4.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 2.69 s | completo | `OVEN-DRAWE_GEN-HDF18122.mp3` | ✅ · idem |
-| `se-va-la-luz.mp3` | se va la luz | 9.34 s | completo | `powerdown.mp3` | ✅ · «cuando se corta la energía del establecimiento» |
-| `subir-monitor.mp3` | subir el monitor | 2.59 s | solo los primeros **.7 s** | `CAMERA_VIDEO_LOA_60105303.mp3` | ✅ · «levantando el monitor» |
-| `susurro-alucinacion.mp3` | susurro (alucinación) | 7.58 s | solo los primeros **2.2 s** | `whispering2.mp3` | ✅ · sonido aleatorio de ambiente cuando un animatronico esta cerca |
-| `voz-robotica-pasillo.mp3` | Bonnie o Chica en las esquinas de los pasillos, **solo desde la 4.ª noche** | 7.55 s | completo | `robotvoice.mp3` | ✅ · «voz robótica» de las esquinas desde la 4.ª noche (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D, se posiciona en la camara 2B y 4B) |
-| `zumbido-luces-pasillo.mp3` | luces de los pasillos encendidas | 4.36 s | en bucle | `BallastHumMedium2.mp3` | ✅ · «sonido de las luces de los pasillos» |
-| `zumbido-ventilador.mp3` | zumbido del ventilador (bucle) | 4.86 s | en bucle | `Buzz_Fan_Florescent2.mp3` | ✅ · «sonidos provocados por el ventilador y la luz» |
+| `publico-de-la-intro.mp3` | público en la intro del periódico | 3.47 s | completo | `CROWD_SMALL_CHIL_EC049202.mp3` | ✅ · «niños gritando al finalizar una noche» |
+| `respiracion-en-la-puerta-1.mp3` | respiración en la puerta | 3.27 s | completo | `Vocals_Breaths_S_35972006.mp3` | ✅ · *gemidos* al entrar en la oficina con el monitor subido |
+| `respiracion-en-la-puerta-2.mp3` | respiración en la puerta | 6.06 s | completo | `Vocals_Breaths_S_35972008.mp3` | ✅ · idem |
+| `respiracion-en-la-puerta-3.mp3` | respiración en la puerta | 2.72 s | completo | `Vocals_Breaths_S_35972012.mp3` | ✅ · idem |
+| `respiracion-en-la-puerta-4.mp3` | respiración en la puerta | 3.76 s | completo | `Vocals_Breaths_S_35972014.mp3` | ✅ · idem |
+| `risa-alucinacion-1.mp3` | risa (alucinación) | 2.25 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1.mp3` | ✅ · sonido aleatorio de ambiente |
+| `risa-alucinacion-2.mp3` | risa lenta de Freddy al moverse, y alucinación | 5.62 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_1d.mp3` | ✅ · risa de Freddy al moverse |
+| `risa-alucinacion-3.mp3` | risa lenta de Freddy al moverse, y alucinación | 8.07 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_2d.mp3` | ✅ · idem |
+| `risa-alucinacion-4.mp3` | risa lenta de Freddy al moverse, y alucinación | 5.67 s | solo los primeros **2 s** | `Laugh_Giggle_Girl_8d.mp3` | ✅ · idem |
+| `ruidos-cocina-1.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 7.76 s | completo | `OVEN-DRA_1_GEN-HDF18119.mp3` | ✅ · «ruidos de Chica en la Kitchen», 4 variantes (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D) |
+| `ruidos-cocina-2.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 5.09 s | completo | `OVEN-DRA_2_GEN-HDF18120.mp3` | ✅ · idem |
+| `ruidos-cocina-3.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 10.34 s | completo | `OVEN-DRA_7_GEN-HDF18121.mp3` | ✅ · idem |
+| `ruidos-cocina-4.mp3` | Chica moviéndose por la cocina (CAM 6, que no tiene imagen) | 5.36 s | completo | `OVEN-DRAWE_GEN-HDF18122.mp3` | ✅ · idem |
+| `se-va-la-luz.mp3` | se va la luz | 18.91 s | completo | `powerdown.mp3` | ✅ · «cuando se corta la energía del establecimiento» |
+| `subir-monitor.mp3` | subir el monitor | 5.15 s | solo los primeros **.7 s** | `CAMERA_VIDEO_LOA_60105303.mp3` | ✅ · «levantando el monitor» |
+| `susto-puerta-iluminada.mp3` | enciendes la luz del pasillo y hay un animatrónico en esa puerta | 4.31 s | solo los primeros **1.2 s** | `windowscare.mp3` | ✅ · cuando aparece un animatronico en tu puerta iluminandolo |
+| `susurro-alucinacion.mp3` | susurro (alucinación) | 15.12 s | solo los primeros **2.2 s** | `whispering2.mp3` | ✅ · sonido aleatorio de ambiente cuando un animatronico esta cerca |
+| `voz-robotica-pasillo.mp3` | Bonnie o Chica en las esquinas de los pasillos, **solo desde la 4.ª noche** | 15.10 s | completo | `robotvoice.mp3` | ✅ · «voz robótica» de las esquinas desde la 4.ª noche (el juego debe jugar en donde esta la camara para poder poner el sonido en cualquier momento y que se escuche en 3D, se posiciona en la camara 2B y 4B) |
+| `zumbido-luces-pasillo.mp3` | luces de los pasillos encendidas | 8.72 s | en bucle | `BallastHumMedium2.mp3` | ✅ · «sonido de las luces de los pasillos» |
+| `zumbido-ventilador.mp3` | zumbido del ventilador (bucle) | 9.69 s | en bucle | `Buzz_Fan_Florescent2.mp3` | ✅ · «sonidos provocados por el ventilador y la luz» |
 
-### Sin asignar (4)
+### Sin asignar (1)
 
-| Archivo | Nombre original | Por qué no está asignado |
 | Archivo | Nombre original | Por qué no está asignado | Verificación |
 |---|---|---|---|
-| `sin-usar-golpe-corto.mp3` | `SFXBible_12478.mp3` | cuando se cierra una puerta | ✅ · «accion de cerrar/abrir las puertas» |
-| `sin-usar-secuencia-digital.mp3` | `COMPUTER_DIGITAL_L2076505.mp3` | glitch aleatorio que solo puede pasar en la noche 6 | ✅ · glitch aleatorio en la noche 6 |
-| `sin-usar-susto-ventana.mp3` | `windowscare.mp3` | cuando aparece un animatronico en tu puerta iluminandolo | ✅ · cuando aparece un animatronico en tu puerta iluminandolo |
 | `tema-menu-fnaf1.mp3` | `darkness-music.mp3` | es el **tema del menú** original (*Urban Darkness Part 08*, Bjørn Lynne) según [la wiki](https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)); el juego usa su propio tema de título | ✅ · *Urban Darkness Part 08* = tema del menú de Steam |
 
 Si un mp3 falta o no se puede decodificar, cada efecto cae en su versión
