@@ -2140,8 +2140,8 @@ function renderTitleCharacters(){if(titleFigureTimer)clearInterval(titleFigureTi
 function getTitleMusic(){return document.getElementById('titleMusic')}
 let titleMusicBuffer=null,titleMusicSource=null,titleMusicGain=null,titleMusicLoading=false;
 function stopTitleMusicFallback(reset=false){if(titleMusicSource){try{titleMusicSource.stop(0)}catch(e){}titleMusicSource.disconnect();titleMusicSource=null}if(titleMusicGain){titleMusicGain.disconnect();titleMusicGain=null}}
-let _titleAudioEv=false,_titleAudioWd=null;function _armTitleAudioEvents(){if(_titleAudioEv)return;const m=getTitleMusic();if(!m)return;_titleAudioEv=true;const onPlay=()=>{stopTitleFallbackTheme();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}};m.addEventListener('playing',onPlay);m.addEventListener('timeupdate',onPlay)}async function playTitleMusic(){const music=getTitleMusic();if(music){_armTitleAudioEvents();music.volume=musicVolMul();music.muted=false;try{await music.play()}catch(e){}}if(_titleAudioWd)clearTimeout(_titleAudioWd);_titleAudioWd=setTimeout(()=>{try{if(!AudioCtx)initAudio();if(AudioCtx&&AudioCtx.state==='suspended')AudioCtx.resume()}catch(e){}const ts=document.getElementById('titleScreen');const vis=ts&&ts.style.display!=='none';const m=getTitleMusic();if(vis&&(!AudioCtx||!m||m.paused||m.ended||m.muted)){stopTitleFallbackTheme();startTitleFallbackTheme()}},1300)}
-function pauseTitleMusic(reset=false){if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}const music=getTitleMusic();if(music){music.muted=true;music.pause();if(reset)music.currentTime=0}stopTitleMusicFallback(reset);stopTitleFallbackTheme()}
+let _titleAudioEv=false,_titleAudioWd=null;function _armTitleAudioEvents(){if(_titleAudioEv)return;const m=getTitleMusic();if(!m)return;_titleAudioEv=true;const onPlay=()=>{stopTitleFallbackTheme();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}};m.addEventListener('playing',onPlay);m.addEventListener('timeupdate',onPlay)}async function playTitleMusic(){startMenuStatic();const music=getTitleMusic();if(music){_armTitleAudioEvents();music.volume=musicVolMul();music.muted=false;try{await music.play()}catch(e){}}if(_titleAudioWd)clearTimeout(_titleAudioWd);_titleAudioWd=setTimeout(()=>{try{if(!AudioCtx)initAudio();if(AudioCtx&&AudioCtx.state==='suspended')AudioCtx.resume()}catch(e){}const ts=document.getElementById('titleScreen');const vis=ts&&ts.style.display!=='none';const m=getTitleMusic();if(vis&&(!AudioCtx||!m||m.paused||m.ended||m.muted)){stopTitleFallbackTheme();startTitleFallbackTheme()}},1300)}
+function pauseTitleMusic(reset=false){stopMenuStatic();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}const music=getTitleMusic();if(music){music.muted=true;music.pause();if(reset)music.currentTime=0}stopTitleMusicFallback(reset);stopTitleFallbackTheme()}
 let splashFinished=true;let titleMusicStarted=false;let audioUnlocked=true;let audioReady=false;
 function updateAudioPrompt(){/* prompt de audio retirado: el audio se arma con el primer gesto del usuario */}
 function syncTitleMusic(reset=false){const __s=saveData.settings||DEFAULT_SETTINGS;const __mv=(__s.volMaster/100)*(__s.volMusic/100);const splash=document.getElementById('splashIntro');const splashVisible=splash&&!splash.classList.contains('hidden');const titleVisible=document.getElementById('titleScreen')&&document.getElementById('titleScreen').style.display!=='none'&&!splashVisible&&splashFinished;updateAudioPrompt();if(titleVisible&&audioUnlocked){const music=getTitleMusic();if(music){music.muted=__mv<=0;music.volume=__mv;music.play().then(()=>{titleMusicStarted=true}).catch(()=>{})}playTitleMusic()}else pauseTitleMusic(reset)}
@@ -2246,8 +2246,9 @@ const SFX={
  glitch1:{f:'interferencia-camara-1.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
  glitch2:{f:'interferencia-camara-2.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
  glitch3:{f:'interferencia-camara-3.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
- staticBed:{f:'estatica-del-monitor.mp3',v:.12,loop:1,g:'estatica'},
- staticBed2:{f:'estatica-del-monitor-larga.mp3',v:.10,loop:1,g:'estatica'},
+ staticBed:{f:'estatica-camaras.mp3',v:.12,loop:1,g:'estatica'},
+ menuStatic:{f:'estatica-menu.mp3',v:.14,loop:1},
+ scareStatic:{f:'estatica-tras-jumpscare.mp3',v:.45,g:'estatica'},
  /* --- animatronicos --- */
  breath1:{f:'respiracion-en-la-puerta-1.mp3',v:.5,cd:2500,g:'breath'},
  breath2:{f:'respiracion-en-la-puerta-2.mp3',v:.5,cd:2500,g:'breath'},
@@ -2267,13 +2268,12 @@ const SFX={
  chimes:{f:'campanas-6am.mp3',v:.55,music:1},
  toreador:{f:'marcha-toreador-apagon.mp3',v:.45,music:1},
  pirate:{f:'musica-pirate-cove.mp3',v:.35,music:1},
- tapeEject:{f:'fin-de-la-llamada.mp3',v:.4,dur:1.5},
  /* --- intro del periodico (dura 6,2 s + 1,2 s de fundido) --- */
  crowd:{f:'publico-de-la-intro.mp3',v:.35},
  circus:{f:'organo-de-circo.mp3',v:.24,cd:55000,music:1},
  /* --- alucinaciones sonoras: puntuales y poco frecuentes --- */
- whisper:{f:'susurro-alucinacion.mp3',v:.32,dur:2.2,cd:15000,g:'alucinacion'},
- giggle1:{f:'risa-alucinacion-1.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
+ whisper:{f:'susurro-amenaza-cerca.mp3',v:.32,dur:2.2,cd:15000,g:'ambienteCerca'},
+ giggle1:{f:'risa-ambiente.mp3',v:.38,dur:2,cd:15000,g:'ambienteRisa'},
  giggle2:{f:'risa-alucinacion-2.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
  giggle3:{f:'risa-alucinacion-3.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
  giggle4:{f:'risa-alucinacion-4.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
@@ -2380,7 +2380,7 @@ function bedTarget(k){const d=SFX[k];if(!d)return 0;return (d.v===undefined?.5:d
 function duckBeds(on){
  if(!AudioCtx)return;
  _bedDuck=on?.32:1;
- ['ambienceBed','staticBed','staticBed2','lightBed','blackoutBed'].forEach((k)=>{
+ ['ambienceBed','staticBed','lightBed','blackoutBed'].forEach((k)=>{
   const l=_sfxLoop[k];if(!l)return;
   try{
    const t=AudioCtx.currentTime;
@@ -2489,9 +2489,9 @@ function startAmbienceBed(){if(!AudioCtx)return;
 /* Estatica del monitor: un solo bucle, elegido al subirlo, y se para al bajarlo. */
 function startCamStatic(){if(!AudioCtx)return;
  if(typeof getSetting==='function'&&!getSetting('staticNoise'))return;
- if(sfxLoopActive('staticBed')||sfxLoopActive('staticBed2'))return;
- playSfx(Math.random()<.5?'staticBed':'staticBed2',{loop:true})}
-function stopCamStatic(){stopSfx('staticBed',.25);stopSfx('staticBed2',.25)}
+ if(sfxLoopActive('staticBed'))return;
+ playSfx('staticBed',{loop:true})}
+function stopCamStatic(){stopSfx('staticBed',.25)}
 function stopSfxBeds(){stopCamStatic();Object.keys(_sfxLoop).forEach((k)=>stopSfx(k,.5))}
 /* Alucinaciones: como mucho una cada 15 s (lo impone el cooldown de cada pista),
    y solo con la opcion activada. */
@@ -2499,7 +2499,7 @@ function maybeHallucinationSfx(){
  if(!AudioCtx)return;
  if(typeof getSetting==='function'&&!getSetting('hallucinations'))return;
  if(Math.random()>.07)return;
- playSfx(sfxPick(['whisper','giggle1','giggle2','giggle3','giggle4']));
+ playSfx(sfxPick(['giggle2','giggle3','giggle4']));
 }
 /* Amenaza cerca. La wiki documenta para este bucle una escalera de volumen segun
    cuantos animatronicos hay en la zona de los pasillos: 30 % con una amenaza,
@@ -2627,8 +2627,42 @@ function sndKnock(side){const p=doorPos(side);
  if(!playSfx('knock',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
 function sndFootsteps(where){const p=(typeof where==='number')?camPos(where):doorPos(where);
  if(!playSfx('steps',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
-function sndTapeEject(){playSfx('tapeEject')}
 function sndPartyCrowd(){playSfx('crowd')}
+/* Estática del menú principal: arranca con el tema del título y va bajando. */
+let _menuStaticWanted=false;
+function startMenuStatic(){
+ if(!AudioCtx)return;
+ if(typeof getSetting==='function'&&!getSetting('staticNoise'))return;
+ if(sfxLoopActive('menuStatic'))return;
+ _menuStaticWanted=true;
+ /* la muestra puede no estar cargada aun en la primera visita al menu: si se
+    programa la bajada antes de que exista el bucle, se pierde en silencio */
+ loadSfx('menuStatic',function(buf){
+  if(!buf||!_menuStaticWanted||sfxLoopActive('menuStatic'))return;
+  playSfx('menuStatic',{loop:true});
+  const l=_sfxLoop['menuStatic'];if(!l)return;
+  try{const t=AudioCtx.currentTime;
+   l.gain.gain.cancelScheduledValues(t);
+   l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
+   l.gain.gain.linearRampToValueAtTime(Math.max(.0001,bedTarget('menuStatic')*.15),t+30)}catch(e){}
+ })}
+function stopMenuStatic(){_menuStaticWanted=false;stopSfx('menuStatic',.5)}
+/* Estática justo después del jumpscare, camino de la pantalla de fin. */
+function sndScareStatic(){
+ if(!AudioCtx)return;
+ setTimeout(()=>{if(state&&state.gameOver)playSfx('scareStatic')},1100)}
+/* Ambiente aleatorio: la risa suena de vez en cuando, sin depender del ajuste
+   de alucinaciones. */
+function maybeAmbienceLaugh(){
+ if(!AudioCtx)return;
+ if(Math.random()>.05)return;
+ playSfx('giggle1')}
+/* El susurro solo cuando hay un animatrónico cerca. */
+function maybeNearWhisper(){
+ if(!AudioCtx||!state||state.blackout)return;
+ if(threatLevel()<=0)return;
+ if(Math.random()>.12)return;
+ playSfx('whisper')}
 /* Susto en la puerta: al encender la luz con alguien delante.
    El enemigo en la puerta se marca con e.side (y e.cam a null). */
 function maybeDoorReveal(side){
@@ -3001,7 +3035,7 @@ audio.currentTime=0;
 audio.volume=Math.min(1,.9*sfxVolMul());duckBeds(true);
 let endTimer=null;
 function clearPhoneCall(){if(endTimer)clearTimeout(endTimer);audio.onended=null;audio.onerror=null;overlay.classList.remove('active');currentPhoneAudio=null;}
-audio.onended=function(){try{sndTapeEject()}catch(e){}clearPhoneCall()};
+audio.onended=function(){clearPhoneCall()};
 audio.onerror=clearPhoneCall;
 overlay.__clearPhoneCall=clearPhoneCall;
 const armEndTimer=()=>{if(endTimer)clearTimeout(endTimer);const d=(audio.duration&&isFinite(audio.duration))?audio.duration*1000+2000:60000;endTimer=setTimeout(clearPhoneCall,Math.max(15000,d));};
@@ -3075,7 +3109,7 @@ state.intervals.push(setInterval(breathTick,1400));
 
 function clearAllIntervals(){try{clearGolden()}catch(e){}if(state.blackoutTimers){state.blackoutTimers.forEach(id=>clearTimeout(id));state.blackoutTimers=[]}state.intervals.forEach(id=>clearInterval(id));state.intervals=[];Object.values(state.timers).forEach(clearTimeout);state.timers={};if(state.hourTimer){clearTimeout(state.hourTimer);state.hourTimer=null}if(state.ambienceTimer){clearTimeout(state.ambienceTimer);state.ambienceTimer=null}}
 
-function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();updateThreatAmbience();maybeCircus();maybeKitchenSfx();maybeNight6Glitch();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
+function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();updateThreatAmbience();maybeCircus();maybeKitchenSfx();maybeNight6Glitch();maybeAmbienceLaugh();maybeNearWhisper();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
 function randomStepSound(){if(state.active&&!state.gameOver&&!state.won){if(Math.random()<.12)triggerHallucination();}}
 
 /* ===== CONTROLS ===== */
@@ -3413,7 +3447,7 @@ function registerDoorUse(side){
   if(st){st.classList.add('jammed');setTimeout(()=>st&&st.classList.remove('jammed'),2600)}}}
 function synthDoorJam(){try{playOsc(180,'square',.1,.2);playOsc(120,'square',.1,.18,.12);
  playNoise(.24,.10)}catch(e){}}
-function doJumpscare(enemyKey,golden){if(state.gameOver||state.won)return;stopPhoneCall();state.gameOver=true;state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndJumpscare(golden);document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on');const lv=getSetting('jumpscareLevel')|0;
+function doJumpscare(enemyKey,golden){if(state.gameOver||state.won)return;stopPhoneCall();state.gameOver=true;state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndJumpscare(golden);sndScareStatic();document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on');const lv=getSetting('jumpscareLevel')|0;
 const jsEnemy=document.getElementById('jsEnemy');jsEnemy.innerHTML=lv===2?'':getEnemySvg(enemyKey||'freddy');
 const jsFlash=document.getElementById('jsFlash');if(jsFlash)jsFlash.style.display=lv>=1?'none':'';
 document.getElementById('jumpscare').classList.add('active');state.lastKiller=enemyKey||'freddy';const _dur=lv===2?900:lv===1?1600:2200;setTimeout(()=>{document.getElementById('jumpscare').classList.remove('active');showEnd(false,state.lastKiller)},_dur)}
