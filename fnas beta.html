@@ -1,6 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>
+/* ===== CONTROL DE ORIGEN =====
+   Este juego solo se puede jugar en la web oficial. Una copia descargada, abierta
+   en local o servida desde otro dominio no arranca. La comprobacion se reevalua en
+   cada llamada: no hay un booleano que se pueda dejar en true una sola vez. */
+(function(){
+var FNAS_HOSTS=['pineappleva.github.io'];
+var FNAS_URL='https://pineappleva.github.io/FNAS/';
+function fnasOriginOK(){
+ try{
+  var loc=window.location;
+  if(loc.protocol!=='https:')return false;
+  var h=(loc.hostname||'').toLowerCase();
+  for(var i=0;i<FNAS_HOSTS.length;i++){if(h===FNAS_HOSTS[i]){return true}}
+  return false;
+ }catch(e){return false}
+}
+function fnasShowBlock(){
+ if(fnasOriginOK()){return false}
+ var d=document.getElementById('fnasOriginBlock');
+ if(!d){
+  d=document.createElement('div');
+  d.id='fnasOriginBlock';
+  d.setAttribute('style','position:fixed;inset:0;z-index:2147483647;background:#040404;color:#e8e8e8;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(1rem,4vmin,2.5rem);font-family:"VT323",monospace;overflow-y:auto;box-sizing:border-box');
+  d.innerHTML='<div style="font-size:clamp(2.4rem,8vmin,4rem)">\u{1F512}</div>'
+   +'<h1 style="font-size:clamp(1.3rem,4.5vmin,2.2rem);letter-spacing:.14em;text-transform:uppercase;color:#ff3b3b;margin:.4rem 0 1rem">Acceso restringido</h1>'
+   +'<p style="max-width:44rem;line-height:1.6;font-size:clamp(.95rem,2.4vmin,1.15rem);color:#cfcfcf">Este juego <strong>solo se puede jugar en la web oficial</strong>. Has abierto una copia local o una version servida desde otro dominio, asi que no arranca.</p>'
+   +'<p style="max-width:44rem;line-height:1.6;font-size:clamp(.95rem,2.4vmin,1.15rem);color:#cfcfcf">Jugar es <strong>gratis</strong> y no hace falta descargar nada:</p>'
+   +'<a href="'+FNAS_URL+'" style="display:inline-block;margin:1.1rem 0;padding:.8rem 1.6rem;border:2px solid #ff3b3b;color:#fff;text-decoration:none;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,59,59,.12);font-size:clamp(.9rem,2.4vmin,1.1rem)">\u25B6 Ir a la web oficial</a>'
+   +'<p style="color:#7a7a7a;font-size:clamp(.75rem,2vmin,.9rem);max-width:40rem;line-height:1.5">FNAS es un fangame gratuito y sin animo de lucro. Five Nights at Freddy\u2019s y sus recursos de audio pertenecen a Scott Cawthon.</p>';
+  if(document.body){document.body.appendChild(d)}
+  else{document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(d)})}
+ }
+ try{document.documentElement.style.overflow='hidden'}catch(e){}
+ return true;
+}
+window.__fnasOriginOK=fnasOriginOK;
+window.__fnasShowBlock=fnasShowBlock;
+if(!fnasOriginOK()){
+ if(document.body){fnasShowBlock()}else{document.addEventListener('DOMContentLoaded',function(){fnasShowBlock()})}
+ try{setInterval(function(){if(!fnasOriginOK()){fnasShowBlock()}},2000)}catch(e){}
+}
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>FINE AT SKIBIRY - FNAF Edition · Beta Test</title>
@@ -2294,8 +2338,8 @@ function renderTitleCharacters(){if(titleFigureTimer)clearInterval(titleFigureTi
 function getTitleMusic(){return document.getElementById('titleMusic')}
 let titleMusicBuffer=null,titleMusicSource=null,titleMusicGain=null,titleMusicLoading=false;
 function stopTitleMusicFallback(reset=false){if(titleMusicSource){try{titleMusicSource.stop(0)}catch(e){}titleMusicSource.disconnect();titleMusicSource=null}if(titleMusicGain){titleMusicGain.disconnect();titleMusicGain=null}}
-let _titleAudioEv=false,_titleAudioWd=null;function _armTitleAudioEvents(){if(_titleAudioEv)return;const m=getTitleMusic();if(!m)return;_titleAudioEv=true;const onPlay=()=>{stopTitleFallbackTheme();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}};m.addEventListener('playing',onPlay);m.addEventListener('timeupdate',onPlay)}async function playTitleMusic(){startMenuStatic();const music=getTitleMusic();if(music){_armTitleAudioEvents();music.volume=musicVolMul();music.muted=false;try{await music.play()}catch(e){}}if(_titleAudioWd)clearTimeout(_titleAudioWd);_titleAudioWd=setTimeout(()=>{try{if(!AudioCtx)initAudio();if(AudioCtx&&AudioCtx.state==='suspended')AudioCtx.resume()}catch(e){}const ts=document.getElementById('titleScreen');const vis=ts&&ts.style.display!=='none';const m=getTitleMusic();if(vis&&(!AudioCtx||!m||m.paused||m.ended||m.muted)){stopTitleFallbackTheme();startTitleFallbackTheme()}},1300)}
-function pauseTitleMusic(reset=false){stopMenuStatic();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}const music=getTitleMusic();if(music){music.muted=true;music.pause();if(reset)music.currentTime=0}stopTitleMusicFallback(reset);stopTitleFallbackTheme()}
+let _titleAudioEv=false,_titleAudioWd=null;function _armTitleAudioEvents(){if(_titleAudioEv)return;const m=getTitleMusic();if(!m)return;_titleAudioEv=true;const onPlay=()=>{stopTitleFallbackTheme();if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}};m.addEventListener('playing',onPlay);m.addEventListener('timeupdate',onPlay)}async function playTitleMusic(){const music=getTitleMusic();if(music){_armTitleAudioEvents();music.volume=.42;music.muted=false;try{await music.play()}catch(e){}}if(_titleAudioWd)clearTimeout(_titleAudioWd);_titleAudioWd=setTimeout(()=>{try{if(!AudioCtx)initAudio();if(AudioCtx&&AudioCtx.state==='suspended')AudioCtx.resume()}catch(e){}const ts=document.getElementById('titleScreen');const vis=ts&&ts.style.display!=='none';const m=getTitleMusic();if(vis&&(!AudioCtx||!m||m.paused||m.ended||m.muted)){stopTitleFallbackTheme();startTitleFallbackTheme()}},1300)}
+function pauseTitleMusic(reset=false){if(_titleAudioWd){clearTimeout(_titleAudioWd);_titleAudioWd=null}const music=getTitleMusic();if(music){music.muted=true;music.pause();if(reset)music.currentTime=0}stopTitleMusicFallback(reset);stopTitleFallbackTheme()}
 let splashFinished=true;let titleMusicStarted=false;let audioUnlocked=true;let audioReady=false;
 function updateAudioPrompt(){/* prompt de audio retirado: el audio se arma con el primer gesto del usuario */}
 function syncTitleMusic(reset=false){const __s=saveData.settings||DEFAULT_SETTINGS;const __mv=(__s.volMaster/100)*(__s.volMusic/100);const splash=document.getElementById('splashIntro');const splashVisible=splash&&!splash.classList.contains('hidden');const titleVisible=document.getElementById('titleScreen')&&document.getElementById('titleScreen').style.display!=='none'&&!splashVisible&&splashFinished;updateAudioPrompt();if(titleVisible&&audioUnlocked){const music=getTitleMusic();if(music){music.muted=__mv<=0;music.volume=__mv;music.play().then(()=>{titleMusicStarted=true}).catch(()=>{})}playTitleMusic()}else pauseTitleMusic(reset)}
@@ -2332,13 +2376,13 @@ foxy:{5:[3,4,11]} // Foxy special: from cove runs to 3->4->11->office
 
 /* ===== AUDIO ===== */
 let AudioCtx=null;
-function initAudio(){if(!AudioCtx)AudioCtx=new(window.AudioContext||window.webkitAudioContext)();if(AudioCtx.state==='suspended')AudioCtx.resume();sfxListener()}
+function initAudio(){if(typeof __fnasOriginOK==='function'&&!__fnasOriginOK()){if(window.__fnasShowBlock){__fnasShowBlock()}return}if(!AudioCtx)AudioCtx=new(window.AudioContext||window.webkitAudioContext)();if(AudioCtx.state==='suspended')AudioCtx.resume()}
 /* Envolvente attack/release: sin ella cada tono arrancaba y paraba en seco y se oia
    un clic digital en cada efecto. */
 function playOsc(freq,type,duration,vol,delay=0){if(!AudioCtx)return;vol*=sfxVol();if(vol<=0)return;
 const osc=AudioCtx.createOscillator();const gain=AudioCtx.createGain();
 osc.type=type;osc.frequency.value=freq;
-osc.connect(gain);gain.connect(sfxOut());
+osc.connect(gain);gain.connect(masterBus());
 const t=AudioCtx.currentTime+delay;
 const atk=Math.min(.012,duration*.2),rel=Math.min(.09,duration*.45);
 gain.gain.setValueAtTime(0.0001,t);
@@ -2352,7 +2396,7 @@ const buf=AudioCtx.createBuffer(1,len,AudioCtx.sampleRate);const data=buf.getCha
 for(let i=0;i<len;i++)data[i]=Math.random()*2-1;
 const src=AudioCtx.createBufferSource();src.buffer=buf;
 const gain=AudioCtx.createGain();
-src.connect(gain);gain.connect(sfxOut());
+src.connect(gain);gain.connect(masterBus());
 const t=AudioCtx.currentTime+delay;const rel=Math.min(.07,duration*.5);
 gain.gain.setValueAtTime(0.0001,t);
 gain.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t+.006);
@@ -2371,492 +2415,30 @@ function masterBus(){if(!AudioCtx)return null;
  comp.connect(AudioCtx.destination);
  _masterBus={ctx:AudioCtx,node:comp};
  return comp}
-/* ================== BANCO DE MUESTRAS: AUDIO REAL DE FNAF 1 ==================
-   Recursos de audio de Five Nights at Freddy's (c) Scott Cawthon, servidos desde
-   assets/audio/fnaf1/ (procedencia y exclusion de licencia en assets/README.md).
-
-   Una entrada por sonido:
-     f    archivo dentro de assets/audio/fnaf1/
-     v    ganancia relativa
-     dur  segundos a reproducir; recorta las muestras mas largas que el evento
-          que las dispara (un glitch de camara dura 280-620 ms, no 3 s)
-     cd   cooldown en ms: evita que un efecto largo se re-dispare y se pise
-     loop suena en bucle (camas de ambiente)
-
-   Cada efecto conserva su version sintetizada como respaldo (synthXxx): si el
-   mp3 no esta o no se puede decodificar, suena el Web Audio de siempre. */
-const SFX={
- /* --- puertas --- */
- doorBang:{f:'golpes-en-la-puerta.mp3',v:.7,dur:1.4,cd:1400},
- knock:{f:'llaman-a-la-puerta.mp3',v:.5,cd:1500,dur:1.4},
- denied:{f:'accion-denegada.mp3',v:.4,cd:250},
- door:{f:'accion-puerta.mp3',v:.5,dur:.6,cd:200},
- doorReveal:{f:'susto-puerta-iluminada.mp3',v:.75,dur:1.2,cd:6000},
- glitchN6:{f:'glitch-noche-6.mp3',v:.3,dur:.8,cd:45000},
- /* --- monitor y camaras --- */
- camUp:{f:'subir-monitor.mp3',v:.45,dur:.7,cd:300},
- camDown:{f:'bajar-monitor.mp3',v:.45,cd:300},
- blip:{f:'cambiar-camara.mp3',v:.5,cd:120},
- glitch1:{f:'interferencia-camara-1.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
- glitch2:{f:'interferencia-camara-2.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
- glitch3:{f:'interferencia-camara-3.mp3',v:.3,dur:.55,cd:400,g:'glitch'},
- staticBed:{f:'estatica-camaras.mp3',v:.12,loop:1,g:'estatica'},
- menuStatic:{f:'estatica-menu.mp3',v:.14,loop:1},
- scareStatic:{f:'estatica-tras-jumpscare.mp3',v:.45,g:'estatica'},
- /* --- animatronicos --- */
- breath1:{f:'respiracion-en-la-puerta-1.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
- breath2:{f:'respiracion-en-la-puerta-2.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
- breath3:{f:'respiracion-en-la-puerta-3.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
- breath4:{f:'respiracion-en-la-puerta-4.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
- run:{f:'carrera-pasillo-1.mp3',v:.6,cd:900,g:'carrera'},
- runFast:{f:'carrera-pasillo-2.mp3',v:.6,cd:900,g:'carrera'},
- steps:{f:'pasos-pasillo.mp3',v:.4,dur:.9,cd:900},
- scream:{f:'jumpscare.mp3',v:.95},
- /* --- ambiente (bucles) --- */
- ambienceBed:{f:'ambiente-oficina.mp3',v:.2,loop:1},
- fanBed:{f:'zumbido-ventilador.mp3',v:.12,loop:1},
- threat:{f:'amenaza-cerca.mp3',v:.22,loop:1},
- blackoutBed:{f:'ambiente-apagon.mp3',v:.32,loop:1},
- /* --- momentos --- */
- powerdown:{f:'se-va-la-luz.mp3',v:.7},
- chimes:{f:'campanas-6am.mp3',v:.55,music:1},
- toreador:{f:'marcha-toreador-apagon.mp3',v:.45,music:1},
- pirate:{f:'musica-pirate-cove.mp3',v:.35,music:1},
- /* --- intro del periodico (dura 6,2 s + 1,2 s de fundido) --- */
- crowd:{f:'publico-de-la-intro.mp3',v:.35},
- circus:{f:'organo-de-circo.mp3',v:.24,cd:55000,music:1},
- /* --- alucinaciones sonoras: puntuales y poco frecuentes --- */
- whisper:{f:'susurro-amenaza-cerca.mp3',v:.32,dur:2.2,cd:15000,g:'ambienteCerca'},
- giggle1:{f:'risa-ambiente.mp3',v:.38,dur:2,cd:15000,g:'ambienteRisa'},
- giggle2:{f:'risa-alucinacion-2.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
- giggle3:{f:'risa-alucinacion-3.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
- giggle4:{f:'risa-alucinacion-4.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
- /* --- los siguientes los identifica la pagina "Archivos de sonido (FNaF)" de la wiki --- */
- /* Chica: los cuatro ruidos que hace mientras se mueve por la Kitchen */
- kitchen1:{f:'ruidos-cocina-1.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
- kitchen2:{f:'ruidos-cocina-2.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
- kitchen3:{f:'ruidos-cocina-3.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
- kitchen4:{f:'ruidos-cocina-4.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
- /* Bonnie y Chica en las esquinas de los pasillos, desde la 4a noche */
- robotVoice:{f:'voz-robotica-pasillo.mp3',v:.55,cd:4000,g:'robot',dur:3.8},
- /* el grito de Golden Freddy es el lento, no el normal de los animatronicos */
- goldenScream:{f:'grito-golden-freddy.mp3',v:.95},
- /* zumbido de las luces de los pasillos, en bucle mientras estan encendidas */
- lightBed:{f:'zumbido-luces-pasillo.mp3',v:.14,loop:1,cd:300,g:'luces'},
- /* risa lenta de Freddy al moverse (misma familia que las alucinaciones, otra via) */
- freddyLaugh1:{f:'risa-alucinacion-2.mp3',v:.34,dur:2,cd:9000,g:'freddyRisa'},
- freddyLaugh2:{f:'risa-alucinacion-3.mp3',v:.34,dur:2,cd:9000,g:'freddyRisa'},
- freddyLaugh3:{f:'risa-alucinacion-4.mp3',v:.34,dur:2,cd:9000,g:'freddyRisa'}
-};
-const SFX_DIR='assets/audio/fnaf1/';
-/* ================== AUDIO POSICIONAL (3D) ==================
-   El oyente esta sentado en la oficina mirando al frente (-Z). Las puertas
-   quedan a los lados y muy cerca; los pasillos se alejan hacia el fondo; el
-   resto del local se reparte alrededor. Cada sonido diegetico se coloca en su
-   punto con un PannerNode HRTF, de modo que la puerta izquierda suena a la
-   izquierda, IShowSpeed corre por el pasillo oeste y el escenario queda al
-   fondo. SFX_3D=false lo degrada a paneo estereo; si el navegador no tiene
-   PannerNode, cae en StereoPanner automaticamente. */
-let SFX_3D=true;   /* ponlo a false para paneo estereo simple */
-const SFX_POS={
- officeLeft:[-1.6,0,.4],officeRight:[1.6,0,.4],
- hallLeftNear:[-1.9,0,-1.8],hallRightNear:[1.9,0,-1.8],
- hallLeft:[-2.4,0,-6.5],hallRight:[2.4,0,-6.5],
- stage:[0,0,-13],dining:[0,0,-9.5],cove:[-4.5,0,-9.5],
- backstage:[4.5,0,-11],kitchen:[5.5,0,-7.5],restrooms:[-5.5,0,-7.5],
- face:[0,0,.3]
-};
-/* Numero de camara -> punto del local. Los pasillos oeste (2A/2B/2C) caen a la
-   izquierda y los este (4A/4B/4C) a la derecha, como en el mapa del juego. */
-const CAM_POS={1:'stage',2:'dining',3:'hallLeft',4:'hallLeftNear',5:'cove',
- 6:'hallRight',7:'hallRightNear',8:'backstage',9:'kitchen',10:'restrooms',
- 11:'hallLeftNear',12:'hallRightNear'};
-function doorPos(side){return side==='left'?'officeLeft':side==='right'?'officeRight':null}
-function camPos(n){return CAM_POS[n]||null}
-function sfxListener(){if(!AudioCtx||!AudioCtx.listener)return;const L=AudioCtx.listener;
- try{
-  if(L.positionX){L.positionX.value=0;L.positionY.value=0;L.positionZ.value=0;
-   L.forwardX.value=0;L.forwardY.value=0;L.forwardZ.value=-1;
-   L.upX.value=0;L.upY.value=1;L.upZ.value=0}
-  else if(L.setPosition){L.setPosition(0,0,0);L.setOrientation(0,0,-1,0,1,0)}
- }catch(e){}}
-function sfxPanner(pos){
- if(!AudioCtx)return null;
- const c=SFX_POS[pos];if(!c)return null;
- if(SFX_3D){
-  try{
-   if(AudioCtx.createPanner){
-    const p=AudioCtx.createPanner();
-    p.panningModel='HRTF';p.distanceModel='inverse';
-    p.refDistance=1.2;p.maxDistance=45;p.rolloffFactor=.85;
-    p.coneInnerAngle=360;p.coneOuterAngle=360;p.coneOuterGain=1;
-    if(p.positionX){p.positionX.value=c[0];p.positionY.value=c[1];p.positionZ.value=c[2]}
-    else if(p.setPosition)p.setPosition(c[0],c[1],c[2]);
-    return p}
-  }catch(e){}
- }
- try{
-  if(AudioCtx.createStereoPanner){
-   const p=AudioCtx.createStereoPanner();
-   p.pan.value=Math.max(-1,Math.min(1,c[0]/2.4));
-   return p}
- }catch(e){}
- return null}
-/* Salida de un efecto: bus maestro, precedido de un panner si procede. */
-function sfxOut(pos){const bus=sfxBus()||AudioCtx.destination;
- const p=(pos===undefined?_sfxPan:pos);
- if(!p)return bus;
- const pn=sfxPanner(p);if(!pn)return bus;
- try{pn.connect(bus)}catch(e){return bus}
- return pn}
-/* Los efectos sintetizados no reciben coordenadas llamada a llamada: se fijan
-   para todo el bloque con withPan(), igual que el paneo que ya tenia la
-   respiracion en su version sintetizada. */
-let _sfxPan=null;
-function withPan(pos,fn){const prev=_sfxPan;_sfxPan=pos||null;
- try{return fn()}finally{_sfxPan=prev}}
-
-let _sfxBuf={},_sfxReq={},_sfxLoop={},_sfxLast={},_sfxPend={},_sfxGen={},_fanToken=0;
-/* Lectura de ajustes que no depende de que exista getSetting() en este build. */
-function settingVal(k,def){
- try{
-  if(typeof saveData!=='undefined'&&saveData&&saveData.settings&&saveData.settings[k]!==undefined)return saveData.settings[k];
-  if(typeof DEFAULT_SETTINGS!=='undefined'&&DEFAULT_SETTINGS[k]!==undefined)return DEFAULT_SETTINGS[k];
- }catch(e){}
- return def}
-/* El deslizador de Musica debe mandar sobre la musica del juego, no solo sobre
-   la del menu: el Toreador, el Pirate Cove y la fiesta son musica. */
-function musicVolMul(){return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volMusic',42)/100))}
-/* La llamada del encargado suena por un <audio> aparte, fuera del bus maestro:
-   si no se baja el ambiente mientras habla, se lo come. */
-let _bedDuck=1;
-function bedTarget(k){const d=SFX[k];if(!d)return 0;return (d.v===undefined?.5:d.v)*sfxVolMul()}
-function duckBeds(on){
- if(!AudioCtx)return;
- _bedDuck=on?.32:1;
- ['ambienceBed','staticBed','lightBed','blackoutBed'].forEach((k)=>{
-  const l=_sfxLoop[k];if(!l)return;
-  try{
-   const t=AudioCtx.currentTime;
-   const v=Math.max(.0001,bedTarget(k)*_bedDuck);
-   l.gain.gain.cancelScheduledValues(t);
-   l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
-   l.gain.gain.linearRampToValueAtTime(v,t+.4);
-  }catch(e){}});
- /* el bucle de amenaza recalcula su ganancia solo, asi que hay que avisarle */
- updateThreatAmbience()}
-function sfxVolMul(){if(typeof sfxVol==='function')return Math.max(0,sfxVol());
- return Math.max(0,(settingVal('volMaster',100)/100)*(settingVal('volSfx',100)/100))}
-function sfxBus(){if(!AudioCtx)return null;
- const b=(typeof masterBus==='function')?masterBus():null;
- return b||AudioCtx.destination}
-function sfxNow(){return (typeof performance!=='undefined'&&performance.now)?performance.now():Date.now()}
-function loadSfx(key,cb){
- const d=SFX[key];
- if(!d){cb(null);return}
- if(Object.prototype.hasOwnProperty.call(_sfxBuf,key)){cb(_sfxBuf[key]);return}
- if(_sfxReq[key]){_sfxReq[key].push(cb);return}
- _sfxReq[key]=[cb];
- let fired=false;
- const done=(b)=>{if(fired)return;fired=true;_sfxBuf[key]=b||null;
-  const q=_sfxReq[key]||[];delete _sfxReq[key];
-  q.forEach((f)=>{try{f(_sfxBuf[key])}catch(e){}})};
- try{
-  fetch(new URL(SFX_DIR+d.f,location.href).href).then((r)=>{
-   if(!r.ok)throw new Error('HTTP '+r.status);return r.arrayBuffer()}).then((ab)=>{
-    if(!AudioCtx){done(null);return}
-    try{
-     const p=AudioCtx.decodeAudioData(ab,(buf)=>done(buf),()=>done(null));
-     if(p&&typeof p.then==='function')p.then((buf)=>done(buf)).catch(()=>done(null));
-    }catch(e){done(null)}
-   }).catch(()=>done(null));
- }catch(e){done(null)}
-}
-function playSfx(key,opt){
- opt=opt||{};
- const d=SFX[key];
- if(!AudioCtx||!d)return false;
- const v=(d.v===undefined?.5:d.v)*(opt.vol===undefined?1:opt.vol)*(d.music?musicVolMul():sfxVolMul());
- if(v<=.0005)return false;
- const loop=(opt.loop===undefined)?!!d.loop:!!opt.loop;
- /* el cooldown es por familia (todos los garble comparten uno), no por archivo:
-    si no, tres glitches seguidos podian colar tres muestras distintas */
- const ck=(d.g||key);
- const cd=(d.cd===undefined?0:d.cd);
- if(cd>0){const now=sfxNow();
-  if(_sfxLast[ck]!==undefined&&now-_sfxLast[ck]<cd)return false;
-  _sfxLast[ck]=now}
- /* los bucles se reservan de forma sincrona: la decodificacion es asincrona y
-    sin esto tres llamadas seguidas apilaban tres camas a la vez */
- /* una cama por familia: la estatica tiene dos pistas alternativas y solo
-    puede sonar una, aunque la decodificacion vaya en camino */
- if(loop&&sfxGroupBusy(d.g||key))return false;
- const my=(_sfxGen[key]||0)+1;_sfxGen[key]=my;
- if(loop)_sfxPend[key]=1;
- loadSfx(key,(buf)=>{
-  if(loop)delete _sfxPend[key];
-  if(_sfxGen[key]!==my)return;   /* se paro mientras cargaba: no arrancar */
-  if(!buf){if(!loop&&opt.fallback){try{opt.fallback()}catch(e){}}return}
-  try{
-   const src=AudioCtx.createBufferSource();src.buffer=buf;src.loop=loop;
-   const g=AudioCtx.createGain();src.connect(g);g.connect(sfxOut(opt.pos||null));
-   const t=AudioCtx.currentTime+(opt.delay||0);
-   const off=(opt.offset||0);
-   let dur=(opt.dur!==undefined?opt.dur:d.dur);
-   if(dur===undefined||dur<=0)dur=buf.duration-off;
-   dur=Math.max(.05,Math.min(dur,buf.duration-off));
-   const fi=loop?.8:Math.min(.02,dur*.1);
-   const fo=loop?.8:Math.min(.3,Math.max(.03,dur*.15));
-   g.gain.setValueAtTime(.0001,t);
-   g.gain.linearRampToValueAtTime(v,t+fi);
-   if(!loop){
-    g.gain.setValueAtTime(v,t+Math.max(fi,dur-fo));
-    g.gain.linearRampToValueAtTime(.0001,t+dur);
-   }
-   src.start(t,off,loop?undefined:dur);
-   if(loop)_sfxLoop[key]={src:src,gain:g};
-  }catch(e){if(opt.fallback){try{opt.fallback()}catch(e2){}}}
- });
- return true;
-}
-function stopSfx(key,release){
- _sfxGen[key]=(_sfxGen[key]||0)+1;delete _sfxPend[key];
- const l=_sfxLoop[key];if(!l)return;delete _sfxLoop[key];
- const r=(release===undefined?.4:release);
- try{
-  if(!AudioCtx){try{l.src.stop()}catch(e){}return}
-  const t=AudioCtx.currentTime;
-  l.gain.gain.cancelScheduledValues(t);
-  l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
-  l.gain.gain.linearRampToValueAtTime(.0001,t+r);
-  l.src.stop(t+r+.05);
- }catch(e){try{l.src.stop()}catch(e2){}}
-}
-function sfxLoopActive(key){return !!_sfxLoop[key]}
-function sfxGroupBusy(g){for(const k in SFX){const e=SFX[k];
- if((e.g||k)!==g)continue;
- if(_sfxLoop[k]||_sfxPend[k])return true}
- return false}
-function startAmbienceBed(){if(!AudioCtx)return;
- if(typeof getSetting==='function'&&!getSetting('ambience'))return;
- playSfx('ambienceBed',{loop:true})}
-/* Estatica del monitor: un solo bucle, elegido al subirlo, y se para al bajarlo. */
-function startCamStatic(){if(!AudioCtx)return;
- if(typeof getSetting==='function'&&!getSetting('staticNoise'))return;
- if(sfxLoopActive('staticBed'))return;
- playSfx('staticBed',{loop:true})}
-function stopCamStatic(){stopSfx('staticBed',.25)}
-function stopSfxBeds(){stopCamStatic();Object.keys(_sfxLoop).forEach((k)=>stopSfx(k,.5))}
-/* Alucinaciones: como mucho una cada 15 s (lo impone el cooldown de cada pista),
-   y solo con la opcion activada. */
-function maybeHallucinationSfx(){
- if(!AudioCtx)return;
- if(typeof getSetting==='function'&&!getSetting('hallucinations'))return;
- if(Math.random()>.07)return;
- playSfx(sfxPick(['giggle2','giggle3','giggle4']));
-}
-/* Amenaza cerca. La wiki documenta para este bucle una escalera de volumen segun
-   cuantos animatronicos hay en la zona de los pasillos: 30 % con una amenaza,
-   50 % con dos, 75 % con tres y 100 % si Freddy esta en la oficina. */
-const THREAT_GAIN=[0,.30,.50,.75,1];
-const THREAT_POS={hallLeft:1,hallLeftNear:1,hallRight:1,hallRightNear:1};
-function threatLevel(){
- if(typeof state==='undefined'||!state||!state.enemies)return 0;
- let n=0;
- for(const k in state.enemies){const e=state.enemies[k];
-  if(!e||!e.active)continue;
-  if(e.side){if(k==='freddy')return 4;n++;continue}
-  if(THREAT_POS[camPos(e.cam)])n++}
- return Math.min(n,3)}
-function updateThreatAmbience(){
- if(!AudioCtx)return;
- if(typeof getSetting==='function'&&!getSetting('ambience'))return;
- const lv=(state&&state.blackout)?0:threatLevel();
- if(lv<=0){stopSfx('threat',.8);return}
- const f=THREAT_GAIN[lv];
- if(!sfxLoopActive('threat')){playSfx('threat',{loop:true,vol:f*_bedDuck});return}
- const l=_sfxLoop['threat'];if(!l)return;
- const v=Math.max(.0001,(SFX.threat.v||.2)*f*(SFX.threat.music?musicVolMul():sfxVolMul())*_bedDuck);
- try{const t=AudioCtx.currentTime;
-  l.gain.gain.cancelScheduledValues(t);
-  l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
-  l.gain.gain.linearRampToValueAtTime(v,t+1.2)}catch(e){}}
-/* Ambiente del apagon: suena mientras dura el corte, hasta el jumpscare o las 6 AM. */
-function startBlackoutBed(){if(!AudioCtx)return;
- if(typeof getSetting==='function'&&!getSetting('ambience'))return;
- playSfx('blackoutBed',{loop:true})}
-/* El organo de circo se oye ocasionalmente durante la noche, no en la intro. */
-function maybeCircus(){
- if(!AudioCtx||!state||(state&&state.blackout))return;
- /* la wiki: al azar cuando uno de los animatronicos esta activo */
- if(!anyAnimatronicActive())return;
- if(Math.random()>.10)return;
- playSfx('circus',{pos:'dining'})}
-/* Cocina: la wiki atribuye estos cuatro sonidos a Chica mientras se mueve por
-   la Kitchen (la CAM 6 del original, que no tiene imagen). */
-function maybeKitchenSfx(){
- if(!AudioCtx||!state||state.blackout)return;
- const c=state.enemies&&state.enemies.chica;
- if(!c||!c.active||c.cam!==9)return;
- if(Math.random()>.40)return;
- playSfx(sfxPick(['kitchen1','kitchen2','kitchen3','kitchen4']),{pos:'kitchen'})}
-/* Voz robotica: la wiki la situa en las esquinas de los pasillos a partir de la
-   4a noche, con Bonnie o Chica. */
-function sndRobotVoice(side){
- if(!AudioCtx)return;
- playSfx('robotVoice',{pos:side==='left'?'hallLeftNear':'hallRightNear'})}
-function maybeArrivalSfx(key,e){
- if(!AudioCtx||!e||!state)return;
- if(key!=='bonnie'&&key!=='chica')return;
- if(state.night<4)return;
- if(e.side){sndRobotVoice(e.side);return}
- if(e.cam===11)sndRobotVoice('left');
- else if(e.cam===12)sndRobotVoice('right')}
-/* Risa lenta de Freddy al moverse, colocada donde este. */
-function sndFreddyLaugh(e){
- if(!AudioCtx||!e)return;
- playSfx(sfxPick(['freddyLaugh1','freddyLaugh2','freddyLaugh3']),
-  {pos:e.side?doorPos(e.side):camPos(e.cam)})}
-/* Grito lento de Golden Freddy, distinto del grito normal. */
-function sndGoldenScream(){
- if(!playSfx('goldenScream',{pos:'face',fallback:synthJumpscare}))synthJumpscare()}
-/* Zumbido de las luces de los pasillos: un solo bucle mientras haya una
-   encendida. Va en bucle y no por pulsacion para que no sature al vigilar. */
-function startLightHum(side){
- if(!AudioCtx||sfxGroupBusy('luces'))return;
- if(typeof getSetting==='function'&&!getSetting('ambience'))return;
- playSfx('lightBed',{loop:true,pos:doorPos(side)})}
-function stopLightHum(){stopSfx('lightBed',.3)}
-function anyAnimatronicActive(){
- if(typeof state==='undefined'||!state||!state.enemies)return false;
- for(const k in state.enemies){const e=state.enemies[k];if(e&&e.active)return true}
- return false}
-
-let _covePlayed=false;
-function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate',{pos:'cove'})}
-function resetCoveMusic(){_covePlayed=false}
-function sfxPick(a){return a[Math.floor(Math.random()*a.length)]}
-function sndDoor(side){const p=doorPos(side);
- if(!playSfx('door',{pos:p,fallback:function(){withPan(p,synthDoor)}}))withPan(p,synthDoor)}
-function sndLight(side){withPan(doorPos(side),synthLight)}
-function sndCamUp(up){const k=(up===false)?'camDown':'camUp';
- if(!playSfx(k,{fallback:synthCamUp}))synthCamUp()}
-function sndCamSwitch(cam){const p=camPos(cam);
- if(!playSfx('blip',{pos:p,fallback:synthCamSwitch}))synthCamSwitch()}
-function sndAmbience(){if(sfxLoopActive('ambienceBed'))return;synthAmbience()}
-function sndJumpscare(golden){if(golden){sndGoldenScream();return}
- if(!playSfx('scream',{pos:'face',fallback:synthJumpscare}))synthJumpscare()}
-function sndPowerDown(){if(!playSfx('powerdown',{fallback:synthPowerDown}))synthPowerDown()}
-function sndFoxyRun(pos){const p=pos||'hallLeft';if(!playSfx(sfxPick(['runFast','run']),{pos:p,fallback:synthFoxyRun}))synthFoxyRun()}
-function sndFreddyTune(){if(!playSfx('toreador',{fallback:synthFreddyTune}))synthFreddyTune()}
-function sndDoorBang(side){const p=doorPos(side);
- if(!playSfx('doorBang',{pos:p,fallback:function(){withPan(p,synthDoorBang)}}))withPan(p,synthDoorBang)}
-function sndCamGlitch(intense,cam){const p=camPos(cam);
- if(!playSfx(sfxPick(['glitch1','glitch2','glitch3']),{pos:p,fallback:function(){synthCamGlitch(intense)}}))synthCamGlitch(intense)}
-function sndBreath(side){
- const k=sfxPick(['breath1','breath2','breath3','breath4']);
- if(!playSfx(k,{pos:doorPos(side),fallback:function(){synthBreath(side)}}))synthBreath(side)}
-function sndDoorJam(side){const p=doorPos(side);
- if(!playSfx('denied',{pos:p,fallback:function(){withPan(p,synthDoorJam)}}))withPan(p,synthDoorJam)}
-function startFanHum(){
- if(!AudioCtx||fanHumNodes)return;
- if(typeof getSetting==='function'&&!getSetting('ambience'))return;
- const my=++_fanToken;
- const v=(SFX.fanBed.v)*sfxVolMul();
- if(v<=.0005){synthFanHum();return}
- loadSfx('fanBed',(buf)=>{
-  if(my!==_fanToken||fanHumNodes)return;
-  if(!buf){synthFanHum();return}
-  try{
-   const src=AudioCtx.createBufferSource();src.buffer=buf;src.loop=true;
-   const g=AudioCtx.createGain();src.connect(g);g.connect(sfxBus()||AudioCtx.destination);
-   const t=AudioCtx.currentTime;
-   g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.5);
-   src.start(t);fanHumNodes={src:src,gain:g};
-  }catch(e){synthFanHum()}
- });
-}
-function sndSixAM(){playSfx('chimes');
- setTimeout(function(){if(state&&state.won)playSfx('crowd')},1500)}
-function sndKnock(side){const p=doorPos(side);
- if(!playSfx('knock',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
-function sndFootsteps(where){const p=(typeof where==='number')?camPos(where):doorPos(where);
- if(!playSfx('steps',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
-function sndPartyCrowd(){playSfx('crowd')}
-/* Estática del menú principal: arranca con el tema del título y va bajando. */
-let _menuStaticWanted=false;
-function startMenuStatic(){
- if(!AudioCtx)return;
- if(typeof getSetting==='function'&&!getSetting('staticNoise'))return;
- if(sfxLoopActive('menuStatic'))return;
- _menuStaticWanted=true;
- /* la muestra puede no estar cargada aun en la primera visita al menu: si se
-    programa la bajada antes de que exista el bucle, se pierde en silencio */
- loadSfx('menuStatic',function(buf){
-  if(!buf||!_menuStaticWanted||sfxLoopActive('menuStatic'))return;
-  playSfx('menuStatic',{loop:true});
-  const l=_sfxLoop['menuStatic'];if(!l)return;
-  try{const t=AudioCtx.currentTime;
-   l.gain.gain.cancelScheduledValues(t);
-   l.gain.gain.setValueAtTime(Math.max(.0001,l.gain.gain.value),t);
-   l.gain.gain.linearRampToValueAtTime(Math.max(.0001,bedTarget('menuStatic')*.15),t+30)}catch(e){}
- })}
-function stopMenuStatic(){_menuStaticWanted=false;stopSfx('menuStatic',.5)}
-/* Estática justo después del jumpscare, camino de la pantalla de fin. */
-function sndScareStatic(){
- if(!AudioCtx)return;
- setTimeout(()=>{if(state&&state.gameOver)playSfx('scareStatic')},1100)}
-/* Ambiente aleatorio: la risa suena de vez en cuando, sin depender del ajuste
-   de alucinaciones. */
-function maybeAmbienceLaugh(){
- if(!AudioCtx)return;
- if(Math.random()>.05)return;
- playSfx('giggle1')}
-/* El susurro solo cuando hay un animatrónico cerca. */
-function maybeNearWhisper(){
- if(!AudioCtx||!state||state.blackout)return;
- if(threatLevel()<=0)return;
- if(Math.random()>.12)return;
- playSfx('whisper')}
-/* Susto en la puerta: al encender la luz con alguien delante.
-   El enemigo en la puerta se marca con e.side (y e.cam a null). */
-function maybeDoorReveal(side){
- if(!AudioCtx||!state||!state.enemies)return;
- const es=state.enemies;
- for(const k in es){const e=es[k];
-  if(e&&e.active&&e.side===side){playSfx('doorReveal',{pos:doorPos(side)});return}}
-}
-/* Glitch digital: solo puede ocurrir en la noche 6. */
-function maybeNight6Glitch(){
- if(!AudioCtx||!state||!state.active||state.blackout)return;
- if(state.night<6)return;
- if(Math.random()>.06)return;
- playSfx('glitchN6')}
-
-function synthDoor(){/* golpe hidraulico + rail metalico */
+function sndDoor(){/* golpe hidraulico + rail metalico */
  playOsc(90,'square',.18,.42);playOsc(55,'sawtooth',.24,.24);playNoise(.2,.09);
  playOsc(160,'triangle',.1,.10,.12);playNoise(.1,.05,.18)}
-function synthLight(){/* chasquido del interruptor + zumbido del fluorescente */
+function sndLight(){/* chasquido del interruptor + zumbido del fluorescente */
  playOsc(900,'sine',.035,.11);playOsc(1350,'sine',.03,.055,.035);playNoise(.045,.045);
  playOsc(120,'sawtooth',.22,.035,.05);playOsc(240,'sine',.18,.02,.06)}
-function synthCamUp(){playNoise(.15,.12);playOsc(200,'sine',.1,.08)}
-function synthCamSwitch(){playNoise(.09,.075);playOsc(400,'sine',.05,.045);
+function sndCamUp(){playNoise(.15,.12);playOsc(200,'sine',.1,.08)}
+function sndCamSwitch(){playNoise(.09,.075);playOsc(400,'sine',.05,.045);
  playOsc(1100,'square',.02,.02,.02)}
 function sndStep(){if(!AudioCtx)return;playOsc(80+Math.random()*40,"sine",.08,.03);playNoise(.06,.015)}
-function synthAmbience(){playOsc(45,'sine',5,.05);playOsc(50,'triangle',5,.03);playNoise(3,.03);if(Math.random()>.7)setTimeout(()=>playOsc(200+Math.random()*300,'sine',.3,.03),1000+Math.random()*2000);if(Math.random()>.88){const laughs=[180,150,120];const f=laughs[Math.floor(Math.random()*laughs.length)];playOsc(f,'sawtooth',.5,.03);playOsc(f*1.5,'square',.4,.02)}}
-function synthJumpscare(){playOsc(180,'sawtooth',1.8,.9);playOsc(350,'square',1.8,.6);playNoise(1.8,.6);const sc=playOsc(900,'sawtooth',1.8,.5);
+function sndAmbience(){playOsc(45,'sine',5,.05);playOsc(50,'triangle',5,.03);playNoise(3,.03);if(Math.random()>.7)setTimeout(()=>playOsc(200+Math.random()*300,'sine',.3,.03),1000+Math.random()*2000);if(Math.random()>.88){const laughs=[180,150,120];const f=laughs[Math.floor(Math.random()*laughs.length)];playOsc(f,'sawtooth',.5,.03);playOsc(f*1.5,'square',.4,.02)}}
+function sndJumpscare(){playOsc(180,'sawtooth',1.8,.9);playOsc(350,'square',1.8,.6);playNoise(1.8,.6);const sc=playOsc(900,'sawtooth',1.8,.5);
 /* playOsc devuelve undefined si no hay AudioCtx o el volumen de efectos es 0 */
 if(sc&&sc.osc&&AudioCtx){sc.osc.frequency.setValueAtTime(900,AudioCtx.currentTime);sc.osc.frequency.exponentialRampToValueAtTime(50,AudioCtx.currentTime+1.8)}}
-function synthPowerDown(){playOsc(50,'sine',3,.15);const sc=playOsc(150,'sine',3,.1);if(sc&&sc.osc&&AudioCtx){sc.osc.frequency.exponentialRampToValueAtTime(15,AudioCtx.currentTime+3)}}
-function synthFoxyRun(){playNoise(.5,.12);playOsc(150,"sawtooth",.5,.18);playOsc(95,"square",.5,.12)}
-function synthFreddyTune(){if(!AudioCtx)return;const notes=[392,392,392,523,440,392,349,330,293,293,293,349,330,294,261];const durs=[.28,.28,.28,.38,.28,.28,.28,.45,.28,.28,.28,.38,.28,.28,.55];let delay=0;notes.forEach((freq,i)=>{playOsc(freq,'square',durs[i],.06,delay);playOsc(freq/2,'sine',durs[i]+.05,.03,delay);delay+=durs[i]+.08});setTimeout(()=>{playOsc(523,'sine',1.2,.04);playOsc(494,'sine',1.2,.04)},delay*1000)}
+function sndPowerDown(){playOsc(50,'sine',3,.15);const sc=playOsc(150,'sine',3,.1);if(sc&&sc.osc&&AudioCtx){sc.osc.frequency.exponentialRampToValueAtTime(15,AudioCtx.currentTime+3)}}
+function sndFoxyRun(){playNoise(.5,.12);playOsc(150,"sawtooth",.5,.18);playOsc(95,"square",.5,.12)}
+function sndFreddyTune(){if(!AudioCtx)return;const notes=[392,392,392,523,440,392,349,330,293,293,293,349,330,294,261];const durs=[.28,.28,.28,.38,.28,.28,.28,.45,.28,.28,.28,.38,.28,.28,.55];let delay=0;notes.forEach((freq,i)=>{playOsc(freq,'square',durs[i],.06,delay);playOsc(freq/2,'sine',durs[i]+.05,.03,delay);delay+=durs[i]+.08});setTimeout(()=>{playOsc(523,'sine',1.2,.04);playOsc(494,'sine',1.2,.04)},delay*1000)}
 let fanHumNodes=null;
-function synthFanHum(){if(!AudioCtx||fanHumNodes)return;if(!getSetting('ambience'))return;const osc1=AudioCtx.createOscillator();const osc2=AudioCtx.createOscillator();const gain=AudioCtx.createGain();osc1.type='triangle';osc2.type='sine';osc1.frequency.value=72;osc2.frequency.value=144;gain.gain.setValueAtTime(0.0001,AudioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.055,AudioCtx.currentTime+.5);osc1.connect(gain);osc2.connect(gain);gain.connect(masterBus());osc1.start();osc2.start();fanHumNodes={osc1,osc2,gain}}
-function stopFanHum(){_fanToken++;if(!fanHumNodes)return;const fn=fanHumNodes;fanHumNodes=null;
+function startFanHum(){if(!AudioCtx||fanHumNodes)return;if(!getSetting('ambience'))return;const osc1=AudioCtx.createOscillator();const osc2=AudioCtx.createOscillator();const gain=AudioCtx.createGain();osc1.type='triangle';osc2.type='sine';osc1.frequency.value=72;osc2.frequency.value=144;gain.gain.setValueAtTime(0.0001,AudioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.055,AudioCtx.currentTime+.5);osc1.connect(gain);osc2.connect(gain);gain.connect(masterBus());osc1.start();osc2.start();fanHumNodes={osc1,osc2,gain}}
+function stopFanHum(){if(!fanHumNodes)return;const fn=fanHumNodes;fanHumNodes=null;
  try{const t=AudioCtx.currentTime;fn.gain.gain.cancelScheduledValues(t);
   fn.gain.gain.setValueAtTime(Math.max(.0002,fn.gain.gain.value),t);
   fn.gain.gain.exponentialRampToValueAtTime(0.0001,t+.18);
-  setTimeout(()=>{try{if(fn.src)fn.src.stop()}catch(e){}try{if(fn.osc1)fn.osc1.stop()}catch(e){}try{if(fn.osc2)fn.osc2.stop()}catch(e){}try{fn.gain.disconnect()}catch(e){}},240);
+  setTimeout(()=>{try{fn.osc1.stop()}catch(e){}try{fn.osc2.stop()}catch(e){}try{fn.gain.disconnect()}catch(e){}},240);
  }catch(e){try{fn.osc1.stop()}catch(e2){}try{fn.osc2.stop()}catch(e2){}}}
 let titleFallbackTimer=null,titleFallbackNodes=[];
 function stopTitleFallbackTheme(){titleFallbackNodes.forEach(n=>{try{n.osc.stop()}catch(e){}try{n.gain.disconnect()}catch(e){}});titleFallbackNodes=[];if(titleFallbackTimer){clearTimeout(titleFallbackTimer);titleFallbackTimer=null}}
@@ -2889,8 +2471,8 @@ const on=!!s[k];b.textContent=on?'SÍ':'NO';b.classList.toggle('on',on);b.classL
 [['volMaster','volMasterVal'],['volMusic','volMusicVal'],['volSfx','volSfxVal']].forEach(([k,vid])=>{
 const sl=document.getElementById(k);const lab=document.getElementById(vid);
 if(sl&&sl.value!=String(s[k]))sl.value=s[k];if(lab)lab.textContent=s[k]+'%'});}
-function saveGame(data){localStorage.setItem(SAVE_KEY,JSON.stringify(data))}
-function resetProgress(){if(confirm('¿Borrar todo tu progreso guardado?')){localStorage.removeItem(SAVE_KEY);saveData=loadSave();applySettings();updateOptionControls();updateMenuLocks();updateDiffButtons();renderOptStats();alert('Progreso borrado.')}}
+function saveGame(data){try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}catch(e){}}
+function resetProgress(){if(confirm('¿Borrar todo tu progreso guardado?')){try{localStorage.removeItem(SAVE_KEY)}catch(e){}saveData=loadSave();applySettings();updateOptionControls();updateMenuLocks();updateDiffButtons();renderOptStats();alert('Progreso borrado.')}}
 let saveData=loadSave();
 
 /* ===== STATE ===== */
@@ -2910,6 +2492,7 @@ function getDrainMult(){const d=state.difficulty==='hard'?1.70:state.difficulty=
 const nightMult=[1,1,1.06,1.13,1.21,1.31,1.42];
 return d*(nightMult[Math.min(state.night,6)]||1.32)}
 function getHourDuration(){
+// Each difficulty: hard=42s, medium=58s, easy=75s per hour
 /* Las 3 dificultades duran casi lo mismo: antes Dificil duraba 42s/hora frente
    a los 75s de Normal, asi que la noche entera gastaba MENOS energia y Dificil
    resultaba mas facil que Medio. La dificultad la marcan el consumo y la IA. */
@@ -3132,7 +2715,7 @@ function cancelNightSequence(){__seqToken++;__seqTimers.forEach(id=>clearTimeout
 const a=document.getElementById('nightScreen');if(a)a.classList.remove('active');
 const b=document.getElementById('nightLoad');if(b)b.classList.remove('active');
 const c=document.getElementById('newsIntro');if(c)c.classList.remove('active','fading');}
-function beginNightSequence(n){
+function beginNightSequence(n){if(typeof __fnasOriginOK==='function'&&!__fnasOriginOK()){if(window.__fnasShowBlock){__fnasShowBlock()}return}
 const myToken=++__seqToken;__seqTimers.forEach(id=>clearTimeout(id));__seqTimers=[];
 const T=(fn,ms)=>{const id=setTimeout(()=>{if(myToken!==__seqToken)return;fn()},ms);__seqTimers.push(id);return id};
 const intro=document.getElementById('newsIntro');
@@ -3161,7 +2744,7 @@ function showNightScreen(){
   });
 }
 if(n===1&&getSetting('newsIntro')){
-  intro.classList.add('active');sndPartyCrowd();
+  intro.classList.add('active');
   T(()=>{
     intro.classList.add('fading');
     T(()=>{
@@ -3191,10 +2774,10 @@ if(audio.src!==src)audio.src=src;
 currentPhoneAudio=audio;
 overlay.classList.add('active');
 audio.currentTime=0;
-audio.volume=Math.min(1,.9*sfxVolMul());duckBeds(true);
+audio.volume=0.9;
 let endTimer=null;
 function clearPhoneCall(){if(endTimer)clearTimeout(endTimer);audio.onended=null;audio.onerror=null;overlay.classList.remove('active');currentPhoneAudio=null;}
-audio.onended=function(){clearPhoneCall()};
+audio.onended=clearPhoneCall;
 audio.onerror=clearPhoneCall;
 overlay.__clearPhoneCall=clearPhoneCall;
 const armEndTimer=()=>{if(endTimer)clearTimeout(endTimer);const d=(audio.duration&&isFinite(audio.duration))?audio.duration*1000+2000:60000;endTimer=setTimeout(clearPhoneCall,Math.max(15000,d));};
@@ -3209,7 +2792,7 @@ overlay.dataset.phoneTimer=endTimer;
 }
 }
 }
-function mutePhoneCall(){duckBeds(false);
+function mutePhoneCall(){
 if(currentPhoneAudio){currentPhoneAudio.pause();currentPhoneAudio.currentTime=0;currentPhoneAudio.onended=null;currentPhoneAudio.onerror=null;currentPhoneAudio=null;}
 const ov=document.getElementById('phoneCall');
 if(ov&&ov.__clearPhoneCall){try{ov.__clearPhoneCall()}catch(e){}ov.__clearPhoneCall=null;}
@@ -3217,7 +2800,7 @@ if(ov&&ov.dataset.phoneTimer){clearTimeout(parseInt(ov.dataset.phoneTimer));dele
 if(ov)ov.classList.remove('active');
 }
 function stopPhoneCall(){mutePhoneCall();}
-function startGame(n){
+function startGame(n){if(typeof __fnasOriginOK==='function'&&!__fnasOriginOK()){if(window.__fnasShowBlock){__fnasShowBlock()}return}
 if(state.blackoutTimers){state.blackoutTimers.forEach(id=>clearTimeout(id))}
 const _diff=(saveData&&saveData.difficulty)||state.difficulty||'easy';
 state={active:true,night:n,hour:0,power:100,doors:{left:false,right:false},lights:{left:false,right:false},camsUp:false,currentCam:1,enemies:initEnemies(n),gameOver:false,won:false,difficulty:_diff,timers:{},intervals:[],ambienceTimer:null,foxyRun:false,lastKiller:null,blackout:false,blackoutTimers:[],doorJam:{left:0,right:0},breathSide:null};
@@ -3268,14 +2851,14 @@ state.intervals.push(setInterval(breathTick,1400));
 
 function clearAllIntervals(){try{clearGolden()}catch(e){}if(state.blackoutTimers){state.blackoutTimers.forEach(id=>clearTimeout(id));state.blackoutTimers=[]}state.intervals.forEach(id=>clearInterval(id));state.intervals=[];Object.values(state.timers).forEach(clearTimeout);state.timers={};if(state.hourTimer){clearTimeout(state.hourTimer);state.hourTimer=null}if(state.ambienceTimer){clearTimeout(state.ambienceTimer);state.ambienceTimer=null}}
 
-function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}startAmbienceBed();maybeHallucinationSfx();updateThreatAmbience();maybeCircus();maybeKitchenSfx();maybeNight6Glitch();maybeAmbienceLaugh();maybeNearWhisper();sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
+function startAmbience(){if(!state.active)return;if(!getSetting('ambience')){state.ambienceTimer=setTimeout(startAmbience,4000);return}sndAmbience();state.ambienceTimer=setTimeout(startAmbience,4000+Math.random()*3000)}
 function randomStepSound(){if(state.active&&!state.gameOver&&!state.won){if(Math.random()<.12)triggerHallucination();}}
 
 /* ===== CONTROLS ===== */
 function toggleDoor(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();
- if(doorJammed(side)){try{sndDoorJam(side)}catch(e){}return}
+ if(doorJammed(side)){try{sndDoorJam()}catch(e){}return}
  registerDoorUse(side);
- setDoor(side,!state.doors[side]);sndDoor(side)}
+ setDoor(side,!state.doors[side]);sndDoor()}
 function setDoor(side,on){const wasOpen=!state.doors[side];state.doors[side]=on;const door=document.getElementById('door'+(side==='left'?'Left':'Right'));const btn=document.getElementById('btnDoor'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnDoor'+(side==='left'?'Left':'Right')+'2');const status=document.getElementById('doorStatus'+(side==='left'?'Left':'Right'));door.classList.toggle('closed',on);door.classList.toggle('open',!on);btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);if(status){status.classList.toggle('active',on);status.textContent=''}
 if(on&&wasOpen)scareOffAtDoor(side);
 if(!on){const hf=document.getElementById(side==='left'?'hallEnemyLeft':'hallEnemyRight');if(hf)hf.classList.remove('retreating')}
@@ -3295,7 +2878,7 @@ function scareOffAtDoor(side){
  const dn=document.getElementById('door'+(side==='left'?'Left':'Right'));
  if(dn){dn.classList.remove('banged');void dn.offsetWidth;dn.classList.add('banged');
   setTimeout(()=>dn&&dn.classList.remove('banged'),380)}
- try{sndDoorBang(side)}catch(e){}
+ try{sndDoorBang()}catch(e){}
  state.timers[tk]=setTimeout(()=>{
   delete state.timers[tk];
   if(!state.active||state.gameOver||state.won)return;
@@ -3309,13 +2892,12 @@ function scareOffAtDoor(side){
  },1100)}
 
 /* golpe metalico: el animatronico choca con la puerta cerrada */
-function synthDoorBang(){try{playOsc(70,'square',.22,.34);playOsc(110,'sawtooth',.16,.18);playNoise(.22,.14)}catch(e){}}
+function sndDoorBang(){try{playOsc(70,'square',.22,.34);playOsc(110,'sawtooth',.16,.18);playNoise(.22,.14)}catch(e){}}
 
-function toggleLight(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setLight(side,!state.lights[side]);sndLight(side)}
-function setLight(side,on){state.lights[side]=on;if(on)maybeDoorReveal(side);
- if(on)startLightHum(side);else if(!state.lights.left&&!state.lights.right)stopLightHum();const hallLight=document.getElementById('hallLight'+(side==='left'?'Left':'Right'));hallLight.classList.toggle('active',on);if(!on)hallLight.classList.add('off-flash');setTimeout(()=>hallLight&&hallLight.classList.remove('off-flash'),500);const btn=document.getElementById('btnLight'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnLight'+(side==='left'?'Left':'Right')+'2');btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);btn.classList.toggle('light-on',on);btn2&&btn2.classList.toggle('light-on',on);const office=document.getElementById('office');if(office){const anyOn=state.lights.left||state.lights.right;office.classList.toggle('lights-off',!anyOn);office.classList.toggle('lights-on',anyOn);if(on){/* keep lights-on while active */}else{office.classList.remove('lights-on')}}if(on){/* La luz solo REVELA: para espantarlos hay que cerrar la puerta. */triggerFlickerBrightness();const hallEnemy=document.getElementById(side==='left'?'hallEnemyLeft':'hallEnemyRight');if(hallEnemy){hallEnemy.style.filter='brightness(2.5)';setTimeout(()=>{hallEnemy.style.filter=''},200)}}updateHallEnemies();updateUsage()}
+function toggleLight(side){if(!state.active||state.camsUp||state.gameOver||state.won)return;initAudio();setLight(side,!state.lights[side]);sndLight()}
+function setLight(side,on){state.lights[side]=on;const hallLight=document.getElementById('hallLight'+(side==='left'?'Left':'Right'));hallLight.classList.toggle('active',on);if(!on)hallLight.classList.add('off-flash');setTimeout(()=>hallLight&&hallLight.classList.remove('off-flash'),500);const btn=document.getElementById('btnLight'+(side==='left'?'Left':'Right'));const btn2=document.getElementById('btnLight'+(side==='left'?'Left':'Right')+'2');btn.classList.toggle('on',on);btn2&&btn2.classList.toggle('on',on);btn.classList.toggle('light-on',on);btn2&&btn2.classList.toggle('light-on',on);const office=document.getElementById('office');if(office){const anyOn=state.lights.left||state.lights.right;office.classList.toggle('lights-off',!anyOn);office.classList.toggle('lights-on',anyOn);if(on){/* keep lights-on while active */}else{office.classList.remove('lights-on')}}if(on){/* La luz solo REVELA: para espantarlos hay que cerrar la puerta. */triggerFlickerBrightness();const hallEnemy=document.getElementById(side==='left'?'hallEnemyLeft':'hallEnemyRight');if(hallEnemy){hallEnemy.style.filter='brightness(2.5)';setTimeout(()=>{hallEnemy.style.filter=''},200)}}updateHallEnemies();updateUsage()}
 
-function toggleCameras(){if(!state.active||state.gameOver||state.won)return;initAudio();if(state.goldenActive)clearGolden();state.camsUp=!state.camsUp;const sys=document.getElementById('cameraSystem');const btn=document.getElementById('camButton');if(state.camsUp){document.body.classList.add('cams-up');sys.classList.add('active');btn.classList.add('cam-on');sndCamUp(true);startCamStatic();updateCamView();updateCamIndicators();updateCoveDecor();updateCamTopBar();stopFanHum()}else{document.body.classList.remove('cams-up');sys.classList.remove('active');btn.classList.remove('cam-on');sndCamUp(false);stopCamStatic();
+function toggleCameras(){if(!state.active||state.gameOver||state.won)return;initAudio();if(state.goldenActive)clearGolden();state.camsUp=!state.camsUp;const sys=document.getElementById('cameraSystem');const btn=document.getElementById('camButton');if(state.camsUp){document.body.classList.add('cams-up');sys.classList.add('active');btn.classList.add('cam-on');sndCamUp();updateCamView();updateCamIndicators();updateCoveDecor();updateCamTopBar();stopFanHum()}else{document.body.classList.remove('cams-up');sys.classList.remove('active');btn.classList.remove('cam-on');sndCamUp();
  const md=document.getElementById('monDown');
  if(md&&!document.body.classList.contains('no-flicker')){md.classList.remove('on');void md.offsetWidth;md.classList.add('on');
   setTimeout(()=>md&&md.classList.remove('on'),360)}
@@ -3329,7 +2911,7 @@ let bars=4;if(state.power<50)bars=3;if(state.power<25)bars=2;if(state.power<10)b
 let near=false;for(const k in state.enemies){if(state.enemies[k].cam===state.currentCam){near=true;break}}
 if(near)bars=Math.max(1,bars-1);
 [...sg.children].forEach((el,i)=>el.classList.toggle('on',i<bars))}}
-function switchCam(num,silent){if(!state.active||state.gameOver||state.won)return;if(!CAMS[num])return;state.currentCam=num;document.querySelectorAll('.cam-node').forEach(n=>{n.classList.toggle('active',parseInt(n.dataset.cam)===num)});if(!silent)sndCamSwitch(num);updateCamView();updateCamIndicators();updateCoveDecor();updateCamTopBar();const __bg=document.getElementById('camBg');if(__bg&&!document.body.classList.contains('no-flicker')){__bg.classList.remove('booting');void __bg.offsetWidth;__bg.classList.add('booting');setTimeout(()=>__bg&&__bg.classList.remove('booting'),380)}}
+function switchCam(num,silent){if(!state.active||state.gameOver||state.won)return;if(!CAMS[num])return;state.currentCam=num;document.querySelectorAll('.cam-node').forEach(n=>{n.classList.toggle('active',parseInt(n.dataset.cam)===num)});if(!silent)sndCamSwitch();updateCamView();updateCamIndicators();updateCoveDecor();updateCamTopBar();const __bg=document.getElementById('camBg');if(__bg&&!document.body.classList.contains('no-flicker')){__bg.classList.remove('booting');void __bg.offsetWidth;__bg.classList.add('booting');setTimeout(()=>__bg&&__bg.classList.remove('booting'),380)}}
 
 /* ===== GAME LOGIC ===== */
 function gameTick(){if(!state.active||state.gameOver||state.won)return;if(state.power<0)state.power=0;
@@ -3364,14 +2946,14 @@ function getCampLimitTicks(){const d=state.difficulty;
  return Math.max(14,Math.round(base*nm))}
 /* Aviso previo: la senal se degrada justo antes de que te lo arranquen */
 function warnCampPull(){const f=document.getElementById('camFeed');if(!f)return;
- try{sndCamGlitch(false,state.currentCam)}catch(e){}
+ try{sndCamGlitch()}catch(e){}
  const g=document.getElementById('camGlitchBurst');
  if(g){g.classList.add('active');setTimeout(()=>g&&g.classList.remove('active'),520)}}
 /* Te baja el monitor a la fuerza y deja que el death timer haga su trabajo */
 function forceCamsDown(){if(!state.camsUp||state.gameOver||state.won)return;
  const sys=document.getElementById('cameraSystem');
  if(sys)sys.classList.add('force-down');
- try{sndCamGlitch(false,state.currentCam)}catch(e){}
+ try{sndCamGlitch()}catch(e){}
  toggleCameras();
  setTimeout(()=>{const s2=document.getElementById('cameraSystem');if(s2)s2.classList.remove('force-down')},700)}
 
@@ -3403,12 +2985,12 @@ setTimeout(()=>feed.classList.remove('cam-move-glitch','cam-move-glitch-hard'),i
 if(burst){burst.classList.add('active');setTimeout(()=>burst.classList.remove('active'),intense?520:300)}
 if(noise){noise.classList.add('active');setTimeout(()=>noise.classList.remove('active'),intense?480:280)}
 if(label){label.classList.add('glitching');setTimeout(()=>label.classList.remove('glitching'),intense?560:320)}
-try{sndCamGlitch(intense,state.currentCam)}catch(e){}}
-function synthCamGlitch(intense){try{playNoise(intense?.22:.12,intense?.10:.05);playOsc(intense?150:220,'square',.05,.02)}catch(e){}}
+try{sndCamGlitch(intense)}catch(e){}}
+function sndCamGlitch(intense){try{playNoise(intense?.22:.12,intense?.10:.05);playOsc(intense?150:220,'square',.05,.02)}catch(e){}}
 
-function aiTick(){if(!state.active||state.gameOver||state.won)return;let _moved=0,_movedHere=false;const _mk=[];for(const key in state.enemies){if(key==='foxy')continue; // Foxy handled separately
+function aiTick(){if(!state.active||state.gameOver||state.won)return;let _moved=0,_movedHere=false;for(const key in state.enemies){if(key==='foxy')continue; // Foxy handled separately
 const e=state.enemies[key];if(!e.active)continue;const ai=e.ai;if(ai<=0)continue;const calmFactor=state.difficulty==='hard'?22:state.difficulty==='medium'?25:29;const roll=Math.floor(Math.random()*calmFactor)+1;if(roll>ai)continue;
-if(e.side){if(state.doors[e.side]){if(Math.random()<0.70){const _dst=e.side==='left'?11:12;e.cam=_dst;e.side=null;sndFootsteps(_dst);_moved++;_mk.push(key);maybeArrivalSfx(key,e);if(state.camsUp&&_dst===state.currentCam)_movedHere=true;updateCamIndicators();}continue}else{continue}}
+if(e.side){if(state.doors[e.side]){if(Math.random()<0.70){const _dst=e.side==='left'?11:12;e.cam=_dst;e.side=null;sndStep();_moved++;if(state.camsUp&&_dst===state.currentCam)_movedHere=true;updateCamIndicators();}continue}else{continue}}
 // Mirar una camara frena al animatronico... pero no en los pasillos de la oficina
 // (11/12), donde solo hay un 40% de que se quede quieto. Evita el exploit de
 // vigilar CAM 2C/4C indefinidamente.
@@ -3419,13 +3001,12 @@ if(state.camsUp&&e.cam===state.currentCam){
   if(Math.random()<hold)continue}
 const paths=PATHS[key][e.cam];if(!paths)continue;const dest=paths[Math.floor(Math.random()*paths.length)];
 const _from=e.cam;
-if(dest==='officeLeft'){e.cam=null;e.side='left';sndKnock('left')}else if(dest==='officeRight'){e.cam=null;e.side='right';sndKnock('right')}else{e.cam=dest;sndFootsteps(dest)}
-_moved++;_mk.push(key);maybeArrivalSfx(key,e);
+if(dest==='officeLeft'){e.cam=null;e.side='left';sndStep()}else if(dest==='officeRight'){e.cam=null;e.side='right';sndStep()}else{e.cam=dest;sndStep()}
+_moved++;
 /* glitch mas fuerte si el movimiento ocurre en la camara que estas viendo */
 if(state.camsUp&&(_from===state.currentCam||e.cam===state.currentCam))_movedHere=true}
 updateCamIndicators();updateCamView();updateHallEnemies();
-if(_moved>0&&state.camsUp)camMoveGlitch(_movedHere);
-if(_mk.indexOf('freddy')>=0)sndFreddyLaugh(state.enemies.freddy)}
+if(_moved>0&&state.camsUp)camMoveGlitch(_movedHere)}
 
 /* Foxy / Speed special mechanic: aggression now scales with AI and difficulty */
 function resetFoxy(hitDoor=false){const foxy=state.enemies.foxy;if(!foxy)return;foxy.cam=5;foxy.side=null;foxy.runStage=0;state.foxyRun=false;if(hitDoor){const hitDrain=Math.min(18,3+Math.ceil((foxy.ai||0)/2)+(state.difficulty==='hard'?2:0));state.power=Math.max(0,state.power-hitDrain);updateHUD();updateUsage()}updateCamIndicators();updateCamView();updateHallEnemies();updateCoveDecor()}
@@ -3450,12 +3031,12 @@ foxy.runStage=Math.min(maxStage,foxy.runStage+boost);
 if(foxy.runStage!==_prevStage&&state.camsUp)camMoveGlitch(state.currentCam===5);
 if(foxy.runStage>=maxStage){
   state.foxyRun=true;foxy.runStage=maxStage;
-  sndFoxyRun('hallLeft');
+  sndFoxyRun();
   /* Sprint por pasillos: 3->4->11->puerta, comprobando puerta en cada salto */
-  let __fxs=0;const stepTo=(cam,after)=>{const tk='foxyrun_'+(++__fxs);state.timers[tk]=setTimeout(()=>{delete state.timers[tk];if(!state.active||state.gameOver||state.won||!foxy||state.enemies.foxy!==foxy)return;if(state.doors.left){sndDoor('left');resetFoxy(true);return}foxy.cam=cam;updateCamIndicators();updateCamView();if(after)after()},getFoxySprintStep())};
+  let __fxs=0;const stepTo=(cam,after)=>{const tk='foxyrun_'+(++__fxs);state.timers[tk]=setTimeout(()=>{delete state.timers[tk];if(!state.active||state.gameOver||state.won||!foxy||state.enemies.foxy!==foxy)return;if(state.doors.left){sndDoor();resetFoxy(true);return}foxy.cam=cam;updateCamIndicators();updateCamView();if(after)after()},getFoxySprintStep())};
   stepTo(3,()=>stepTo(4,()=>stepTo(11,()=>{
     if(!state.active||state.gameOver||state.won||!foxy||state.enemies.foxy!==foxy)return;
-    if(state.doors.left){sndDoor('left');resetFoxy(true);return}
+    if(state.doors.left){sndDoor();resetFoxy(true);return}
     foxy.side='left';state.foxyRun=false;
     updateCamIndicators();updateCamView();updateHallEnemies();
     /* NO se mata aqui: se le deja en la puerta y decide checkDoorDeath/gameTick,
@@ -3470,7 +3051,7 @@ function nextHourTick(){if(!state.active||state.gameOver||state.won)return;state
 /* La noche se pone cada vez peor: la IA sube con las horas (tope 20) */
 for(const k in state.enemies){const e=state.enemies[k];if(!e.active||e.ai<=0)continue;
 const step=(state.night>=5?2:1);
-if(state.hour>=2||state.night>=5)e.ai=Math.min(20,e.ai+step)}if(state.hourTimer){clearTimeout(state.hourTimer);}state.hourTimer=setTimeout(nextHourTick,getHourDuration());}
+if(state.hour>=2||state.night>=4)e.ai=Math.min(20,e.ai+step)}if(state.hourTimer){clearTimeout(state.hourTimer);}state.hourTimer=setTimeout(nextHourTick,getHourDuration());}
 
 function uiTick(){if(!state.active)return;if(state.camsUp)updateCamTopBar();const _flick=getSetting('flicker');const nearDoor=Object.values(state.enemies).some(e=>e.side);if(_flick&&nearDoor){document.getElementById('officeFlicker').classList.add('active');setTimeout(()=>document.getElementById('officeFlicker').classList.remove('active'),120)}
 const noise=document.getElementById('staticNoise');const camEnemy=document.getElementById('camEnemy');const glitch=document.getElementById('camGlitchBurst');const lowPower=document.getElementById('lowPowerPulse');
@@ -3505,7 +3086,6 @@ for(const key in state.enemies){const e=state.enemies[key];
 function updateCoveDecor(){const cove=document.getElementById('coveDecor');if(!cove)return;const foxy=state.enemies.foxy;
 /* El Pirate Cove SOLO se dibuja cuando estas mirando la CAM 5 */
 if(!foxy||!state.camsUp||state.currentCam!==5){cove.innerHTML='';cove.className='';cove.style.display='none';return}
-sndPirateCove();
 if(!foxy.active){
 cove.style.display='flex';cove.className='cove-stage';cove.innerHTML='';
 const curtain=document.createElement('div');curtain.className='cove-curtain';cove.appendChild(curtain);
@@ -3516,9 +3096,9 @@ const enemy=document.createElement('div');enemy.className='cove-inactive-enemy';
 if(state.camsUp&&state.currentCam===5){const maxStage=getFoxyMaxStage();const openness=maxStage===99?0:(foxy.runStage/maxStage);cove.style.display='flex';cove.className='cove-stage';const curtain=document.createElement('div');curtain.className='cove-curtain';if(openness>=.34)curtain.classList.add('peek');if(openness>=.67)curtain.classList.add('gone');cove.innerHTML='';cove.appendChild(curtain);const star=document.createElement('div');star.className='cove-star';star.textContent='★';cove.appendChild(star);const sign=document.createElement('div');sign.className='cove-sign';sign.textContent='SPEED COVE';cove.appendChild(sign);if(openness>=.67){const enemy=document.createElement('div');enemy.className='cam-enemy';enemy.style.opacity='1';enemy.style.position='relative';enemy.innerHTML=getEnemySvg('foxy');cove.appendChild(enemy)}}else{cove.style.display='none'}}
 
 /* ===== SPECIAL EVENTS ===== */
-function powerOut(){if(!state.active||state.blackout)return;state.blackout=true;const _boState=state;stopPhoneCall();state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndPowerDown();startBlackoutBed();
+function powerOut(){if(!state.active||state.blackout)return;state.blackout=true;stopPhoneCall();state.active=false;clearAllIntervals();stopFanHum();sndPowerDown();
 /* el reloj sigue: aun puedes llegar a las 6 AM a oscuras */
-const remaining=6-state.hour;if(remaining>0){let hleft=remaining;const tick=()=>{if(state!==_boState||state.gameOver||state.won)return;state.hour++;updateHUD();if(state.hour>=6){state.blackoutTimers&&state.blackoutTimers.forEach(id=>clearTimeout(id));winGame();return}state.blackoutTimers.push(setTimeout(tick,getHourDuration()))};state.blackoutTimers=state.blackoutTimers||[];state.blackoutTimers.push(setTimeout(tick,getHourDuration()))}setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);state.camsUp=false;document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('blackout').classList.add('active');document.getElementById('blackoutEyes').classList.remove('active');const hallLeft=document.getElementById('hallEnemyLeft');const hallRight=document.getElementById('hallEnemyRight');hallLeft.classList.remove('visible');hallRight.classList.remove('visible');hallLeft.innerHTML='';hallRight.innerHTML='';const powerFreddy=document.getElementById('powerFreddy');powerFreddy.innerHTML='';powerFreddy.classList.remove('active');document.getElementById('fan').style.opacity='.35';document.getElementById('fan-blades').style.animationPlayState='paused';state.blackoutTimers=state.blackoutTimers||[];state.blackoutTimers.push(setTimeout(()=>{if(state!==_boState)return;powerFreddy.innerHTML=getEnemySvg('freddy');powerFreddy.classList.add('active');document.getElementById('blackoutEyes').classList.add('active');sndFreddyTune();
+const remaining=6-state.hour;if(remaining>0){let hleft=remaining;const tick=()=>{if(state.gameOver||state.won)return;state.hour++;updateHUD();if(state.hour>=6){state.blackoutTimers&&state.blackoutTimers.forEach(id=>clearTimeout(id));winGame();return}state.blackoutTimers.push(setTimeout(tick,getHourDuration()))};state.blackoutTimers=state.blackoutTimers||[];state.blackoutTimers.push(setTimeout(tick,getHourDuration()))}setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);state.camsUp=false;document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('blackout').classList.add('active');document.getElementById('blackoutEyes').classList.remove('active');const hallLeft=document.getElementById('hallEnemyLeft');const hallRight=document.getElementById('hallEnemyRight');hallLeft.classList.remove('visible');hallRight.classList.remove('visible');hallLeft.innerHTML='';hallRight.innerHTML='';const powerFreddy=document.getElementById('powerFreddy');powerFreddy.innerHTML='';powerFreddy.classList.remove('active');document.getElementById('fan').style.opacity='.35';document.getElementById('fan-blades').style.animationPlayState='paused';state.blackoutTimers=[];state.blackoutTimers.push(setTimeout(()=>{powerFreddy.innerHTML=getEnemySvg('freddy');powerFreddy.classList.add('active');document.getElementById('blackoutEyes').classList.add('active');sndFreddyTune();
 /* Margen aleatorio como en el original: si el reloj llega a las 6 AM antes, sobrevives */
 const delay=6000+Math.random()*9000;state.blackoutTimers.push(setTimeout(()=>doJumpscare('freddy'),delay))},2600))}
 
@@ -3542,12 +3122,12 @@ function maybeGoldenSkibidi(){
   state.goldenActive=true;
   g.innerHTML=getEnemySvg('freddy');
   g.classList.add('active');
-  try{synthFreddyTune()}catch(e){}
+  try{sndFreddyTune()}catch(e){}
   try{playNoise(.6,.05)}catch(e){}
   /* si sigue en pantalla al acabar la animacion -> muerte */
   const deadline=setTimeout(()=>{
     if(state.goldenActive&&!state.camsUp&&!state.gameOver&&!state.won){
-      clearGolden();doJumpscare('freddy',true)
+      clearGolden();doJumpscare('freddy')
     }else{clearGolden()}
   },6200);
   state.timers.golden=deadline;
@@ -3565,9 +3145,7 @@ function clearGolden(){
 /* ---- 3. RESPIRACION EN LA PUERTA ----
    Pista de audio: si hay alguien esperando fuera, se le oye respirar por ese lado
    aunque no enciendas la luz. Recompensa jugar con sonido. */
-function breathTick(){if(!state.active||state.gameOver||state.won||!state.camsUp)return;
- /* la wiki: los gemidos se oyen al entrar en la oficina con el monitor puesto,
-    es decir justo cuando no puedes ver la puerta */
+function breathTick(){if(!state.active||state.gameOver||state.won||state.camsUp)return;
  let side=null;
  for(const k in state.enemies){const e=state.enemies[k];
   if(e&&e.active&&e.side){side=e.side;break}}
@@ -3576,7 +3154,7 @@ function breathTick(){if(!state.active||state.gameOver||state.won||!state.camsUp
  if(state.doors[side])return;   /* con la puerta cerrada no se le oye */
  try{sndBreath(side)}catch(e){}}
 
-function synthBreath(side){if(!AudioCtx)return;
+function sndBreath(side){if(!AudioCtx)return;
  const vol=sfxVol();if(vol<=0)return;
  const dur=.55;
  const buf=AudioCtx.createBuffer(1,Math.floor(AudioCtx.sampleRate*dur),AudioCtx.sampleRate);
@@ -3603,17 +3181,17 @@ function registerDoorUse(side){
  while(arr.length&&now-arr[0]>4000)arr.shift();
  if(arr.length>=5){
   state.doorJam[side]=now+2600;arr.length=0;
-  try{sndDoorJam(side)}catch(e){}
+  try{sndDoorJam()}catch(e){}
   const st=document.getElementById('doorStatus'+(side==='left'?'Left':'Right'));
   if(st){st.classList.add('jammed');setTimeout(()=>st&&st.classList.remove('jammed'),2600)}}}
-function synthDoorJam(){try{playOsc(180,'square',.1,.2);playOsc(120,'square',.1,.18,.12);
+function sndDoorJam(){try{playOsc(180,'square',.1,.2);playOsc(120,'square',.1,.18,.12);
  playNoise(.24,.10)}catch(e){}}
-function doJumpscare(enemyKey,golden){if(state.gameOver||state.won)return;stopPhoneCall();state.gameOver=true;state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndJumpscare(golden);sndScareStatic();document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on');const lv=getSetting('jumpscareLevel')|0;
+function doJumpscare(enemyKey){if(state.gameOver||state.won)return;stopPhoneCall();state.gameOver=true;state.active=false;clearAllIntervals();stopFanHum();sndJumpscare();document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on');const lv=getSetting('jumpscareLevel')|0;
 const jsEnemy=document.getElementById('jsEnemy');jsEnemy.innerHTML=lv===2?'':getEnemySvg(enemyKey||'freddy');
 const jsFlash=document.getElementById('jsFlash');if(jsFlash)jsFlash.style.display=lv>=1?'none':'';
 document.getElementById('jumpscare').classList.add('active');state.lastKiller=enemyKey||'freddy';const _dur=lv===2?900:lv===1?1600:2200;setTimeout(()=>{document.getElementById('jumpscare').classList.remove('active');showEnd(false,state.lastKiller)},_dur)}
 
-function winGame(){if(state.won||state.gameOver)return;state.won=true;state.active=false;clearAllIntervals();stopFanHum();stopSfxBeds();sndSixAM();document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('officeWrapper').classList.remove('active');const six=document.getElementById('sixAmBanner');if(six){six.classList.add('active')}if(state.night>saveData.completed){saveData.completed=state.night}if(!saveData.stars)saveData.stars=[];if(!saveData.stars.includes(state.night))saveData.stars.push(state.night);
+function winGame(){if(state.won||state.gameOver)return;state.won=true;state.active=false;clearAllIntervals();stopFanHum();document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('officeWrapper').classList.remove('active');const six=document.getElementById('sixAmBanner');if(six){six.classList.add('active')}if(state.night>saveData.completed){saveData.completed=state.night}if(!saveData.stars)saveData.stars=[];if(!saveData.stars.includes(state.night))saveData.stars.push(state.night);
 /* estrellas de esta noche segun dificultad; nos quedamos con el mejor resultado */
 if(!saveData.nightStars)saveData.nightStars={};
 const __ds={easy:1,medium:2,hard:3};const __earned=state.night===6?3:(__ds[state.difficulty]||1);
@@ -3634,7 +3212,7 @@ if(__po){__po.innerHTML=getEnemySvg(killer&&ENEMY_NAMES[killer]?killer:'freddy')
    solo te deja a solas con quien te ha pillado. */
 sub.textContent='';msg.textContent='';const eb=document.getElementById('endButtons');if(eb){eb.innerHTML='';const rb=document.createElement('button');rb.className='title-btn primary';rb.style.textAlign='center';rb.textContent='>> Reintentar Noche';rb.onclick=function(){playClick();var nn=state.night;document.getElementById('endScreen').classList.remove('active','win','lose');selectNight(nn)};eb.appendChild(rb);const mb=document.createElement('button');mb.className='title-btn';mb.style.textAlign='center';mb.textContent='>> Menú Principal';mb.onclick=function(){playClick();returnToMenu()};eb.appendChild(mb)}}}
 
-function returnToMenu(){cancelNightSequence();clearAllIntervals();stopFanHum();stopSfxBeds();resetCoveMusic();document.body.classList.remove('cams-up');state.active=false;state.gameOver=false;state.won=false;const _cd=document.getElementById('coveDecor');if(_cd){_cd.innerHTML='';_cd.style.display='none'}const __ns=document.getElementById('nightScreen');if(__ns)__ns.classList.remove('active');const __nl=document.getElementById('nightLoad');if(__nl)__nl.classList.remove('active');document.getElementById('endScreen').classList.remove('active','win','lose');document.getElementById('blackout').classList.remove('active');document.getElementById('blackoutEyes').classList.remove('active');document.getElementById('powerFreddy').classList.remove('active');document.getElementById('powerFreddy').innerHTML='';document.getElementById('jumpscare').classList.remove('active');document.getElementById('newsIntro').classList.remove('active');document.getElementById('hud').classList.remove('active');document.getElementById('officeWrapper').classList.remove('active');document.getElementById('camButton').classList.remove('active','cam-on');document.getElementById('cameraSystem').classList.remove('active');document.getElementById('titleScreen').style.display='flex';splashFinished=true;document.getElementById('menuContainer').style.display='flex';document.getElementById('nightsMenu').classList.remove('active');document.getElementById('optionsMenu').classList.remove('active');document.getElementById('creditsMenu').classList.remove('active');document.getElementById('instructions').classList.remove('active');stopPhoneCall();document.getElementById('fan').style.opacity='1';document.getElementById('fan-blades').style.animationPlayState='running';updateMenuLocks();updateDiffButtons();setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);syncTitleMusic()}
+function returnToMenu(){cancelNightSequence();clearAllIntervals();stopFanHum();document.body.classList.remove('cams-up');state.active=false;state.gameOver=false;state.won=false;const _cd=document.getElementById('coveDecor');if(_cd){_cd.innerHTML='';_cd.style.display='none'}const __ns=document.getElementById('nightScreen');if(__ns)__ns.classList.remove('active');const __nl=document.getElementById('nightLoad');if(__nl)__nl.classList.remove('active');document.getElementById('endScreen').classList.remove('active','win','lose');document.getElementById('blackout').classList.remove('active');document.getElementById('blackoutEyes').classList.remove('active');document.getElementById('powerFreddy').classList.remove('active');document.getElementById('powerFreddy').innerHTML='';document.getElementById('jumpscare').classList.remove('active');document.getElementById('newsIntro').classList.remove('active');document.getElementById('hud').classList.remove('active');document.getElementById('officeWrapper').classList.remove('active');document.getElementById('camButton').classList.remove('active','cam-on');document.getElementById('cameraSystem').classList.remove('active');document.getElementById('titleScreen').style.display='flex';splashFinished=true;document.getElementById('menuContainer').style.display='flex';document.getElementById('nightsMenu').classList.remove('active');document.getElementById('optionsMenu').classList.remove('active');document.getElementById('creditsMenu').classList.remove('active');document.getElementById('instructions').classList.remove('active');stopPhoneCall();document.getElementById('fan').style.opacity='1';document.getElementById('fan-blades').style.animationPlayState='running';updateMenuLocks();updateDiffButtons();setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);syncTitleMusic()}
 
 /* ===== UI ===== */
 function updateHUD(){document.getElementById('hudNight').textContent=state.night;const HOURS=[12,1,2,3,4,5,6];const h=HOURS[Math.min(state.hour,6)];document.getElementById('hudTime').textContent=h+' AM';document.getElementById('hudPower').textContent=Math.floor(state.power)+'%';var hh=document.querySelector('.hour-hand');if(hh){var hr=(h===12?0:h)*30;hh.style.transform='translateX(-50%) rotate('+hr+'deg)'}}
@@ -3734,7 +3312,7 @@ function hideInstructions(){document.getElementById('instructions').classList.re
 /* ===== INIT ===== */
 renderTitleCharacters();updateMenuLocks();updateDiffButtons();updateTitleStats();initMenuButtons();initCreditsClickToExit();initCamKeyboard();initOptScroll();applySettings();updateOptionControls();
 const splash=document.getElementById('splashIntro');if(splash){setTimeout(()=>{splash.classList.add('hidden');setTimeout(()=>splash.remove(),1400)},4800)}
-const bootMusic=getTitleMusic();if(bootMusic){bootMusic.volume=musicVolMul();bootMusic.muted=false;bootMusic.play().catch(()=>{})}
+const bootMusic=getTitleMusic();if(bootMusic){bootMusic.volume=.42;bootMusic.muted=false;bootMusic.play().catch(()=>{})}
 splashFinished=true;audioUnlocked=true;syncTitleMusic()
 if(!saveData.seenTutorial){document.getElementById('instructions').classList.add('active');saveData.seenTutorial=true;saveGame(saveData)}
 function playClick(){playOsc(660,"square",.06,.018);playOsc(990,"sine",.05,.012,.02)}
@@ -3779,7 +3357,7 @@ sl.addEventListener('change',()=>{persist();if(k!=='volMusic')playClick()});
 sl.addEventListener('click',e=>e.stopPropagation());sl.addEventListener('pointerdown',e=>e.stopPropagation());});
 applySettings();updateOptionControls();
 }
-function armAudioAndTitle(){audioUnlocked=true;if(!audioReady){try{initAudio();audioReady=true}catch(e){}}else if(AudioCtx&&AudioCtx.state==='suspended'){try{AudioCtx.resume()}catch(e){}}const titleVisible=document.getElementById('titleScreen')&&document.getElementById('titleScreen').style.display!=='none';if(titleVisible){const music=getTitleMusic();if(music){music.muted=false;music.volume=musicVolMul();music.play().then(()=>{titleMusicStarted=true}).catch(()=>{})}}setTimeout(syncTitleMusic,120)}document.addEventListener('click',armAudioAndTitle);document.addEventListener('keydown',armAudioAndTitle);document.addEventListener('pointerdown',armAudioAndTitle);document.addEventListener('touchstart',armAudioAndTitle,{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseTitleMusic();else syncTitleMusic()});
+function armAudioAndTitle(){audioUnlocked=true;if(!audioReady){try{initAudio();audioReady=true}catch(e){}}else if(AudioCtx&&AudioCtx.state==='suspended'){try{AudioCtx.resume()}catch(e){}}const titleVisible=document.getElementById('titleScreen')&&document.getElementById('titleScreen').style.display!=='none';if(titleVisible){const music=getTitleMusic();if(music){music.muted=false;music.volume=.42;music.play().then(()=>{titleMusicStarted=true}).catch(()=>{})}}setTimeout(syncTitleMusic,120)}document.addEventListener('click',armAudioAndTitle);document.addEventListener('keydown',armAudioAndTitle);document.addEventListener('pointerdown',armAudioAndTitle);document.addEventListener('touchstart',armAudioAndTitle,{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseTitleMusic();else syncTitleMusic()});
 </script>
 
 <script>
