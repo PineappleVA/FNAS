@@ -96,7 +96,9 @@ el uso normal nunca lo dispara.
 Multiplicador por dificultad: **Normal 1,08 · Medio 1,38 · Difícil 1,70**
 Multiplicador por noche: `×1,00 → ×1,06 → ×1,13 → ×1,21 → ×1,31 → ×1,42`
 
-**Coste total de una noche** (estrategia media: 22 % del tiempo una puerta, 12 % luz, 30 % monitor):
+**Coste total de una noche** (estrategia media: 22 % del tiempo una puerta, 12 % luz, 30 % monitor).
+Tabla reproducida a partir del código con desviación 0 en las 18 celdas:
+`6 h × base × curvaDeHora[noche] × multDificultad × curvaDeConsumo[noche] × 0,0974 %/s`.
 
 | Dificultad | N1 | N2 | N3 | N4 | N5 | N6 |
 |---|---|---|---|---|---|---|
@@ -132,6 +134,29 @@ Probabilidad de moverse por tick, media de los cuatro:
 | Normal | 10,3 % | 32,7 % | 68,9 % |
 | Medio | 12,0 % | 38,0 % | 80,0 % |
 | Difícil | 13,6 % | 43,2 % | 90,9 % |
+
+El índice 0 de cada tabla no se usa: **el índice es el número de noche**.
+
+**La IA también sube con las horas** (`nextHourTick`): +1 por hora hasta la Noche 4 y +2 desde la
+Noche 5, con tope 20. El aumento arranca en la hora 2, salvo en las Noches 5 y 6, que lo hacen desde
+la hora 1. Antes la condición era `hour>=2 || night>=4`, de modo que la Noche 4 recibía un
+incremento extra que las Noches 1-3 no tenían: un salto invisible justo en la noche más criticada.
+
+IA media de los cuatro animatrónicos por noche, medida ejecutando `initEnemies()` y `nextHourTick()`
+reales (Normal, sin bonos de dificultad):
+
+| | N1 | N2 | N3 | N4 | N5 | N6 |
+|---|---|---|---|---|---|---|
+| Antes | 3,50 | 7,42 | 11,17 | **16,21** | 19,42 | 20,00 |
+| Ahora | 3,50 | 7,42 | 11,17 | **15,42** | 19,42 | 20,00 |
+
+Salto respecto a la noche anterior, ahora: ×2,12 · ×1,51 · **×1,38** · **×1,26** · ×1,03 (antes
+×1,45 y ×1,20 en esos dos pasos: la escalera era más brusca justo en la Noche 4).
+
+> La compilación **Unreleased** usa tablas propias y tenía una inversión real: Bonnie y Chica valían
+> 10 en la Noche 4 y 9 en la 5, y IShowSpeed 7 frente a 6. Tres de los cuatro eran *más fuertes en la
+> Noche 4 que en la 5*; sólo lo tapaba la media porque Skibidi Toilet sube de 2 a 6. Corregido a
+> `[0,2,4,6,8,10,12]`, `[0,2,4,6,8,10,12]` y `[0,0,2,4,6,8,10]`.
 
 Intervalo de movimiento: base `1900 / 2900 / 4200 ms` por `[1, 1, .91, .84, .77, .70, .62]`.
 
@@ -289,15 +314,20 @@ sin batería en la última hora, no por un fallo de reacción.
 - Pantalla de muerte con los 4 asesinos: retrato correcto, sin texto residual
 - 6 partidas encadenadas: **0** timers colgando
 
-### Comprobación de archivo autónomo (sin conexión)
+### Multimedia en `assets/` (ya no va incrustada)
 
-El juego se carga con **toda la red externa bloqueada** y funciona igual:
+El juego **ya no lleva la multimedia en base64 dentro del HTML**. Fuentes, imágenes, música y
+llamadas de teléfono viven en la carpeta `assets/` y se sirven junto a la página:
 
-- Peticiones a servidores externos durante una sesión completa: **ninguna**
-- `Creepster` y `VT323` incrustadas como `@font-face` en base64 (≈ 60 KB) y **verificadas como
-  aplicadas** midiendo el texto contra la fuente genérica del sistema
-- Sin `@import`, sin `fonts.googleapis.com` ni `fonts.gstatic.com` en el archivo
-- Regresión completa repetida con la red caída: **0 errores JS y 0 de consola**
+- `assets/fonts/` — `Creepster` y `VT323` (dos subconjuntos) en `.woff2`
+- `assets/img/` — logo del splash y periódico de la intro
+- `assets/audio/` — música del menú, clic de interfaz y las llamadas de cada noche
+  (`phone/` para la v3.0, `phone-unreleased/` para la compilación Unreleased)
+- Peticiones a servidores externos durante una sesión completa: **ninguna**. Todo sale del propio
+  repositorio; sin `@import`, sin `fonts.googleapis.com` ni `fonts.gstatic.com`.
+- **Consecuencia:** el HTML ya **no** es un archivo autónomo. Para jugar hay que servirlo por HTTP
+  con la carpeta `assets/` a su lado —GitHub Pages lo hace solo—; abierto con `file://` no carga
+  la multimedia.
 
 ### Correcciones de esta pasada
 
@@ -312,7 +342,8 @@ El juego se carga con **toda la red externa bloqueada** y funciona igual:
   sombra de contacto.
 - **El juego dependía de internet sin que se notara.** La hoja de estilos empezaba con un `@import`
   de Google Fonts: sin conexión, el título y la interfaz perdían su tipografía y caían a una fuente
-  del sistema. Las dos fuentes van ahora incrustadas dentro del propio archivo.
+  del sistema. Las dos fuentes se sirven ahora desde `assets/fonts/`, sin `@import` ni
+  dominios de terceros (ver *Multimedia en `assets/`*).
 - **Código muerto retirado:** `updateHallEyes` (vacía desde que se quitaron los ojos rojos),
   `stepNear` (nunca conectada) y el `console.log` de arranque de partida.
 

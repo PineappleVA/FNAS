@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FNAS · pruebas de audio</title>
+<style>
+:root{color-scheme:dark}
+body{background:#0b0b0d;color:#e8e6e3;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;margin:0;padding:24px}
+h1{font-size:18px;margin:0 0 4px}
+p.lead{color:#9a978f;margin:0 0 14px;max-width:78ch}
+table{border-collapse:collapse;width:100%;max-width:1200px}
+th,td{border-bottom:1px solid #232327;padding:6px 8px;text-align:left;vertical-align:middle}
+th{color:#8d8a83;font-weight:400;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+td.n{word-break:break-all}td.r{text-align:right;white-space:nowrap;color:#b9b6ae}
+td.o{color:#6f6c66;word-break:break-all;font-size:12px}
+td.p{width:38px}
+button{background:#1c1c20;color:#e8c93a;border:1px solid #3a3a40;border-radius:4px;cursor:pointer;font-size:13px;padding:3px 8px}
+button:hover{background:#26262c}button.on{background:#e8c93a;color:#111}
+.ok{color:#7ec97e}.no{color:#8a8a8a}
+</style></head><body>
+<h1>Pruebas de audio &mdash; FNAF 1</h1>
+<p class="lead">Herramienta de desarrollo, no forma parte del juego. Cada archivo de
+<code>assets/audio/fnaf1/</code> con el evento que lo dispara, el recorte aplicado
+(<code>7,89 s &#8594; 0,90 s</code> = solo suena el primer segundo) y su nombre original en el pack
+de The Sounds Resource. Sirve para comprobar de o&iacute;do que cada sonido est&aacute; donde debe.</p>
+<p class="lead">Identidad de las pistas musicales tomada de la p&aacute;gina <a href="https://freddy-fazbears-pizza.fandom.com/wiki/Soundtrack_(FNaF1)">Soundtrack (FNaF1)</a> de la Five Nights at Freddy&rsquo;s Wiki y de <a href="https://freddy-fazbears-pizza.fandom.com/es/wiki/Archivos_de_sonido_(FNaF)">Archivos de sonido (FNaF)</a>, que relacionan cada <code>.ogg</code> del juego con su t&iacute;tulo real y el momento en que suena. Los efectos se identifican por el nombre de la librer&iacute;a del pack de The Sounds Resource.</p>
+<p class="lead">Volumen <input type="range" id="vol" min="0" max="100" value="70"></p>
+<table><thead><tr><th></th><th>archivo</th><th>duraci&oacute;n</th><th>suena cuando</th><th>nombre original</th><th></th></tr></thead>
+<tbody>
+<tr><td class="p"><button data-s="accion-denegada.mp3">&#9654;</button></td><td class="n">accion-denegada.mp3</td><td class="r">0.21 s</td><td>acción denegada</td><td class="o">error.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="ambiente-apagon.mp3">&#9654;</button></td><td class="n">ambiente-apagon.mp3</td><td class="r">30.04 s</td><td>ambiente del apag&oacute;n (bucle, desde que se va la luz hasta el susto o las 6&nbsp;AM)</td><td class="o">ambience2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="ambiente-oficina.mp3">&#9654;</button></td><td class="n">ambiente-oficina.mp3</td><td class="r">115.51 s</td><td>ambiente principal de la oficina, toda la noche (bucle)</td><td class="o">ColdPresc-B.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="amenaza-cerca.mp3">&#9654;</button></td><td class="n">amenaza-cerca.mp3</td><td class="r">57.47 s</td><td>amenaza cerca: 30&nbsp;% con un animatr&oacute;nico en el pasillo, 50&nbsp;% con dos, 75&nbsp;% con tres, 100&nbsp;% si Freddy est&aacute; en la oficina (bucle)</td><td class="o">EerieAmbienceLargeSca_MV005.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="bajar-monitor.mp3">&#9654;</button></td><td class="n">bajar-monitor.mp3</td><td class="r">0.44 s</td><td>bajar el monitor</td><td class="o">put-down.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="cambiar-camara.mp3">&#9654;</button></td><td class="n">cambiar-camara.mp3</td><td class="r">0.16 s</td><td>cambiar de cámara</td><td class="o">blip3.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="campanas-6am.mp3">&#9654;</button></td><td class="n">campanas-6am.mp3</td><td class="r">8.65 s</td><td>campanas de las 6 AM</td><td class="o">chimes-2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="carrera-pasillo-1.mp3">&#9654;</button></td><td class="n">carrera-pasillo-1.mp3</td><td class="r">1.33 s</td><td>carrera de IShowSpeed</td><td class="o">run.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="carrera-pasillo-2.mp3">&#9654;</button></td><td class="n">carrera-pasillo-2.mp3</td><td class="r">1.18 s</td><td>carrera de IShowSpeed</td><td class="o">running-fast3.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="estatica-del-monitor-larga.mp3">&#9654;</button></td><td class="n">estatica-del-monitor-larga.mp3</td><td class="r">16.88 s</td><td>estática del monitor (bucle, alternativa)</td><td class="o">static2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="estatica-del-monitor.mp3">&#9654;</button></td><td class="n">estatica-del-monitor.mp3</td><td class="r">5.46 s</td><td>estática del monitor (bucle)</td><td class="o">static.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="fin-de-la-llamada.mp3">&#9654;</button></td><td class="n">fin-de-la-llamada.mp3</td><td class="r">1.5 s &#8594; 8.36 s</td><td>la cinta sale al terminar la llamada</td><td class="o">MiniDV_Tape_Eject_1.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="golpes-en-la-puerta.mp3">&#9654;</button></td><td class="n">golpes-en-la-puerta.mp3</td><td class="r">1.4 s &#8594; 3.37 s</td><td>golpes contra la puerta cerrada</td><td class="o">DOOR_POUNDING_ME_D0291401.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="grito-golden-freddy.mp3">&#9654;</button></td><td class="n">grito-golden-freddy.mp3</td><td class="r">7.97 s</td><td>jumpscare de Golden Freddy (el grito lento)</td><td class="o">XSCREAM2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="interferencia-camara-1.mp3">&#9654;</button></td><td class="n">interferencia-camara-1.mp3</td><td class="r">.55 s &#8594; 2.09 s</td><td>interferencia al cambiar de sala</td><td class="o">garble1.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="interferencia-camara-2.mp3">&#9654;</button></td><td class="n">interferencia-camara-2.mp3</td><td class="r">.55 s &#8594; 3.00 s</td><td>interferencia al cambiar de sala</td><td class="o">garble2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="interferencia-camara-3.mp3">&#9654;</button></td><td class="n">interferencia-camara-3.mp3</td><td class="r">.55 s &#8594; 2.14 s</td><td>interferencia al cambiar de sala</td><td class="o">garble3.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="jumpscare.mp3">&#9654;</button></td><td class="n">jumpscare.mp3</td><td class="r">2.66 s</td><td>jumpscare</td><td class="o">XSCREAM.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="llaman-a-la-puerta.mp3">&#9654;</button></td><td class="n">llaman-a-la-puerta.mp3</td><td class="r">1.72 s</td><td>un animatrónico llega a la puerta</td><td class="o">knock2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="marcha-toreador-apagon.mp3">&#9654;</button></td><td class="n">marcha-toreador-apagon.mp3</td><td class="r">233.42 s</td><td>Marcha del Toreador: Freddy la toca cuando se va la luz y mientras est&aacute; en la Cocina</td><td class="o">music_box.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="musica-pirate-cove.mp3">&#9654;</button></td><td class="n">musica-pirate-cove.mp3</td><td class="r">4.88 s</td><td>Pirate Cove la primera vez que abres la CAM 5</td><td class="o">pirate-song2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="organo-de-circo.mp3">&#9654;</button></td><td class="n">organo-de-circo.mp3</td><td class="r">6.2 s</td><td>&oacute;rgano de circo tipo tiovivo, ocasionalmente durante la noche</td><td class="o">circus.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="pasos-pasillo.mp3">&#9654;</button></td><td class="n">pasos-pasillo.mp3</td><td class="r">.9 s &#8594; 7.89 s</td><td>pasos por el pasillo</td><td class="o">deep-steps.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="publico-de-la-intro.mp3">&#9654;</button></td><td class="n">publico-de-la-intro.mp3</td><td class="r">1.75 s</td><td>público en la intro del periódico</td><td class="o">CROWD_SMALL_CHIL_EC049202.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="respiracion-en-la-puerta-1.mp3">&#9654;</button></td><td class="n">respiracion-en-la-puerta-1.mp3</td><td class="r">1.65 s</td><td>respiración en la puerta</td><td class="o">Vocals_Breaths_S_35972006.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="respiracion-en-la-puerta-2.mp3">&#9654;</button></td><td class="n">respiracion-en-la-puerta-2.mp3</td><td class="r">3.03 s</td><td>respiración en la puerta</td><td class="o">Vocals_Breaths_S_35972008.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="respiracion-en-la-puerta-3.mp3">&#9654;</button></td><td class="n">respiracion-en-la-puerta-3.mp3</td><td class="r">1.36 s</td><td>respiración en la puerta</td><td class="o">Vocals_Breaths_S_35972012.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="respiracion-en-la-puerta-4.mp3">&#9654;</button></td><td class="n">respiracion-en-la-puerta-4.mp3</td><td class="r">1.88 s</td><td>respiración en la puerta</td><td class="o">Vocals_Breaths_S_35972014.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="risa-alucinacion-1.mp3">&#9654;</button></td><td class="n">risa-alucinacion-1.mp3</td><td class="r">2 s &#8594; 1.12 s</td><td>risa (alucinación)</td><td class="o">Laugh_Giggle_Girl_1.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="risa-alucinacion-2.mp3">&#9654;</button></td><td class="n">risa-alucinacion-2.mp3</td><td class="r">2 s &#8594; 2.82 s</td><td>risa lenta de Freddy al moverse, y alucinaci&oacute;n</td><td class="o">Laugh_Giggle_Girl_1d.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="risa-alucinacion-3.mp3">&#9654;</button></td><td class="n">risa-alucinacion-3.mp3</td><td class="r">2 s &#8594; 4.05 s</td><td>risa lenta de Freddy al moverse, y alucinaci&oacute;n</td><td class="o">Laugh_Giggle_Girl_2d.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="risa-alucinacion-4.mp3">&#9654;</button></td><td class="n">risa-alucinacion-4.mp3</td><td class="r">2 s &#8594; 2.85 s</td><td>risa lenta de Freddy al moverse, y alucinaci&oacute;n</td><td class="o">Laugh_Giggle_Girl_8d.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="ruidos-cocina-1.mp3">&#9654;</button></td><td class="n">ruidos-cocina-1.mp3</td><td class="r">3.89 s</td><td>Chica movi&eacute;ndose por la cocina (CAM 6, sin imagen)</td><td class="o">OVEN-DRA_1_GEN-HDF18119.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="ruidos-cocina-2.mp3">&#9654;</button></td><td class="n">ruidos-cocina-2.mp3</td><td class="r">2.56 s</td><td>Chica movi&eacute;ndose por la cocina (CAM 6, sin imagen)</td><td class="o">OVEN-DRA_2_GEN-HDF18120.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="ruidos-cocina-3.mp3">&#9654;</button></td><td class="n">ruidos-cocina-3.mp3</td><td class="r">5.17 s</td><td>Chica movi&eacute;ndose por la cocina (CAM 6, sin imagen)</td><td class="o">OVEN-DRA_7_GEN-HDF18121.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="ruidos-cocina-4.mp3">&#9654;</button></td><td class="n">ruidos-cocina-4.mp3</td><td class="r">2.69 s</td><td>Chica movi&eacute;ndose por la cocina (CAM 6, sin imagen)</td><td class="o">OVEN-DRAWE_GEN-HDF18122.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="se-va-la-luz.mp3">&#9654;</button></td><td class="n">se-va-la-luz.mp3</td><td class="r">9.34 s</td><td>se va la luz</td><td class="o">powerdown.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="sin-usar-golpe-corto.mp3">&#9654;</button></td><td class="n">sin-usar-golpe-corto.mp3</td><td class="r">1.18 s</td><td>&mdash;</td><td class="o">SFXBible_12478.mp3</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="sin-usar-secuencia-digital.mp3">&#9654;</button></td><td class="n">sin-usar-secuencia-digital.mp3</td><td class="r">4.05 s</td><td>&mdash;</td><td class="o">COMPUTER_DIGITAL_L2076505.mp3</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="sin-usar-susto-ventana.mp3">&#9654;</button></td><td class="n">sin-usar-susto-ventana.mp3</td><td class="r">4.31 s</td><td>&mdash;</td><td class="o">windowscare.mp3</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="subir-monitor.mp3">&#9654;</button></td><td class="n">subir-monitor.mp3</td><td class="r">.7 s &#8594; 2.59 s</td><td>subir el monitor</td><td class="o">CAMERA_VIDEO_LOA_60105303.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="susurro-alucinacion.mp3">&#9654;</button></td><td class="n">susurro-alucinacion.mp3</td><td class="r">2.2 s &#8594; 7.58 s</td><td>susurro (alucinación)</td><td class="o">whispering2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="tema-menu-fnaf1.mp3">&#9654;</button></td><td class="n">tema-menu-fnaf1.mp3</td><td class="r">62.41 s</td><td>tema del men&uacute; original (versi&oacute;n Steam); el juego usa su propio tema</td><td class="o">darkness-music.mp3</td><td><span class="no">sin asignar</span></td></tr>
+<tr><td class="p"><button data-s="voz-robotica-pasillo.mp3">&#9654;</button></td><td class="n">voz-robotica-pasillo.mp3</td><td class="r">7.55 s</td><td>Bonnie o Chica en las esquinas de los pasillos, desde la 4.&ordf; noche</td><td class="o">robotvoice.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="zumbido-luces-pasillo.mp3">&#9654;</button></td><td class="n">zumbido-luces-pasillo.mp3</td><td class="r">4.36 s</td><td>luces de los pasillos encendidas (bucle)</td><td class="o">BallastHumMedium2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+<tr><td class="p"><button data-s="zumbido-ventilador.mp3">&#9654;</button></td><td class="n">zumbido-ventilador.mp3</td><td class="r">4.86 s</td><td>zumbido del ventilador (bucle)</td><td class="o">Buzz_Fan_Florescent2.mp3</td><td><span class="ok">en el juego</span></td></tr>
+</tbody></table>
+<script>
+var cur=null;
+document.querySelectorAll('button[data-s]').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(cur){try{cur.a.pause()}catch(e){} cur.b.classList.remove('on');
+      if(cur.b===b){cur=null;return}}
+    var a=new Audio('assets/audio/fnaf1/'+encodeURIComponent(b.dataset.s));
+    a.volume=(document.getElementById('vol').value/100);
+    b.classList.add('on');cur={a:a,b:b};
+    a.onended=function(){b.classList.remove('on');if(cur&&cur.b===b)cur=null};
+    a.play().catch(function(){b.classList.remove('on')});
+  });
+});
+</script></body></html>
