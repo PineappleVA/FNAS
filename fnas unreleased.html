@@ -1122,7 +1122,7 @@ function playNoise(duration,vol){if(!AudioCtx)return;const buf=AudioCtx.createBu
 const SFX={
  /* --- puertas --- */
  doorBang:{f:'golpes-en-la-puerta.mp3',v:.7,dur:1.4,cd:1400},
- knock:{f:'llaman-a-la-puerta.mp3',v:.5,cd:1500},
+ knock:{f:'llaman-a-la-puerta.mp3',v:.5,cd:1500,dur:1.4},
  denied:{f:'accion-denegada.mp3',v:.4,cd:250},
  door:{f:'accion-puerta.mp3',v:.5,dur:.6,cd:200},
  doorReveal:{f:'susto-puerta-iluminada.mp3',v:.75,dur:1.2,cd:6000},
@@ -1138,10 +1138,10 @@ const SFX={
  menuStatic:{f:'estatica-menu.mp3',v:.14,loop:1},
  scareStatic:{f:'estatica-tras-jumpscare.mp3',v:.45,g:'estatica'},
  /* --- animatronicos --- */
- breath1:{f:'respiracion-en-la-puerta-1.mp3',v:.5,cd:2500,g:'breath'},
- breath2:{f:'respiracion-en-la-puerta-2.mp3',v:.5,cd:2500,g:'breath'},
- breath3:{f:'respiracion-en-la-puerta-3.mp3',v:.5,cd:2500,g:'breath'},
- breath4:{f:'respiracion-en-la-puerta-4.mp3',v:.5,cd:2500,g:'breath'},
+ breath1:{f:'respiracion-en-la-puerta-1.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
+ breath2:{f:'respiracion-en-la-puerta-2.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
+ breath3:{f:'respiracion-en-la-puerta-3.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
+ breath4:{f:'respiracion-en-la-puerta-4.mp3',v:.5,cd:2500,g:'breath',dur:2.4},
  run:{f:'carrera-pasillo-1.mp3',v:.6,cd:900,g:'carrera'},
  runFast:{f:'carrera-pasillo-2.mp3',v:.6,cd:900,g:'carrera'},
  steps:{f:'pasos-pasillo.mp3',v:.4,dur:.9,cd:900},
@@ -1167,12 +1167,12 @@ const SFX={
  giggle4:{f:'risa-alucinacion-4.mp3',v:.38,dur:2,cd:15000,g:'alucinacion'},
  /* --- los siguientes los identifica la pagina "Archivos de sonido (FNaF)" de la wiki --- */
  /* Chica: los cuatro ruidos que hace mientras se mueve por la Kitchen */
- kitchen1:{f:'ruidos-cocina-1.mp3',v:.5,cd:2600,g:'cocina'},
- kitchen2:{f:'ruidos-cocina-2.mp3',v:.5,cd:2600,g:'cocina'},
- kitchen3:{f:'ruidos-cocina-3.mp3',v:.5,cd:2600,g:'cocina'},
- kitchen4:{f:'ruidos-cocina-4.mp3',v:.5,cd:2600,g:'cocina'},
+ kitchen1:{f:'ruidos-cocina-1.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
+ kitchen2:{f:'ruidos-cocina-2.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
+ kitchen3:{f:'ruidos-cocina-3.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
+ kitchen4:{f:'ruidos-cocina-4.mp3',v:.5,cd:2600,g:'cocina',dur:2.4},
  /* Bonnie y Chica en las esquinas de los pasillos, desde la 4a noche */
- robotVoice:{f:'voz-robotica-pasillo.mp3',v:.55,cd:4000,g:'robot'},
+ robotVoice:{f:'voz-robotica-pasillo.mp3',v:.55,cd:4000,g:'robot',dur:3.8},
  /* el grito de Golden Freddy es el lento, no el normal de los animatronicos */
  goldenScream:{f:'grito-golden-freddy.mp3',v:.95},
  /* zumbido de las luces de los pasillos, en bucle mientras estan encendidas */
@@ -1508,7 +1508,8 @@ function startFanHum(){
   }catch(e){synthFanHum()}
  });
 }
-function sndSixAM(){playSfx('chimes')}
+function sndSixAM(){playSfx('chimes');
+ setTimeout(function(){if(state&&state.won)playSfx('crowd')},1500)}
 function sndKnock(){if(!playSfx('knock',{fallback:sndStep}))sndStep()}
 function sndFootsteps(where){const p=(typeof where==='number')?camPos(where):doorPos(where);
  if(!playSfx('steps',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
@@ -1753,6 +1754,7 @@ if(overlay)overlay.classList.remove('active');
 function skipPhoneCall(){if(currentPhoneAudio){currentPhoneAudio.pause();currentPhoneAudio.onended=null;currentPhoneAudio=null;}document.getElementById('phoneCall').classList.remove('active');}
 function stopPhoneCall(){if(currentPhoneAudio){currentPhoneAudio.pause();currentPhoneAudio.onended=null;currentPhoneAudio=null;}document.getElementById('phoneCall').classList.remove('active');}
 function startGame(n){
+if(state.blackoutTimers){state.blackoutTimers.forEach(id=>clearTimeout(id));state.blackoutTimers=[]}
 state={active:true,night:n,hour:0,hourStartTime:Date.now(),power:100,doors:{left:false,right:false},lights:{left:false,right:false},camsUp:false,currentCam:1,enemies:initEnemies(),gameOver:false,won:false,difficulty:'easy',timers:{},intervals:[],ambienceTimer:null,foxyRun:false,foxyCounter:0};
 
 document.getElementById('powerFreddy').classList.remove('active');
@@ -1894,7 +1896,7 @@ function updateCoveDecor(){const cove=document.getElementById('coveDecor');if(!c
 if(state.camsUp&&state.currentCam===5){const maxStage=getFoxyMaxStage();const openness=maxStage===99?0:(foxy.runStage/maxStage);cove.style.display='flex';cove.className='cove-stage';const curtain=document.createElement('div');curtain.className='cove-curtain';if(openness>=.34)curtain.classList.add('peek');if(openness>=.67)curtain.classList.add('gone');cove.innerHTML='';cove.appendChild(curtain);const star=document.createElement('div');star.className='cove-star';star.textContent='★';cove.appendChild(star);const sign=document.createElement('div');sign.className='cove-sign';sign.textContent='SPEED COVE';cove.appendChild(sign);if(openness>=.67){const enemy=document.createElement('div');enemy.className='cam-enemy';enemy.style.opacity='1';enemy.style.position='relative';enemy.innerHTML=getEnemySvg('foxy');cove.appendChild(enemy)}}else{cove.style.display='none'}}
 
 /* ===== SPECIAL EVENTS ===== */
-function powerOut(){if(!state.active)return;stopSfxBeds();stopPhoneCall();state.active=false;clearAllIntervals();stopFanHum();sndPowerDown();startBlackoutBed();setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);state.camsUp=false;document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('blackout').classList.add('active');document.getElementById('blackoutEyes').classList.remove('active');const hallLeft=document.getElementById('hallEnemyLeft');const hallRight=document.getElementById('hallEnemyRight');hallLeft.classList.remove('visible');hallRight.classList.remove('visible');hallLeft.innerHTML='';hallRight.innerHTML='';const powerFreddy=document.getElementById('powerFreddy');powerFreddy.innerHTML='';powerFreddy.classList.remove('active');document.getElementById('fan').style.opacity='.35';document.getElementById('fan-blades').style.animationPlayState='paused';setTimeout(()=>{powerFreddy.innerHTML=getEnemySvg('freddy');powerFreddy.classList.add('active');sndFreddyTune();setTimeout(()=>doJumpscare('freddy'),4200)},1800)}
+function powerOut(){if(!state.active)return;const _boState=state;stopSfxBeds();stopPhoneCall();state.active=false;clearAllIntervals();stopFanHum();sndPowerDown();startBlackoutBed();setDoor('left',false);setDoor('right',false);setLight('left',false);setLight('right',false);state.camsUp=false;document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on','active');document.getElementById('hud').classList.remove('active');document.getElementById('blackout').classList.add('active');document.getElementById('blackoutEyes').classList.remove('active');const hallLeft=document.getElementById('hallEnemyLeft');const hallRight=document.getElementById('hallEnemyRight');hallLeft.classList.remove('visible');hallRight.classList.remove('visible');hallLeft.innerHTML='';hallRight.innerHTML='';const powerFreddy=document.getElementById('powerFreddy');powerFreddy.innerHTML='';powerFreddy.classList.remove('active');document.getElementById('fan').style.opacity='.35';document.getElementById('fan-blades').style.animationPlayState='paused';state.blackoutTimers=[];state.blackoutTimers.push(setTimeout(()=>{if(state!==_boState)return;powerFreddy.innerHTML=getEnemySvg('freddy');powerFreddy.classList.add('active');sndFreddyTune();state.blackoutTimers.push(setTimeout(()=>{if(state!==_boState)return;doJumpscare('freddy')},4200))},1800))}
 
 function triggerHallucination(){if(!state.active||state.gameOver||state.won||Math.random()>.35)return;const r=Math.random();const el=document.getElementById('hallEnemyLeft');if(r<.5){el.innerHTML=getEnemySvg('freddy');el.classList.add('visible');setTimeout(()=>{el.innerHTML='';el.classList.remove('visible')},180)}else{const face=document.getElementById('officeFlicker');if(face){face.style.background='rgba(255,255,255,.18)';face.classList.add('active');setTimeout(()=>{face.classList.remove('active');face.style.background=''},120)}}}function doJumpscare(enemyKey,golden){if(state.gameOver)return;stopSfxBeds();;stopPhoneCall();state.gameOver=true;state.active=false;clearAllIntervals();stopFanHum();sndJumpscare(golden);sndScareStatic();document.getElementById('cameraSystem').classList.remove('active');document.getElementById('camButton').classList.remove('cam-on');const jsEnemy=document.getElementById('jsEnemy');jsEnemy.innerHTML=getEnemySvg(enemyKey||'freddy');document.getElementById('jumpscare').classList.add('active');setTimeout(()=>{document.getElementById('jumpscare').classList.remove('active');returnToMenu()},2200)}
 
