@@ -2359,7 +2359,8 @@ const SFX_POS={
  hallLeft:[-2.4,0,-6.5],hallRight:[2.4,0,-6.5],
  stage:[0,0,-13],dining:[0,0,-9.5],cove:[-4.5,0,-9.5],
  backstage:[-4.5,0,-11],kitchen:[5.5,0,-7.5],restrooms:[5.5,0,-7.5],
- face:[0,0,-.3]
+ face:[0,0,-.3],
+ screen:[0,0,-1.6]
 };
 /* Numero de camara -> punto del local. Los pasillos oeste (2A/2B/2C) caen a la
    izquierda y los este (4A/4B/4C) a la derecha, como en el mapa del juego. */
@@ -2368,6 +2369,14 @@ const CAM_POS={1:'stage',2:'dining',3:'hallLeft',4:'hallLeftNear',5:'cove',
  11:'hallLeftNear',12:'hallRightNear'};
 function doorPos(side){return side==='left'?'officeLeft':side==='right'?'officeRight':null}
 function camPos(n){return CAM_POS[n]||null}
+/* Con el monitor subido, la habitacion que estas viendo sale de la pantalla,
+   que es lo que tienes delante; el resto del local conserva su posicion real,
+   puertas incluidas. Sin esto el blip de cambiar de camara llegaba desde 7 m y
+   20 grados de azimut mientras la estatica del monitor sonaba centrada y a
+   ganancia completa: todo el rato daba la impresion de sonido plano. */
+function monitorPos(cam,fallback){
+ if(cam!=null&&state&&state.camsUp&&state.currentCam===cam)return 'screen';
+ return fallback}
 function sfxListener(){if(!AudioCtx||!AudioCtx.listener)return;const L=AudioCtx.listener;
  try{
   if(L.positionX){L.positionX.value=0;L.positionY.value=0;L.positionZ.value=0;
@@ -2594,7 +2603,7 @@ function maybeCircus(){
  /* la wiki: al azar cuando uno de los animatronicos esta activo */
  if(!anyAnimatronicActive())return;
  if(Math.random()>.10)return;
- playSfx('circus',{pos:'dining'})}
+ playSfx('circus',{pos:monitorPos(2,'dining')})}
 /* Cocina: la wiki atribuye estos cuatro sonidos a Chica mientras se mueve por
    la Kitchen (la CAM 6 del original, que no tiene imagen). */
 function maybeKitchenSfx(){
@@ -2602,19 +2611,19 @@ function maybeKitchenSfx(){
  const c=state.enemies&&state.enemies.chica;
  if(!c||!c.active||c.cam!==9)return;
  if(Math.random()>.40)return;
- playSfx(sfxPick(['kitchen1','kitchen2','kitchen3','kitchen4']),{pos:'kitchen'})}
+ playSfx(sfxPick(['kitchen1','kitchen2','kitchen3','kitchen4']),{pos:monitorPos(9,'kitchen')})}
 /* Voz robotica: la wiki la situa en las esquinas de los pasillos a partir de la
    4a noche, con Bonnie o Chica. */
-function sndRobotVoice(side){
+function sndRobotVoice(side,cam){
  if(!AudioCtx)return;
- playSfx('robotVoice',{pos:side==='left'?'hallLeftNear':'hallRightNear'})}
+ playSfx('robotVoice',{pos:monitorPos(cam,side==='left'?'hallLeftNear':'hallRightNear')})}
 function maybeArrivalSfx(key,e){
  if(!AudioCtx||!e||!state)return;
  if(key!=='bonnie'&&key!=='chica')return;
  if(state.night<4)return;
- if(e.side){sndRobotVoice(e.side);return}
- if(e.cam===11)sndRobotVoice('left');
- else if(e.cam===12)sndRobotVoice('right')}
+ if(e.side){sndRobotVoice(e.side,e.cam);return}
+ if(e.cam===11)sndRobotVoice('left',11);
+ else if(e.cam===12)sndRobotVoice('right',12)}
 /* Risa lenta de Freddy al moverse, colocada donde este. */
 function sndFreddyLaugh(e){
  if(!AudioCtx||!e)return;
@@ -2636,7 +2645,7 @@ function anyAnimatronicActive(){
  return false}
 
 let _covePlayed=false;
-function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate',{pos:'cove'})}
+function sndPirateCove(){if(_covePlayed)return;_covePlayed=true;playSfx('pirate',{pos:monitorPos(5,'cove')})}
 function resetCoveMusic(){_covePlayed=false}
 function sfxPick(a){return a[Math.floor(Math.random()*a.length)]}
 function sndDoor(side){const p=doorPos(side);
@@ -2644,7 +2653,7 @@ function sndDoor(side){const p=doorPos(side);
 function sndLight(side){withPan(doorPos(side),synthLight)}
 function sndCamUp(up){const k=(up===false)?'camDown':'camUp';
  if(!playSfx(k,{fallback:synthCamUp}))synthCamUp()}
-function sndCamSwitch(cam){const p=camPos(cam);
+function sndCamSwitch(cam){const p=monitorPos(cam,camPos(cam));
  if(!playSfx('blip',{pos:p,fallback:synthCamSwitch}))synthCamSwitch()}
 function sndAmbience(){if(sfxLoopActive('ambienceBed'))return;synthAmbience()}
 function sndJumpscare(golden){if(golden){sndGoldenScream();return}
@@ -2654,7 +2663,7 @@ function sndFoxyRun(pos){const p=pos||'hallLeft';if(!playSfx(sfxPick(['runFast',
 function sndFreddyTune(){if(!playSfx('toreador',{fallback:synthFreddyTune}))synthFreddyTune()}
 function sndDoorBang(side){const p=doorPos(side);
  if(!playSfx('doorBang',{pos:p,fallback:function(){withPan(p,synthDoorBang)}}))withPan(p,synthDoorBang)}
-function sndCamGlitch(intense,cam){const p=camPos(cam);
+function sndCamGlitch(intense,cam){const p=monitorPos(cam,camPos(cam));
  if(!playSfx(sfxPick(['glitch1','glitch2','glitch3']),{pos:p,fallback:function(){synthCamGlitch(intense)}}))synthCamGlitch(intense)}
 function sndBreath(side){
  const k=sfxPick(['breath1','breath2','breath3','breath4']);
@@ -2683,7 +2692,7 @@ function sndSixAM(){playSfx('chimes');
  setTimeout(function(){if(state&&state.won)playSfx('crowd')},1500)}
 function sndKnock(side){const p=doorPos(side);
  if(!playSfx('knock',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
-function sndFootsteps(where){const p=(typeof where==='number')?camPos(where):doorPos(where);
+function sndFootsteps(where){const p=(typeof where==='number')?monitorPos(where,camPos(where)):doorPos(where);
  if(!playSfx('steps',{pos:p,fallback:function(){withPan(p,sndStep)}}))withPan(p,sndStep)}
 function sndPartyCrowd(){playSfx('crowd')}
 /* Estática del menú principal: arranca con el tema del título y va bajando. */
