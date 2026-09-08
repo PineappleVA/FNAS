@@ -2348,13 +2348,18 @@ const SFX_DIR='assets/audio/fnaf1/';
    fondo. SFX_3D=false lo degrada a paneo estereo; si el navegador no tiene
    PannerNode, cae en StereoPanner automaticamente. */
 let SFX_3D=true;   /* ponlo a false para paneo estereo simple */
+/* Ley de caida por distancia comun a las dos rutas. Con rolloff .85 las salas
+   lejanas quedaban en .11-.15 de ganancia: la cocina de Chica salia unos 9 dB
+   por debajo del ambiente que tiene que atravesar. Con .45 suben a .18-.25 y
+   se sigue notando claramente la diferencia entre la puerta y el escenario. */
+const SFX_REF=1.2,SFX_ROLL=.45,SFX_MAXD=45;
 const SFX_POS={
  officeLeft:[-1.6,0,.4],officeRight:[1.6,0,.4],
  hallLeftNear:[-1.9,0,-1.8],hallRightNear:[1.9,0,-1.8],
  hallLeft:[-2.4,0,-6.5],hallRight:[2.4,0,-6.5],
  stage:[0,0,-13],dining:[0,0,-9.5],cove:[-4.5,0,-9.5],
- backstage:[4.5,0,-11],kitchen:[5.5,0,-7.5],restrooms:[-5.5,0,-7.5],
- face:[0,0,.3]
+ backstage:[-4.5,0,-11],kitchen:[5.5,0,-7.5],restrooms:[5.5,0,-7.5],
+ face:[0,0,-.3]
 };
 /* Numero de camara -> punto del local. Los pasillos oeste (2A/2B/2C) caen a la
    izquierda y los este (4A/4B/4C) a la derecha, como en el mapa del juego. */
@@ -2370,35 +2375,43 @@ function sfxListener(){if(!AudioCtx||!AudioCtx.listener)return;const L=AudioCtx.
    L.upX.value=0;L.upY.value=1;L.upZ.value=0}
   else if(L.setPosition){L.setPosition(0,0,0);L.setOrientation(0,0,-1,0,1,0)}
  }catch(e){}}
-function sfxPanner(pos){
- if(!AudioCtx)return null;
+function sfxChain(pos,bus){
  const c=SFX_POS[pos];if(!c)return null;
  if(SFX_3D){
   try{
    if(AudioCtx.createPanner){
     const p=AudioCtx.createPanner();
     p.panningModel='HRTF';p.distanceModel='inverse';
-    p.refDistance=1.2;p.maxDistance=45;p.rolloffFactor=.85;
+    p.refDistance=SFX_REF;p.maxDistance=SFX_MAXD;p.rolloffFactor=SFX_ROLL;
     p.coneInnerAngle=360;p.coneOuterAngle=360;p.coneOuterGain=1;
     if(p.positionX){p.positionX.value=c[0];p.positionY.value=c[1];p.positionZ.value=c[2]}
     else if(p.setPosition)p.setPosition(c[0],c[1],c[2]);
+    p.connect(bus);
     return p}
   }catch(e){}
  }
+ /* Sin PannerNode: paneo por azimut y la misma caida por distancia. Antes se
+    hacia x/2.4 sin atenuacion, con dos efectos: seis de las trece posiciones
+    se saturaban a tope a un lado (el pasillo, a -20 grados, sonaba igual de
+    escorado que los banos), y un sonido del escenario sonaba tan fuerte como
+    uno de la puerta. La mezcla dependia del navegador. */
  try{
   if(AudioCtx.createStereoPanner){
-   const p=AudioCtx.createStereoPanner();
-   p.pan.value=Math.max(-1,Math.min(1,c[0]/2.4));
-   return p}
+   const d=Math.sqrt(c[0]*c[0]+c[1]*c[1]+c[2]*c[2]);
+   const az=(d<1e-4)?0:Math.atan2(c[0],-c[2]);
+   const pan=AudioCtx.createStereoPanner();
+   pan.pan.value=Math.max(-1,Math.min(1,Math.sin(az)));
+   const g=AudioCtx.createGain();
+   g.gain.value=SFX_REF/(SFX_REF+SFX_ROLL*Math.max(0,d-SFX_REF));
+   pan.connect(g);g.connect(bus);
+   return pan}
  }catch(e){}
  return null}
-/* Salida de un efecto: bus maestro, precedido de un panner si procede. */
 function sfxOut(pos){const bus=sfxBus()||AudioCtx.destination;
  const p=(pos===undefined?_sfxPan:pos);
  if(!p)return bus;
- const pn=sfxPanner(p);if(!pn)return bus;
- try{pn.connect(bus)}catch(e){return bus}
- return pn}
+ return sfxChain(p,bus)||bus}
+
 /* Los efectos sintetizados no reciben coordenadas llamada a llamada: se fijan
    para todo el bloque con withPan(), igual que el paneo que ya tenia la
    respiracion en su version sintetizada. */
