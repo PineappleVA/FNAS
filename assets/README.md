@@ -25,10 +25,10 @@ verificación.
 | 7 | `img/newspaper-intro.png` | periódico «Skibiry Herald» de la intro de cada noche | Scott Cawthon · obra mixeada |
 | 8 | `audio/title-theme.m4a` | música de la pantalla de título y del menú | Scott Cawthon · obra propia |
 | 9 | `audio/click.mp3` | clic de interfaz en botones y menús | Equipo Pineapple · obra propia |
-| 10 | `audio/phone/night1.mp3` | llamada del encargado de la noche 1 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
-| 11 | `audio/phone/night2.mp3` | llamada del encargado de la noche 2 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
-| 12 | `audio/phone/night3.mp3` | llamada del encargado de la noche 3 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
-| 13 | `audio/phone/night4.mp3` | llamada del encargado de la noche 4 (builds v3.0: `fnaf release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 10 | `audio/phone/night1.mp3` | llamada del encargado de la noche 1 (builds v3.0: `fnas release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 11 | `audio/phone/night2.mp3` | llamada del encargado de la noche 2 (builds v3.0: `fnas release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 12 | `audio/phone/night3.mp3` | llamada del encargado de la noche 3 (builds v3.0: `fnas release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
+| 13 | `audio/phone/night4.mp3` | llamada del encargado de la noche 4 (builds v3.0: `fnas release.html` y `fnas beta.html`) | Equipo Pineapple · obra propia |
 | 14 | `audio/phone-unreleased/night1.mp3` | llamada del encargado de la noche 1 (compilación Unreleased) | Equipo Pineapple · obra propia |
 | 15 | `audio/phone-unreleased/night2.mp3` | llamada del encargado de la noche 2 (compilación Unreleased) | Equipo Pineapple · obra propia |
 | 16 | `audio/phone-unreleased/night3.mp3` | llamada del encargado de la noche 3 (compilación Unreleased) | Equipo Pineapple · obra propia |

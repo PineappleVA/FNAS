@@ -10,7 +10,7 @@ Five Nights at Skibidi's
 
 **🌐 Solo se puede jugar en la web oficial:** <https://pineappleva.github.io/FNAS/>
 
-`fnaf release.html` y `fnas beta.html` llevan un **control de origen**: al abrir la
+`fnas release.html` y `fnas beta.html` llevan un **control de origen**: al abrir la
 página se comprueba que se sirve por `https://` desde `pineappleva.github.io`. Si no
 es así aparece una pantalla de *Acceso restringido* con el enlace a la web oficial y
 el juego no arranca: ni el audio, ni la partida. También se bloquea al abrir el
@@ -40,7 +40,7 @@ temporalmente de tu copia el bloque marcado como `CONTROL DE ORIGEN`.
 
 | Archivo | Qué es |
 |---|---|
-| `fnaf release.html` | Versión final, **v3.0 «Señal Perdida»** |
+| `fnas release.html` | Versión final, **v3.0 «Señal Perdida»** |
 | `fnas beta.html` | Periodo de beta de la v3.0: el mismo juego actualizado, con el aviso del equipo y las noches 1-4 abiertas |
 | `fnas unreleased.html` | Compilación intermedia: noches 1-5 jugables y dificultad fijada en Normal |
 
@@ -58,7 +58,7 @@ assets/
   audio/   música del menú, clic y llamadas de cada noche
 ```
 
-Consecuencia: los HTML ya no son archivos autónomos. Además, `fnaf release.html` y
+Consecuencia: los HTML ya no son archivos autónomos. Además, `fnas release.html` y
 `fnas beta.html` comprueban el origen al arrancar y solo funcionan servidos desde la web
 oficial —ver [Cómo jugar](#cómo-jugar).
 
