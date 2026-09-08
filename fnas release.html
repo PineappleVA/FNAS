@@ -47,7 +47,7 @@ if(!fnasOriginOK()){
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FINE AT SKIBIRY - FNAF Edition · Beta Test</title>
+<title>FINE AT SKIBIRY - FNAF Edition</title>
 <style>
 /* Fuentes incrustadas en base64: el juego es un unico archivo autonomo y
    conserva su tipografia sin conexion a internet. */
@@ -1615,158 +1615,9 @@ body.no-static .cam-rec-dot2{animation:none!important}
 @keyframes vsPop{0%{opacity:.25;transform:translateX(-4px)}100%{opacity:1;transform:none}}
 /* separación para que el bloque no quede pegado bajo la barra */
 .cl-rel{scroll-margin-top:44px}
-
-/* ================= BETA TEST (build v3.0) ================= */
-.title-beta-row{display:flex;align-items:center;gap:.5rem;margin:.45rem 0 .15rem}
-.title-beta{color:#e8c93a;font-size:clamp(.78rem,1.9vmin,.98rem);letter-spacing:.3em;
-  text-transform:uppercase;animation:titleFlicker 4s infinite;
-  text-shadow:0 0 8px rgba(232,201,58,.45)}
-.beta-help-btn{width:24px;height:24px;background:transparent;border:1px solid #4a4a4a;color:#8a8a8a;
-  font-family:'VT323',monospace;font-size:1rem;line-height:1;cursor:pointer;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;transition:all .2s}
-.beta-help-btn:hover{border-color:#e8c93a;color:#e8c93a;transform:scale(1.1)}
-.ver-tag.beta-tag{color:#e8c93a;border:1px solid rgba(232,201,58,.4);padding:.06rem .42rem;
-  border-radius:2px;letter-spacing:.22em}
-
-/* aviso fijo: el juego completo llega muy pronto (sin fecha comprometida) */
-#betaSoon{position:fixed;bottom:clamp(14px,3vh,28px);right:clamp(14px,3vw,28px);z-index:9050;
-  padding:.5rem .8rem;border:1px solid rgba(232,201,58,.4);background:rgba(0,0,0,.82);
-  text-align:right;font-family:'VT323',monospace;pointer-events:none}
-#betaSoon .soon-tag{display:block;color:#e8c93a;font-size:clamp(.58rem,1.2vmin,.7rem);
-  letter-spacing:.26em;text-transform:uppercase}
-#betaSoon .soon-text{display:block;color:#8a8a8a;font-size:clamp(.66rem,1.4vmin,.8rem);
-  letter-spacing:.14em;margin-top:.15rem}
-
-/* popup del equipo */
-#betaNotePopup{position:fixed;inset:0;z-index:9300;display:flex;justify-content:center;
-  align-items:center;background:rgba(0,0,0,.86);backdrop-filter:blur(3px);
-  padding:clamp(1rem,3vmin,1.5rem);animation:fadeIn .5s ease}
-#betaNotePopup.hidden{display:none}
-#betaNotePopup .beta-note-box{position:relative;width:min(640px,94vw);max-height:90vh;overflow-y:auto;
-  background:linear-gradient(180deg,#131313 0%,#050505 100%);
-  border:1px solid rgba(232,201,58,.5);box-shadow:0 0 40px rgba(0,0,0,.85),0 0 18px rgba(232,201,58,.07);
-  padding:1.3rem 1.2rem;scrollbar-width:thin;scrollbar-color:#3a3a3a transparent}
-#betaNotePopup .beta-note-box::-webkit-scrollbar{width:7px}
-#betaNotePopup .beta-note-box::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:3px}
-#betaNotePopup .beta-note-header{text-align:center;border-bottom:1px solid rgba(232,201,58,.32);
-  padding-bottom:.7rem;margin-bottom:1rem}
-#betaNotePopup .beta-note-tag{display:inline-block;background:#e8c93a;color:#0a0a0a;
-  font-size:clamp(.62rem,1.5vmin,.78rem);letter-spacing:.22em;text-transform:uppercase;
-  padding:.18rem .6rem;margin-bottom:.55rem}
-#betaNotePopup .beta-note-title{color:#e8c93a;font-size:clamp(1.35rem,3.8vmin,2rem);
-  letter-spacing:.16em;text-transform:uppercase;text-shadow:0 0 12px rgba(232,201,58,.35);margin:.2rem 0}
-#betaNotePopup .beta-note-subtitle{color:#7a7a7a;font-size:clamp(.72rem,1.7vmin,.88rem);
-  letter-spacing:.18em;text-transform:uppercase}
-#betaNotePopup .beta-note-body{font-size:clamp(.88rem,2.1vmin,1.05rem);line-height:1.55;text-align:left}
-#betaNotePopup .beta-note-body p{margin-bottom:.8rem;color:#c8c8c8}
-#betaNotePopup .beta-note-body strong{color:#e8c93a}
-#betaNotePopup .beta-note-body em{color:#9a9a9a;font-style:italic}
-#betaNotePopup .beta-emoji{color:#e8c93a}
-#betaNotePopup .beta-note-divider{height:1px;background:linear-gradient(90deg,transparent,
-  rgba(232,201,58,.45),transparent);margin:1rem 0}
-#betaNotePopup .beta-note-list{list-style:none;margin:.2rem 0 .8rem;padding:0}
-#betaNotePopup .beta-note-list li{color:#b8b8b8;margin-bottom:.4rem;padding-left:1rem;position:relative}
-#betaNotePopup .beta-note-list li::before{content:'—';position:absolute;left:0;color:#e8c93a}
-#betaNotePopup .beta-note-launch-box{margin:1rem 0;padding:.95rem 1rem;text-align:center;
-  border:1px solid rgba(232,201,58,.45);
-  background:linear-gradient(180deg,rgba(232,201,58,.07),rgba(232,201,58,.02))}
-#betaNotePopup .beta-note-launch-tag{display:inline-block;background:#e8c93a;color:#0a0a0a;
-  font-size:clamp(.62rem,1.5vmin,.78rem);letter-spacing:.28em;text-transform:uppercase;
-  padding:.22rem .6rem;margin-bottom:.55rem}
-#betaNotePopup .beta-note-launch-date{color:#e8c93a;font-size:clamp(1.3rem,3.6vmin,1.85rem);
-  letter-spacing:.2em;text-transform:uppercase;text-shadow:0 0 14px rgba(232,201,58,.5);margin-bottom:.45rem}
-#betaNotePopup .beta-note-launch-note{color:#b0b0b0;font-size:clamp(.8rem,1.9vmin,.95rem);line-height:1.5}
-#betaNotePopup .beta-note-link{color:#e8c93a;text-decoration:underline;
-  text-decoration-style:dashed;text-underline-offset:3px;transition:all .2s}
-#betaNotePopup .beta-note-link:hover{color:#fff;text-shadow:0 0 8px rgba(232,201,58,.6)}
-#betaNotePopup .beta-note-buttons{display:flex;gap:.7rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
-#betaNotePopup .beta-btn{font-family:'VT323',monospace;padding:.5rem 1.1rem;border:1px solid #e8c93a;
-  background:transparent;color:#e8c93a;font-size:clamp(.9rem,2.1vmin,1.05rem);letter-spacing:.16em;
-  text-transform:uppercase;cursor:pointer;transition:all .2s}
-#betaNotePopup .beta-btn:hover{background:#e8c93a;color:#0a0a0a;
-  box-shadow:0 0 12px rgba(232,201,58,.45);transform:translateY(-1px)}
-#betaNotePopup .beta-btn.secondary{border-color:#5a5a5a;color:#9a9a9a}
-#betaNotePopup .beta-btn.secondary:hover{background:#5a5a5a;color:#0a0a0a;box-shadow:none}
-#betaNotePopup .beta-note-footer{margin-top:1rem;padding-top:.7rem;
-  border-top:1px solid rgba(232,201,58,.22);text-align:center;color:#6a6a6a;
-  font-size:clamp(.7rem,1.6vmin,.85rem);letter-spacing:.14em;text-transform:uppercase}
-#betaNotePopup .beta-note-footer .footer-team{color:#e8c93a}
-@media (max-width:640px){#betaNotePopup .beta-note-box{padding:1.05rem .8rem}
-  #betaNotePopup .beta-note-buttons{flex-direction:column}
-  #betaNotePopup .beta-btn{width:100%}}
 </style>
 </head>
 <body>
-
-<!-- ===== AVISO DE BETA (build v3.0) ===== -->
-<div id="betaNotePopup" class="hidden">
-<div class="beta-note-box">
-<div class="beta-note-header">
-<div class="beta-note-tag">Beta Test — Mensaje Importante</div>
-<h2 class="beta-note-title">¡Hola, Beta Tester!</h2>
-<div class="beta-note-subtitle">Mensaje del equipo Pineapple</div>
-</div>
-<div class="beta-note-body">
-<p>Gracias por probar la <strong>beta de la v3.0 «Señal Perdida»</strong>. No es un trozo del juego
-viejo: es la build ya actualizada, con el monitor rehecho y el balance nuevo de energía. Lo que
-juegues estos días decide cómo sale la versión final.</p>
-
-<div class="beta-note-divider"></div>
-
-<p><span class="beta-emoji">★</span> <strong>Qué trae esta build:</strong></p>
-<ul class="beta-note-list">
-<li>Monitor nuevo: barra de estado con sala, reloj, REC y señal, más controles de teclado
-(flechas para cambiar de cámara, 1-9 directo, C para subirlo y Esc para bajarlo).</li>
-<li>Energía rehecha: cada puerta cerrada se paga, y el gasto sube noche a noche.</li>
-<li>IShowSpeed ya no te mata sin aviso ni sin margen, y el audio va sin clics ni saturación.</li>
-<li>La luz solo revela y la puerta es lo único que ahuyenta: se acabó la ruleta.</li>
-</ul>
-
-<p><span class="beta-emoji">🔒</span> <strong>Limitado mientras dure la beta:</strong></p>
-<ul class="beta-note-list">
-<li>Solo están abiertas las <strong>noches 1 a 4</strong>; la 5 y la 6 llegan con el lanzamiento.</li>
-<li>Las tres dificultades sí están activas: probar el balance nuevo es justo lo que buscamos.</li>
-<li>El progreso puede resetearse entre builds. Es beta, es normal.</li>
-</ul>
-
-<div class="beta-note-divider"></div>
-
-<div class="beta-note-launch-box">
-<div class="beta-note-launch-tag">Lanzamiento</div>
-<div class="beta-note-launch-date">Muy pronto</div>
-<div class="beta-note-launch-note">El juego completo llega <strong>muy pronto</strong>. Sin fechas que
-luego haya que mover: cuando esté, aparece aquí. 💛</div>
-</div>
-
-<p><span class="beta-emoji">🐛</span> <strong>¿Algo raro? Cuéntanoslo.</strong> Glitch, error, algo que
-no encaje o una noche que te parezca imposible: todo sirve. Si puedes grabarlo en pantalla, mejor,
-así vemos dónde pasa.</p>
-
-<p style="text-align:center;margin-top:.8rem">
-<a class="beta-note-link" href="https://forms.gle/hvFLsajPLyaWXVVB7" target="_blank"
- rel="noopener">📝 Abrir formulario de feedback</a>
-</p>
-
-<p style="text-align:center;margin-top:.4rem"><em>¡Suerte en las noches y gracias por probar la
-beta! 💛</em></p>
-</div>
-
-<div class="beta-note-buttons">
-<button class="beta-btn" onclick="window.open('https://forms.gle/hvFLsajPLyaWXVVB7','_blank')">📝 Ir al Formulario</button>
-<button class="beta-btn secondary" id="betaNoteCloseBtn">▶ Cerrar y Jugar</button>
-</div>
-
-<div class="beta-note-footer">
-Equipo <span class="footer-team">Pineapple</span> — FNAF x Skibidi Toilet Experience · v3.0 Beta
-</div>
-</div>
-</div>
-
-<!-- ===== PROXIMO LANZAMIENTO ===== -->
-<div id="betaSoon">
-<span class="soon-tag">Próximo lanzamiento</span>
-<span class="soon-text">Juego completo · muy pronto</span>
-</div>
 
 <!-- ===== SPLASH INTRO ===== -->
 <div id="splashIntro">
@@ -1785,11 +1636,6 @@ Equipo <span class="footer-team">Pineapple</span> — FNAF x Skibidi Toilet Expe
 <div class="title-stage">
 <h1 class="title-glitch" data-text="FINE AT SKIBIRY">FINE AT<br>SKIBIRY</h1>
 <h2>Five Nights at Skibidi's</h2>
-<div class="title-beta-row">
-<span class="title-beta">Beta Test · v3.0</span>
-<button class="beta-help-btn" id="btnShowBetaNote" onclick="playClick();showBetaNote()"
- aria-label="Mensaje del equipo" title="Mensaje del equipo">?</button>
-</div>
 <div id="menuContainer">
 <button class="title-btn primary menu-btn" id="btnNewGame" onclick="playClick();showNightsMenu()">>> Nueva Partida</button>
 <button class="title-btn menu-btn" id="btnOptions" onclick="playClick();showOptions()">>> Opciones</button>
@@ -3107,9 +2953,6 @@ om.addEventListener('scroll',()=>{updateOptScrollHint();updateVerSticky()},{pass
 window.addEventListener('resize',updateOptScrollHint)}
 function showOptPage(id){document.querySelectorAll('.opt-page').forEach(p=>p.classList.toggle('active',p.id===id));const om=document.getElementById('optionsMenu');if(om)om.scrollTop=0;setTimeout(()=>{updateOptScrollHint();updateVerSticky()},30);if(id==='optData')renderOptStats();if(id==='optVersion')renderChangelog();}
 const GAME_VERSION='3.0';
-/* Canal de esta build: es la beta publica de la v3.0, no el juego completo */
-const BUILD_CHANNEL='beta';
-const BETA_MAX_NIGHT=4;
 const CHANGELOG=[
 {v:'3.0',d:'25 ago 2026',t:'Señal Perdida',
  desc:'La versión actual. Rehace el monitor de seguridad y reequilibra por completo la energía: ahora cada puerta cerrada se paga y las últimas noches se ganan por los pelos.',
@@ -3153,8 +2996,7 @@ const bal=r.c.filter(x=>x[0]==='balance').length;
 const fixes=r.c.filter(x=>x[0]==='fix').length;
 box.innerHTML=
  '<div class="ver-badge"><span class="ver-num">v'+r.v+'</span>'
- +'<span class="ver-tag">'+r.t+'</span>'
- +(BUILD_CHANNEL==='beta'?'<span class="ver-tag beta-tag">Beta Test</span>':'')+'</div>'
+ +'<span class="ver-tag">'+r.t+'</span></div>'
  +'<div class="ver-date">'+r.d+' · versión '+(idx===0?'más reciente':'antigua')+'</div>'
  +'<div class="ver-desc">'+r.desc+'</div>'
  +'<div class="ver-chips">'
@@ -3221,10 +3063,10 @@ if((saveData.stars||[]).indexOf(n)>=0)return n===6?3:1;return 0}
 function updateMenuLocks(){for(let i=1;i<=6;i++){const btn=document.getElementById('night'+i+'Btn');if(!btn)continue;
 /* Progresion: solo se desbloquea la siguiente noche al superar la anterior */
 const done=saveData.completed||0;
-const unlocked=i<=done+1&&i<=BETA_MAX_NIGHT;
+const unlocked=i<=done+1;
 btn.disabled=!unlocked;
 /* La Noche 6 es SECRETA: no existe en el menu hasta que superas la Noche 5 */
-if(i===6){if(done<5||i>BETA_MAX_NIGHT){btn.style.display='none';btn.classList.remove('secret-night');continue}
+if(i===6){if(done<5){btn.style.display='none';btn.classList.remove('secret-night');continue}
 btn.style.display='';btn.classList.add('secret-night')}
 /* Estrellas en TODAS las noches: apagadas si aun no la has superado */
 const earned=nightStarsFor(i);
@@ -3234,7 +3076,7 @@ btn.classList.toggle('locked-night',!unlocked);
 btn.innerHTML='<span class="night-label">'+label+'</span>'+(unlocked?'':'<span class="lock-ico" aria-label="bloqueada"></span>')+'<span class="night-stars">'+stars+'</span>'}
 const hint=document.getElementById('nightsHint');
 if(hint){const d=saveData.completed||0;
-hint.textContent = d>=BETA_MAX_NIGHT ? 'En la beta solo están abiertas hasta la Noche '+BETA_MAX_NIGHT : 'Supera una noche para desbloquear la siguiente'}
+hint.textContent = d>=6 ? 'Has sobrevivido a todas las noches' : (d>=5 ? 'Algo más te espera...' : 'Supera una noche para desbloquear la siguiente')}
 updateTitleStats()}
 function setDifficulty(diff){if(!diff)return;saveData.difficulty=diff;state.difficulty=diff;try{localStorage.setItem(SAVE_KEY,JSON.stringify(saveData))}catch(e){}updateDiffButtons();}
 function updateDiffButtons(){const diff=saveData.difficulty||'easy';const colors={easy:'#0a3a0a',medium:'#3a3a0a',hard:'#3a0a0a'};const borderColors={easy:'#0f0',medium:'#fd6',hard:'#f66'};['diffEasy','diffMedium','diffHard'].forEach(function(id){const b=document.getElementById(id);if(!b)return;const isActive=(id==='diffEasy'&&diff==='easy')||(id==='diffMedium'&&diff==='medium')||(id==='diffHard'&&diff==='hard');if(isActive){b.style.background=colors[diff];b.style.color=borderColors[diff];b.style.border='2px solid '+borderColors[diff];b.style.padding='.4rem .8rem';b.style.boxShadow='0 0 12px '+borderColors[diff]}else{b.style.background='transparent';b.style.color='#818181';b.style.border='none';b.style.padding='.4rem .8rem';b.style.boxShadow='none'}});const desc={easy:'Normal: IA estándar, energía normal. 75 s por hora (Noche 1).',medium:'Medio: IA con bonus (+1 Skibidi/Speed, +2 Cameraman/TV), energía drena 50% más rápido. 58 s por hora.',hard:'Difícil: IA con bonus alto (+3 Skibidi/Speed, +4 Cameraman/TV), energía drena el doble. 42 s por hora.'};const dd=document.getElementById('diffDesc');if(dd)dd.textContent=desc[diff]||desc.easy;updateTitleStats()}
@@ -3285,7 +3127,7 @@ if(n===1&&getSetting('newsIntro')){
 }
 }
 
-function selectNight(n){if(n>BETA_MAX_NIGHT||n>(saveData.completed||0)+1){return}
+function selectNight(n){if(n>(saveData.completed||0)+1){return}
 armAudioAndTitle();initAudio();cancelNightSequence();clearAllIntervals();state.active=false;state.night=n;if(n===6){state.difficulty='hard'}else{state.difficulty=saveData.difficulty||'easy'}document.getElementById('nightsMenu').classList.remove('active');document.getElementById('creditsMenu').classList.remove('active');document.getElementById('titleScreen').style.display='none';const splash=document.getElementById('splashIntro');if(splash){splash.classList.add('hidden');setTimeout(()=>splash.remove(),1400)}document.getElementById('newsIntro').classList.remove('active');document.getElementById('nightLoad').classList.remove('active');pauseTitleMusic(true);setTimeout(()=>beginNightSequence(n),40)}
 
 /* ===== GAME START ===== */
@@ -3891,28 +3733,6 @@ sl.addEventListener('click',e=>e.stopPropagation());sl.addEventListener('pointer
 applySettings();updateOptionControls();
 }
 function armAudioAndTitle(){audioUnlocked=true;if(!audioReady){try{initAudio();audioReady=true}catch(e){}}else if(AudioCtx&&AudioCtx.state==='suspended'){try{AudioCtx.resume()}catch(e){}}const titleVisible=document.getElementById('titleScreen')&&document.getElementById('titleScreen').style.display!=='none';if(titleVisible){const music=getTitleMusic();if(music){music.muted=false;music.volume=musicVolMul();music.play().then(()=>{titleMusicStarted=true}).catch(()=>{})}}setTimeout(syncTitleMusic,120)}document.addEventListener('click',armAudioAndTitle);document.addEventListener('keydown',armAudioAndTitle);document.addEventListener('pointerdown',armAudioAndTitle);document.addEventListener('touchstart',armAudioAndTitle,{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseTitleMusic();else syncTitleMusic()});
-</script>
-
-<script>
-/* ================= BETA TEST · BUILD v3.0 ================= */
-const BETA_NOTE_KEY='fnas_betaNoteSeen_v30';
-function showBetaNote(){const p=document.getElementById('betaNotePopup');if(p)p.classList.remove('hidden')}
-function closeBetaNote(){const p=document.getElementById('betaNotePopup');if(p)p.classList.add('hidden');
-try{localStorage.setItem(BETA_NOTE_KEY,'1')}catch(e){}}
-(function initBetaNote(){
-const closeBtn=document.getElementById('betaNoteCloseBtn');
-if(closeBtn)closeBtn.addEventListener('click',(e)=>{e.stopPropagation();playClick();closeBetaNote()});
-const p=document.getElementById('betaNotePopup');
-if(p)p.addEventListener('click',(e)=>{if(e.target===p)closeBetaNote()});
-document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&p&&!p.classList.contains('hidden'))closeBetaNote()});
-let seen=false;try{seen=localStorage.getItem(BETA_NOTE_KEY)==='1'}catch(e){}
-if(seen)return;
-/* se abre cuando el splash ya se ha ido, para no pisarlo */
-const tryShow=()=>{const splash=document.getElementById('splashIntro');
-const gone=!splash||splash.classList.contains('hidden')||!document.body.contains(splash);
-if(gone)setTimeout(showBetaNote,800);else setTimeout(tryShow,400)};
-setTimeout(tryShow,100);
-})();
 </script>
 </body>
 </html>
